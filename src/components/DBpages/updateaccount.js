@@ -24,10 +24,10 @@ const TableU = () => {
     const [password, setPassword] = useState('');
     const [update, setUpdate] = useState('');
     const [suspend, setSuspend] = useState(''); // state for suspend account
-    const [showRole, setShowRole] = useState(true); //pop out for roles
+    const [showRole, setShowRole] = useState(false); //pop out for roles
     const [assignroles, setAssignRoles] = useState(''); // handle roles
-    const [showEmail, setShowEmail] = useState(true); //pop out for Email
-    const [showPassword, setShowPassword] = useState(true); //pop out for Password
+    const [showEmail, setShowEmail] = useState(false); //pop out for Email
+    const [showPassword, setShowPassword] = useState(false); //pop out for Password
     const [showSuspend, setShowSuspend] = useState(false); //pop out for Suspend
     const [accounts, setAccounts] = useState([])
     const [accountUpdating, setAccountUpdating] = useState(null)
