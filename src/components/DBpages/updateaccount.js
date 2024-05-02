@@ -3,15 +3,32 @@ import Modal from 'react-modal';
 import Dashboard from './dashboard';
 import { viewAccountController, updateProfileController } from '../../controller';
 
+const ToggleButtonSuspend = () => {
+    const [isToggledSuspend, setIsToggledSuspend] = useState(false); // state for toggle button for suspend
+  
+    // handle click for suspend button
+    const handleClick = () => {
+      setIsToggledSuspend((prevState) => !prevState);
+    };
+  
+    return (
+      <button className="mx-4 my-2 p-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300 focus:outline-none" onClick={handleClick}>
+        {isToggledSuspend ? 'Suspend' : 'Unsuspend'}
+      </button>
+    );
+  };
+
 const TableU = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [update, setUpdate] = useState('');
+    const [suspend, setSuspend] = useState(''); // state for suspend account
     const [showRole, setShowRole] = useState(true); //pop out for roles
     const [assignroles, setAssignRoles] = useState(''); // handle roles
     const [showEmail, setShowEmail] = useState(true); //pop out for Email
     const [showPassword, setShowPassword] = useState(true); //pop out for Password
+    const [showSuspend, setShowSuspend] = useState(false); //pop out for Suspend
     const [accounts, setAccounts] = useState([])
     const [accountUpdating, setAccountUpdating] = useState(null)
 
@@ -25,6 +42,7 @@ const TableU = () => {
     const toggleRole = () => setShowRole(!showRole); // toggle role
     const toggleEmail = () => setShowEmail(!showEmail); // toggle email
     const togglePassword = () => setShowPassword(!showPassword); // toggle password
+    const toggleSuspend = () => setShowSuspend(!showSuspend); // toggle Suspend
 
     const handleAssignRole = (e) => { // handle roles
         setAssignRoles(e.target.value);
@@ -79,6 +97,12 @@ const TableU = () => {
         console.log('Password:', password);
         console.log('Confirm Password:', password);
         setPassword('');
+    }
+    // handle submit Suspend Account
+    const handleSubmitSuspend = (e) => {
+        e.preventDefault();
+        console.log('Suspend:', suspend);
+        setSuspend('');
     }
 
     return (
@@ -146,6 +170,7 @@ const TableU = () => {
                             <option value="role" onClick={toggleRole}>Roles</option>
                             <option value="emails" onClick={toggleEmail}>Email</option>
                             <option value="passwords" onClick={togglePassword}>Password</option>
+                            <option value="suspend" onClick={toggleSuspend}>Suspend</option>
                         </select>
                         {/* Roles update */}
                         {showRole && (
@@ -177,6 +202,15 @@ const TableU = () => {
                         </div>
                     </form>
                     )}
+                    {/* Suspend Account */}
+                                    {showSuspend && (
+                                <form onSubmit={handleSubmitSuspend}>
+                                    <div className="my-4 border-b-2">
+                                        <label htmlFor="suspend" className="block mb-2 text-sm font-medium text-white">Suspend Account</label>
+                                        <ToggleButtonSuspend/>
+                                    </div>
+                                </form>
+                                )}
                     </div>
                 <button className='p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300' onClick={closeModal}>Close</button>
                 <button type='submit' className='p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300' onClick={updateAccount}>Update</button>

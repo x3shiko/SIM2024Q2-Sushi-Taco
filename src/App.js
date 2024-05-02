@@ -10,10 +10,17 @@ import Agents from "./components/pages/agent";
 import Login from "./components/pages/login";
 import CreateA from "./components/DBpages/createaccount";
 import MainPage from "./components/mainpage";
-import DBHome from './components/DBpages/dbhome';
 import ViewA from './components/DBpages/viewaccount';
 import UpdateA from './components/DBpages/updateaccount';
 import AssignR from './components/DBpages/assignrole';
+//Buyer page
+import BProperties from './components/DBbuyer/buyerproperties';
+import RateReviewAgents from './components/DBbuyer/rrAgents';
+import CalculateMortgage from './components/DBbuyer/calculateMort';
+import BuyerSaveProperty from './components/DBbuyer/buyersaveproperty';
+// for testing
+import DBHome from './components/DBpages/dbhome';
+//import DBBuyerHome from './components/DBbuyer/dbbuyerhome';
 import './index.css'
 
 function App() {
@@ -30,11 +37,17 @@ function App() {
           <Route path="/rents" component={Rents} />
           <Route path="/agents" component={Agents} />
           <Route path="/login" component={Login} />
+          {/* admins pages */}
           <Route path="/createA" component={CreateA} />
           <Route path="/dbhome" component={DBHome} />
           <Route path="/viewaccount" component={ViewA} />
           <Route path="/updateaccount" component={UpdateA} />
           <Route path="/assignrole" component={AssignR} />
+          {/* Buyer page */}
+          <Route path="/buyerproperties" component={BProperties} />
+          <Route path="/rrAgents" component={RateReviewAgents} />
+          <Route path="/calculateMort" component={CalculateMortgage} />
+          <Route path="/buyersaveproperty" component={BuyerSaveProperty} />
         </Switch>
       </div>
     </Router>
