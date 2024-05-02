@@ -70,6 +70,10 @@ class UserAccounts{
     }
 }
 
+class User{
+    //sdnsjdn
+}
+
 export const userAccounts = new UserAccounts();
 export const userSignOut = new UserSignOut();
 export const userSignIn = new UserSignIn();
