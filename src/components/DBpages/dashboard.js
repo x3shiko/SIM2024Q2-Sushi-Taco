@@ -1,11 +1,21 @@
 // ProfileDashboard.js
 import React, { useState } from 'react';
+import { signOutController } from '../../controller';
 
 const Dashboard = () => {
     const [showDrop, setShowDrop] = useState(false);
     const handleDropClick = () => {
         setShowDrop(!showDrop);
       };
+
+    const handleLogOut = () => {
+      signOutController.signOut()
+      // doSignOut().then(() => {
+      //   console.log("Sign out successfully")
+      // })
+      handleDropClick()
+    }
+
     return (
         <div id="dashboard" className="flex w-1/4 bg-gray-100">
             <div className="md:hidden transition-all" onClick={handleDropClick}>
@@ -88,7 +98,7 @@ const Dashboard = () => {
         </a>
         <a href="/"
           className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={handleDropClick}
+          onClick={handleLogOut}
         >
            Logout
         </a>

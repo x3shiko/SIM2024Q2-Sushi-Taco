@@ -1,13 +1,42 @@
 import React, { useState } from 'react';
 import SnTLogo from '../../assets/SnTLogo.png';
+import { useHistory } from 'react-router-dom';
+import { signInController } from '../../controller';
 
+const Alert = ({ type, message }) => {
+    // Alert function
+    let alertClasses = 'my-2 px-4 py-2 rounded-md';
+    switch (type) {
+      case 'success':
+        alertClasses += ' bg-green-500 text-white';
+        break;
+      case 'error':
+        alertClasses += ' bg-red-500 text-white';
+        break;
+      default:
+        alertClasses += ' bg-gray-500 text-white';
+    }
+  
+    return (
+      <div className={alertClasses}>
+        <p>{message}</p>
+      </div>
+    );
+  };
 
 const Login = () => {
         const [email, setEmail] = useState('');
         const [password, setPassword] = useState('');
-    
+        const history = useHistory();
+
         const handleEmailChange = (e) => {
             setEmail(e.target.value);
+        };
+
+        const [showAlert, setShowAlert] = useState(false);
+
+        const handleShowAlert = () => {
+          setShowAlert(true);
         };
     
         const handlePasswordChange = (e) => {
@@ -17,12 +46,15 @@ const Login = () => {
         const handleSubmit = (e) => {
             e.preventDefault();
             //login logic here
-            console.log('Email:', email);
-            console.log('Password:', password);
-            // Reset form after submission
-            setEmail('');
-            setPassword('');
+            signInController.signIn(email,password).then(() => {
+              console.log("Successfully login")
+              history.push('/dbhome');
+            }).catch((error) => {
+              handleShowAlert()
+              console.log(error)
+            })
         };
+
     return (
         <div id="login" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 p-10 border rounded-md border-10 border-blue-300">
@@ -41,7 +73,9 @@ const Login = () => {
                     </div>
                     <button type="submit" className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login</button>
                 </form>
-                <h3 className="mt-4">Do not have an account?<a href="signup"><span className="text-indigo-600 hover:text-blue-400 mx-1">Sign Up</span></a> </h3>
+                {showAlert && (
+                        <Alert type="error" message="Wrong email/password" />
+                    )}
                 </div>
             </div>
         </div>
