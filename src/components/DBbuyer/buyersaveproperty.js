@@ -5,7 +5,7 @@ import Imagee1 from "../../assets/1.png";
 const BuyerSaveProperty = () => {
 
   return(
-    <div className="grid grid-cols-3 grid-rows-3 p-4 min-h-screen w-3/4 overflow-x-auto">
+    <div className="grid grid-cols-3 p-4 min-h-screen w-3/4 overflow-x-auto">
       <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
         <img className="w-full" src={Imagee1} alt="img1"/>
           <div className="px-6 py-4">
