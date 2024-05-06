@@ -43,12 +43,17 @@ const BProperties = ({ data, onSearch}) => {
                     className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
                 />
                 </div>
-                <div className="my-3">
-                                    <select id="roles" value={selectSS} onChange={handleSelectSS} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        <option value=""disabled>Select Sold/Unsold Properties</option>
-                                        <option value="sold" onClick={toggleSold}>Sold</option>
-                                        <option value="unsold"onClick={toggleUnsold}>Unsold</option>
-                                    </select>
+
+                {/* Sold/Unsold selection */}
+                <div className='my-3'>
+                <select id="roles" value={selectSS} onChange={handleSelectSS} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value=""disabled>Select Sold/Unsold Properties</option>
+                        <option value="sold" onClick={toggleSold}>Sold</option>
+                        <option value="unsold"onClick={toggleUnsold}>Unsold</option>
+                    </select>
+                </div>
+                {/* Start of Property Grid */}
+                <div className="grid grid-cols-3 grid-rows-3 my-3">
                                     {/* show sold properties */}
                                     {showSold && (
                                         <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
