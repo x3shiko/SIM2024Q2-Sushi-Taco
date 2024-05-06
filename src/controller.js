@@ -1,4 +1,4 @@
-import { userAccounts, userSignOut, userSignIn } from "./firebase/userAccounts";
+import { userSignOut, userSignIn, newUser, existingUsers } from "./firebase/userAccounts";
 import { userProfiles } from './firebase/userProfile';
 import { properties } from "./properties";
 
@@ -6,20 +6,7 @@ import { properties } from "./properties";
 class CreateAccountController{
 
     createAccount(email, password, firstName, lastName, roles){
-        return new Promise((resolve, reject) => {
-            userAccounts.doCreateUserWIthEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    const userID = userCredential.user.uid;
-                    userProfiles.createProfile(userID, email, firstName, lastName, roles).then(() => {
-                        resolve(true);
-                    }).catch((error) => {
-                        reject(false);
-                    })
-                }).catch((error) => {
-                    console.error("Error creating user:", error);
-                    reject(false); // Reject with false if there's an error creating user
-                });
-        });
+        return newUser.createNewUser(email, password, firstName, lastName, roles)
     }
     
 }
@@ -29,7 +16,7 @@ export const createAccountController = new CreateAccountController()
 class ViewAccountController{
     getAccounts = () =>{
         return new Promise((resolve, reject) => {
-            resolve(userAccounts.getAccounts())
+            resolve(existingUsers.getAccounts())
         });
     }
 }

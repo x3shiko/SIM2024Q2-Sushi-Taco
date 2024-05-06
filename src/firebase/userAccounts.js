@@ -1,10 +1,39 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail  } from "firebase/auth";
 import { auth } from "./firebase";
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc, setDoc } from 'firebase/firestore';
 
 class NewUser{
-    doCreateUserWIthEmailAndPassword(email, password){
-        return createUserWithEmailAndPassword(auth, email, password)
+
+    constructor(){
+        this.db = getFirestore();
+    }
+
+    createNewUser(email, password, firstName, lastName, roles){
+        return new Promise((resolve, reject) => {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const userID = userCredential.user.uid;
+                    const userDocRef = doc(this.db, 'users', userID); // 'users' is the collection name
+                    setDoc(userDocRef, {
+                        email: email,
+                        password: password,
+                        firstName: firstName,
+                        lastName: lastName,
+                        role: roles,
+                        status: "Active"
+                        // Add other details as needed
+                    }).then(() => {
+                        console.log("User data successfully created and stored in database");
+                        resolve(true);
+                    }).catch((error) => {
+                        console.error("Error storing user data:", error);
+                        reject(false);
+                    });
+                }).catch((error) => {
+                    console.error("Error creating user:", error);
+                    reject(false); // Reject with false if there's an error creating user
+                });
+        });
     }
 }
 
@@ -20,44 +49,12 @@ class UserSignOut{
     }
 }
 
-class UserUpdate{
-    doPasswordChange = (newPassword) => {
-        return updatePassword(auth.currentUser, newPassword)
-    }
-
-    changeEmail = (newEmail) => {
-        return updateEmail(user, newEmail)
-    }
-}
-
-class UserAccounts{
-
+class ExistingUsers{
     constructor(){
         this.db = getFirestore();
     }
 
-    doCreateUserWIthEmailAndPassword(email, password){
-        return createUserWithEmailAndPassword(auth, email, password)
-    }
-
-    doSignInWithEmailAndPassword = (email, password) => {
-        return signInWithEmailAndPassword(auth, email, password)
-    }
-
-    doSignOut = () => {
-        return auth.signOut();
-    }
-
-    doPasswordChange = (newPassword) => {
-        return updatePassword(auth.currentUser, newPassword)
-    }
-
-    changeEmail = (newEmail) => {
-        return updateEmail(user, newEmail)
-    }
-
     getAccounts = async () => {
-
         const accountsCollection = collection(this.db, 'users');
         const accountsSnapshot = await getDocs(accountsCollection);
         const accountsData = accountsSnapshot.docs.map(doc => {
@@ -70,6 +67,7 @@ class UserAccounts{
     }
 }
 
-export const userAccounts = new UserAccounts();
 export const userSignOut = new UserSignOut();
 export const userSignIn = new UserSignIn();
+export const newUser = new NewUser();
+export const existingUsers = new ExistingUsers();

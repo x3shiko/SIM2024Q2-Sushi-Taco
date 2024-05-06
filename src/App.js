@@ -19,7 +19,7 @@ import RateReviewAgents from './components/DBbuyer/rrAgents';
 import CalculateMortgage from './components/DBbuyer/calculateMort';
 import BuyerSaveProperty from './components/DBbuyer/buyersaveproperty';
 // for testing
-//import DBHome from './components/DBpages/dbhome';
+import DBHome from './components/DBpages/dbhome';
 import DBBuyerHome from './components/DBbuyer/dbbuyerhome';
 import './index.css'
 
@@ -39,11 +39,12 @@ function App() {
           <Route path="/login" component={Login} />
           {/* admins pages */}
           <Route path="/createA" component={CreateA} />
-          <Route path="/dbbuyerhome" component={DBBuyerHome} />
+          <Route path="/dbhome" component={DBHome} />
           <Route path="/viewaccount" component={ViewA} />
           <Route path="/updateaccount" component={UpdateA} />
           <Route path="/assignrole" component={AssignR} />
           {/* Buyer page */}
+          <Route path="/dbbuyerhome" component={DBBuyerHome} />
           <Route path="/buyerproperties" component={BProperties} />
           <Route path="/rrAgents" component={RateReviewAgents} />
           <Route path="/calculateMort" component={CalculateMortgage} />
