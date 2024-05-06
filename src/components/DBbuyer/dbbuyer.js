@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+import { signOutController } from '../../controller';
 
 const DashboardBuyer = () => {
     const [showDrop, setShowDrop] = useState(false);
     const handleDropClick = () => {
         setShowDrop(!showDrop);
       };
+
+    const handleLogOut = () => {
+      signOutController.signOut()
+      handleDropClick()
+    }
     return (
         <div id="dashboard" className="flex w-1/4 h-full bg-gray-100">
             <div className="md:hidden transition-all" onClick={handleDropClick}>
