@@ -43,16 +43,18 @@ const Login = () => {
             setPassword(e.target.value);
         };
     
-        const handleSubmit = (e) => {
+        const handleSubmit = async (e) => {
             e.preventDefault();
             //login logic here
-            signInController.signIn(email,password).then(() => {
-              console.log("Successfully login")
+            const role = await signInController.signIn(email, password)
+            console.log(role)
+            if (role == "admin"){
               history.push('/dbhome');
-            }).catch((error) => {
+            } else if (role == "buyer"){
+              history.push('/DBBuyerHome');
+            } else {
               handleShowAlert()
-              console.log(error)
-            })
+            }
         };
 
     return (

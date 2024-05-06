@@ -61,15 +61,15 @@ class SignOutController{
 
 export const signOutController = new SignOutController();
 
-class SignInController{
-    signIn(email,password){
-        return new Promise((resolve, reject) => {
-            userSignIn.doSignInWithEmailAndPassword(email,password).then(() => {
-                resolve(true)
-            }).catch((error) => {
-                reject(false)
-            })
-        });
+class SignInController {
+    async signIn(email, password) {
+        try {
+            const role = await userSignIn.doSignInWithEmailAndPassword(email, password);
+            return role;
+        } catch (error) {
+            console.error("Error signing in:", error);
+            throw error;
+        }
     }
 }
 
