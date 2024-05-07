@@ -1,7 +1,8 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import DashboardBuyer from './dbbuyer';
 import Image1 from "../../assets/1.png";
 import Image2 from "../../assets/2.png";
+import { viewPropertiesController, viewSoldPropertiesController } from '../../controller';
 
 const BProperties = ({ data, onSearch}) => {
     const [query, setQuery] = useState('');
@@ -9,7 +10,23 @@ const BProperties = ({ data, onSearch}) => {
     const [showSold, setShowSold] = useState(true);
     const [showUnsold, setShowUnsold] = useState(true);
     const [selectSS, setSelectSS] = useState('');
+    const [properties, setProperties] = useState([])
+    const [soldProperties, setSoldProperties] = useState([])
 
+    useEffect(() => {
+        const fetchProperties = async () => {
+            const properties = viewPropertiesController.fetchProperties()
+            console.log("Properties:", properties);
+            setProperties(properties)
+        }
+        const fetchSoldProperties = async () => {
+            const soldProperties = viewSoldPropertiesController.fetchProperties()
+            console.log("Sold Properties:", soldProperties);
+            setSoldProperties(soldProperties)
+        }
+        fetchProperties()
+        fetchSoldProperties()
+    }, [])
 
     //toggle for sold/unsold property
     const toggleSold = () => setShowSold(!showSold);
@@ -55,19 +72,16 @@ const BProperties = ({ data, onSearch}) => {
                 {/* Start of Property Grid */}
                 <div className="grid grid-cols-3 grid-rows-3 my-3">
                                     {/* show sold properties */}
-                                    {showSold && (
+                                    {showSold && soldProperties.map((soldProperty) => (
                                         <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
                                         <img
                                         className="w-full"
-                                        src={Image1}
+                                        src={soldProperty.image}
                                         alt="Placeholder"
                                         />
                                         <div className="px-6 py-4">
-                                        <div className="font-bold text-xl mb-2">123 Main St</div>
-                                        <p className="text-gray-700 text-base">
-                                            House Description: 3 bd | 2 ba | 1,500 sqft
-                                            Price:              $500,000
-                                        </p>
+                                        <div className="font-bold text-xl mb-2">{soldProperty.address}</div>
+                                        <p className="text-gray-700 text-base">{soldProperty.description}</p>
                                         </div>
                                         <div className="px-6 py-4">
                                             {/* doesnt need any function or buy */}
@@ -83,21 +97,18 @@ const BProperties = ({ data, onSearch}) => {
                                             </button>
                                         </div>
                                     </div>
-                                    )}
+                                    ))}
                                     {/* show unsold properties */}
-                                    {showUnsold && (
+                                    {showUnsold && properties.map((property) => (
                                         <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
                                             <img
                                             className="w-full"
-                                            src={Image2}
+                                            src={property.image}
                                             alt="Placeholder"
                                             />
                                             <div className="px-6 py-4">
-                                            <div className="font-bold text-xl mb-2">456 Oak St</div>
-                                            <p className="text-gray-700 text-base">
-                                                House Description: 4 bd | 3 ba | 2,000 sqft
-                                                Price:            $750,000
-                                            </p>
+                                            <div className="font-bold text-xl mb-2">{property.address}</div>
+                                            <p className="text-gray-700 text-base">{property.description}</p>
                                             </div>
                                             <div className="px-6 py-4">
                                             <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
@@ -113,7 +124,7 @@ const BProperties = ({ data, onSearch}) => {
                                             </button>
                                             </div>
                                         </div>
-                                        )}
+                                        ))}
                                 </div>
             </div>
     );

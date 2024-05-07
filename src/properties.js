@@ -1,5 +1,5 @@
-import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
-
+import { getFirestore, collection, getDocs, doc, updateDoc, query } from 'firebase/firestore';
+import { where } from 'firebase/firestore';
 class Properties{
 
     constructor(){
@@ -8,8 +8,8 @@ class Properties{
 
     getProperties = async () => {
         const propertiesCollection = collection(this.db, 'properties');
-        const propertiesSnapshot = await getDocs(propertiesCollection);
-        const propertiesData = propertiesSnapshot.docs.map(doc => {
+        const querySnapshot = await query(propertiesCollection, where('status', '==', 'unsold'));
+        const propertiesData = querySnapshot.docs.map(doc => {
             return{
                 id:doc.id,
                 ...doc.data()

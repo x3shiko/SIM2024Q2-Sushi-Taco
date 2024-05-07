@@ -2,6 +2,8 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail
 import { auth } from "./firebase";
 import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc} from 'firebase/firestore';
 
+
+
 class NewUser{
 
     constructor(){
@@ -107,6 +109,18 @@ class ExistingUsers{
     }
 }
 
+class UpdateUser{
+    constructor(){
+        this.db = getFirestore();
+    }
+
+    updateAccount = async (userID, fieldToUpdate) => {
+        const userDocRef = doc(this.db, 'users', userID);
+        await updateDoc(userDocRef, fieldToUpdate);
+    }
+}
+
+export const updateUser = new UpdateUser();
 export const userSignOut = new UserSignOut();
 export const userSignIn = new UserSignIn();
 export const newUser = new NewUser();

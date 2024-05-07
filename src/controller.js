@@ -1,4 +1,4 @@
-import { userSignOut, userSignIn, newUser, existingUsers } from "./firebase/userAccounts";
+import { userSignOut, userSignIn, newUser, existingUsers, updateUser } from "./firebase/userAccounts";
 import { userProfiles } from './firebase/userProfile';
 import { properties } from "./properties";
 
@@ -23,15 +23,15 @@ class ViewAccountController{
 
 export const viewAccountController = new ViewAccountController();
 
-class UpdateProfileController{
-    updateProfile(userID, fieldToUpdate){
+class UpdateAccountController{
+    updateAccount(userID, fieldToUpdate){
         return new Promise((resolve, reject) => {
-            resolve(userProfiles.updateProfile(userID, fieldToUpdate))
+            resolve(updateUser.updateAccount(userID, fieldToUpdate))
         });
     }
 }
 
-export const updateProfileController = new UpdateProfileController();
+export const updateAccountController = new UpdateAccountController();
 
 class ViewPropertiesController{
     fetchProperties = () =>{

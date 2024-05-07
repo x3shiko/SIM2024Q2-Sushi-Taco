@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import Dashboard from './dashboard';
-import { viewAccountController, updateProfileController } from '../../controller';
+import { viewAccountController, updateAccountController } from '../../controller';
 
 const ToggleButtonSuspend = () => {
     const [isToggledSuspend, setIsToggledSuspend] = useState(false); // state for toggle button for suspend
@@ -61,12 +61,15 @@ const TableU = () => {
         try {
             if (update === 'role' && assignroles !== '') {
                 // Update user role
-                await updateProfileController.updateProfile(accountUpdating, { role: assignroles });
+                await updateAccountController.updateAccount(accountUpdating, { role: assignroles });
                 console.log(`Successfully changed user role to ${assignroles}`);
-            } else if (update === 'emails') {
+            } else if (update === 'email') {
                 // Update user email
-            } else if (update === 'passwords') {
+                await updateAccountController.updateAccount(accountUpdating, { email: email });
+            } else if (update === 'password') {
                 // Update user password
+                // changeUserPassword(accountUpdating, "321321")
+                await updateAccountController.updateAccount(accountUpdating, { password: password });
             } else {
                 console.log('No valid update operation selected.');
             }
@@ -82,21 +85,17 @@ const TableU = () => {
         console.log(value)
         setUpdate(value);
         setShowRole(value === 'role');
-        setShowEmail(value === 'emails');
-        setShowPassword(value === 'passwords');
+        setShowEmail(value === 'email');
+        setShowPassword(value === 'password');
     };
 
     const handleSubmitEmail = (e) => {
         e.preventDefault();
-        console.log('Email:', email);
-        console.log('Confim Email:', email);
-        setEmail('');
+        setEmail(e.target.value);
     }
     const handleSubmitPassword = (e) => {
         e.preventDefault();
-        console.log('Password:', password);
-        console.log('Confirm Password:', password);
-        setPassword('');
+        setPassword(e.target.value);
     }
     // handle submit Suspend Account
     const handleSubmitSuspend = (e) => {
@@ -168,8 +167,8 @@ const TableU = () => {
                         <select id="roles" value={update} onChange={handleUpdate} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="" disabled>Select changes</option>
                             <option value="role" onClick={toggleRole}>Roles</option>
-                            <option value="emails" onClick={toggleEmail}>Email</option>
-                            <option value="passwords" onClick={togglePassword}>Password</option>
+                            <option value="email" onClick={toggleEmail}>Email</option>
+                            <option value="password" onClick={togglePassword}>Password</option>
                             <option value="suspend" onClick={toggleSuspend}>Suspend</option>
                         </select>
                         {/* Roles update */}
@@ -186,19 +185,19 @@ const TableU = () => {
                         )}
                         {/* Email Update */}
                         {showEmail && (
-                    <form onSubmit={handleSubmitEmail}>
+                    <form>
                         <div className="my-4 border-b-2">
                             <input type="email" id="email" placeholder='Email' className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-                            <input type='email' id="email" placeholder='Confirm Email' className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+                            <input type='email' id="email" placeholder='Confirm Email' onChange={handleSubmitEmail} className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
                         </div>
                     </form>
                     )}
                     {/* Password Update */}
                         {showPassword && (
-                    <form onSubmit={handleSubmitPassword}>
+                    <form>
                         <div className="my-4 border-b-2">
                             <input type='password' id="password" placeholder='Password' className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-                            <input type='password' id="password" placeholder='Confirm Password' className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+                            <input type='password' id="password" placeholder='Confirm Password' onChange={handleSubmitPassword} className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
                         </div>
                     </form>
                     )}

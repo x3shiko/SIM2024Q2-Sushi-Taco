@@ -1,4 +1,4 @@
-import { getFirestore, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, updateDoc, setDoc, getDoc, collection } from 'firebase/firestore';
 
 class NewProfile{
 
@@ -23,12 +23,12 @@ class NewProfile{
     };
 }
 
-class ProfileUpdate{
-    updateProfile = async (userID, fieldToUpdate) => {
-        const userDocRef = doc(this.db, 'users', userID);
-        await updateDoc(userDocRef, fieldToUpdate);
-    };
-}
+// class ProfileUpdate{
+//     updateProfile = async (userID, fieldToUpdate) => {
+//         const userDocRef = doc(this.db, 'users', userID);
+//         await updateDoc(userDocRef, fieldToUpdate);
+//     };
+// }
 
 class UserProfiles{
 
