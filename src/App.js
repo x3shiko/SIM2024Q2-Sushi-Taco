@@ -13,8 +13,7 @@ import CreateA from "./components/DBpages/createaccount";
 import MainPage from "./components/mainpage";
 import ViewA from './components/DBpages/viewaccount';
 import UpdateA from './components/DBpages/updateaccount';
-import AssignR from './components/DBpages/assignrole';
-import CreateP from './components/DBpages/createprofile';
+import ProfileDB from './components/DBpages/profile';
 //Buyer page
 import BProperties from './components/DBbuyer/buyerproperties';
 import RateReviewAgents from './components/DBbuyer/rrAgents';
@@ -44,8 +43,7 @@ function App() {
           <Route path="/dbhome" component={DBHome} />
           <Route path="/viewaccount" component={ViewA} />
           <Route path="/updateaccount" component={UpdateA} />
-          <Route path="/assignrole" component={AssignR} />
-          <Route path="/createprofile" component={CreateP} />
+          <Route path="/profile" component={ProfileDB} />
           {/* Buyer page */}
           <Route path="/dbbuyerhome" component={DBBuyerHome} />
           <Route path="/buyerproperties" component={BProperties} />

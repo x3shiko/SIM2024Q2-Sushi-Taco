@@ -29,7 +29,6 @@ const TableU = () => {
     const [assignSuspend, setAssignSuspend] = useState(''); // handle suspend
     const [showEmail, setShowEmail] = useState(false); //pop out for Email
     const [showPassword, setShowPassword] = useState(false); //pop out for Password
-    const [showProfileD, setShowProfileD] = useState(false); //pop out for Profile Description
     const [showSuspend, setShowSuspend] = useState(false); //pop out for Suspend
     const [accounts, setAccounts] = useState([])
     const [accountUpdating, setAccountUpdating] = useState(null)
@@ -44,7 +43,6 @@ const TableU = () => {
     const toggleRole = () => setShowRole(!showRole); // toggle role
     const toggleEmail = () => setShowEmail(!showEmail); // toggle email
     const togglePassword = () => setShowPassword(!showPassword); // toggle password
-    const toggleProfileD = () => setShowProfileD(!showProfileD); // toggle Profile Description
     const toggleSuspend = () => setShowSuspend(!showSuspend); // toggle Suspend
 
     const handleAssignRole = (e) => { // handle roles
@@ -94,7 +92,6 @@ const TableU = () => {
         setShowRole(value === 'role');
         setShowEmail(value === 'email');
         setShowPassword(value === 'password');
-        setShowProfileD(value === 'profileD');
         setShowSuspend(value === 'suspend');
     };
 
@@ -152,16 +149,7 @@ const TableU = () => {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            Profile Description
-                        </th>
-                        <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
                             Status
-                        </th>
-                        <th scope="col" className="relative px-6 py-3">
-                            <span className="sr-only">Edit</span>
                         </th>
                     </tr>
                 </thead>
@@ -194,7 +182,6 @@ const TableU = () => {
                             <option value="role" onClick={toggleRole}>Profile</option>
                             <option value="email" onClick={toggleEmail}>Email</option>
                             <option value="password" onClick={togglePassword}>Password</option>
-                            <option value="profileD" onClick={toggleProfileD}>Profile Description</option>
                             <option value="suspend" onClick={toggleSuspend}>Suspend</option>
                         </select>
                         {/* Roles update */}
@@ -226,12 +213,6 @@ const TableU = () => {
                             <input type='password' id="password" placeholder='Confirm Password' onChange={handleSubmitPassword} className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
                         </div>
                     </form>
-                    )}
-                    {/* Update Profile Description */}
-                        {showProfileD && (
-                            <div className="my-4 border-b-2">
-                                <textarea id="CreateProfile" placeholder='Profile Description' className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-                            </div>
                     )}
                     {/* Suspend Account */}
                             {showSuspend && (
