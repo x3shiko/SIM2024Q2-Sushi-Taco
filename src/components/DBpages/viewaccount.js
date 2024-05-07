@@ -7,6 +7,11 @@ const TableA = ({ data, onSearch }) => {
     const [accounts, setAccounts] = useState([])
     const [filteredAccounts, setFilteredAccounts] = useState([])
     const [showFilteredAccounts, setShowFilteredAccounts] = useState(false)
+    const [assignProfile, setAssignProfile] = useState(''); // handle roles
+
+    const handleAssignProfile = (e) => { // handle roles
+        setAssignProfile(e.target.value);
+    };
 
     useEffect(() => {
         const fetchAccounts = async () => {
@@ -45,6 +50,14 @@ const TableA = ({ data, onSearch }) => {
                     className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
                 />
                 </div>
+                {/* Assign profile dropdown add in key here*/}
+                    <select id="roles" value={assignProfile} onChange={handleAssignProfile} className="m-2 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="" disabled>Assign Profile</option>
+                        <option value="buyer">Buy</option>
+                        <option value="seller">Sell</option>
+                        <option value="agency">Agent</option>
+                        <option value="admin">Admin</option>
+                    </select>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
