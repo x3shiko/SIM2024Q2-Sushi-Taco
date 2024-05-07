@@ -55,7 +55,7 @@ const Dashboard = () => {
                         {/*<li className="py-2 hover:bg-blue-700 cursor-pointer"><a href='assignrole'>Assign Roles</a></li>*/}
                         <li className="py-2 hover:bg-blue-700 cursor-pointer"><a href='viewaccount'>View Account</a></li>
                         <li className="py-2 hover:bg-blue-700 cursor-pointer"><a href='updateaccount'>Update Account</a></li>
-                        <li className="py-2 hover:bg-blue-700 cursor-pointer"><a href='createprofile'>Create Profile</a></li>
+                        {/*<li className="py-2 hover:bg-blue-700 cursor-pointer"><a href='createprofile'>Create Profile</a></li>*/}
                         <li className="py-2 hover:bg-blue-700 cursor-pointer"><a href='/'>Logout</a></li>
                         {/* Add more menu items as needed */}
                     </ul>
@@ -97,12 +97,12 @@ const Dashboard = () => {
         >
            Update Account
         </a>
-        <a href="createprofile"
+        {/*<a href="createprofile"
           className="p-4 hover:bg-gray-700 cursor-pointer"
           onClick={handleLogOut}
         >
            Create Profile
-        </a>
+    </a>*/}
         <a href="/"
           className="p-4 hover:bg-gray-700 cursor-pointer"
           onClick={handleLogOut}
