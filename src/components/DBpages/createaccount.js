@@ -59,7 +59,7 @@ const Signup = () => {
         };
     return (
         <div className="min-h-screen w-3/4 flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 p-10 bg-white border rounded-md border-10 border-blue-300">
+            <div className="max-w-md w-full space-y-8 p-10 bg-gray-100">
                 <div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create Account</h2>
                     <img className="h-12 w-auto mx-auto mt-2 block" src={SnTLogo} alt="Logo" />
