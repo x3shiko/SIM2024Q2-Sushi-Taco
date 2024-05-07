@@ -25,13 +25,6 @@ const Alert = ({ type, message }) => {
   };
 
 const Signup = () => {
-        const [text, setText] = useState('');
-        const [roles, setRoles] = useState('');
-
-        const handleRoleChange = (e) => {
-            setRoles(e.target.value);
-        };
-
         //alert function
         const [showAlert, setShowAlert] = useState(false);
 
@@ -48,7 +41,7 @@ const Signup = () => {
             const firstName = signupForm['firstN'].value;
             const lastName = signupForm['lastN'].value;
 
-            createAccountController.createAccount(email, password, firstName, lastName, roles).then((createAccountSuccess) => {
+            createAccountController.createAccount(email, password, firstName, lastName).then((createAccountSuccess) => {
               console.log(createAccountSuccess)
               if (createAccountSuccess){
                 signupForm.reset();
@@ -80,18 +73,6 @@ const Signup = () => {
                     <div className="my-4">
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700"></label>
                         <input type='password' id="password" placeholder='Password' className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-                    </div>
-                    <div className="my-4">
-                        <label htmlFor="roles" className="block text-sm font-medium text-gray-700">Profile</label>
-                        <select id="roles" value={roles} onChange={handleRoleChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                        <option value="" disabled>Select a Profile</option>
-                        <option value="buyer">Buy</option>
-                        <option value="seller">Sell</option>
-                        <option value="agency">Agent</option>
-                        </select>
-                    </div>
-                    <div className="my-4 border-b-2">
-                        <textarea id="CreateProfile" placeholder='Profile Description' className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
                     </div>
                     {/* button should be onSubmit but i'll leave it as onClick for you to see first */}
                     <button type="submit" className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Create</button>

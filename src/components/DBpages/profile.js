@@ -36,9 +36,18 @@ const Profile = () => {
     return (
 <div className="min-h-screen w-3/4 overflow-x-auto">
     {/* create profile button and modal */}
-                <button className="m-4 p-3 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600" onClick={openModalCreateP}>
+    <div className="container mx-auto mt-4 flex justify-evenly">
+                <button className="flex m-4 p-3 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600" onClick={openModalCreateP}>
                     Create Profile
                 </button>
+                {/* search profile input */}
+                <div className="flex my-2 items-center">
+                                <input
+                                    type="text"
+                                    placeholder="Search by Profile"
+                                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"/>
+                                </div>
+                            </div>
                 <Modal isOpen={isOpenCreateP} onRequestClose={closeModalCreateP} className="block p-2 w-1/2 mx-auto bg-gray-600">
                             <div className='flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white'>Create Profile</div> {/* header*/}
                             {/* input search */}
@@ -46,7 +55,7 @@ const Profile = () => {
                             <div className="flex my-4 items-center justify-center">
                                 <input
                                     type="text"
-                                    placeholder="Search Profile"
+                                    placeholder="Search Profile Name"
                                     value={whenChange}
                                     onChange={handleInputChange}
                                     className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"

@@ -52,7 +52,7 @@ const TableA = ({ data, onSearch }) => {
                 </div>
                 {/* Assign profile dropdown add in key here*/}
                     <select id="roles" value={assignProfile} onChange={handleAssignProfile} className="m-2 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="" disabled>Assign Profile</option>
+                        <option value="" disabled>Search Profile</option>
                         <option value="buyer">Buy</option>
                         <option value="seller">Sell</option>
                         <option value="agency">Agent</option>
