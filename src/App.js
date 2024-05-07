@@ -14,15 +14,13 @@ import MainPage from "./components/mainpage";
 import ViewA from './components/DBpages/viewaccount';
 import UpdateA from './components/DBpages/updateaccount';
 import AssignR from './components/DBpages/assignrole';
-import ViewP from './components/DBpages/viewprofile';
-import UpdateP from './components/DBpages/updateprofile';
 import CreateP from './components/DBpages/createprofile';
 //Buyer page
 import BProperties from './components/DBbuyer/buyerproperties';
 import RateReviewAgents from './components/DBbuyer/rrAgents';
 import CalculateMortgage from './components/DBbuyer/calculateMort';
 import BuyerSaveProperty from './components/DBbuyer/buyersaveproperty';
-// for testing
+// route to dashboard of each roles
 import DBHome from './components/DBpages/dbhome';
 import DBBuyerHome from './components/DBbuyer/dbbuyerhome';
 import './index.css'
@@ -47,10 +45,7 @@ function App() {
           <Route path="/viewaccount" component={ViewA} />
           <Route path="/updateaccount" component={UpdateA} />
           <Route path="/assignrole" component={AssignR} />
-          
           <Route path="/createprofile" component={CreateP} />
-          <Route path="/viewprofile" component={ViewP} />
-          <Route path="/updateprofile" component={UpdateP} />
           {/* Buyer page */}
           <Route path="/dbbuyerhome" component={DBBuyerHome} />
           <Route path="/buyerproperties" component={BProperties} />

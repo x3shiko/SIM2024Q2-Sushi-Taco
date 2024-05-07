@@ -17,11 +17,6 @@ const SignProfile = () => {
 
     return (
         <div className="min-h-screen w-3/4 overflow-x-auto">
-            <div className="flex my-2 items-center justify-center">
-            <button className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm text-gray-400 font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-100" onClick={openModal}>
-                Create Profile
-            </button>
-            </div>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
@@ -54,6 +49,12 @@ const SignProfile = () => {
                         <td className="m-2 px-6 py-4 whitespace-nowrap">John</td>
                         <td className="m-2 px-6 py-4 whitespace-nowrap">Johndoe@gmail.com</td>
                         <td className="m-2 px-6 py-4 whitespace-nowrap max-w-xs overflow-hidden">Hi Im John, I specialise in HDB estate</td>
+                        <div className="flex my-2 items-center justify-center">
+                            {/* Create button */}
+                        <button className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-100" onClick={openModal}>
+                            Create Profile
+                        </button>
+                        </div>
                             <Modal isOpen={isOpen} onRequestClose={closeModal} className="block p-2 w-1/2 mx-auto bg-gray-600">
                                 {/* header for modal*/}
                             <div className='flex p-3 mb-5 border-b-4 justify-evenly align-middle text-white'>Select Changes</div>

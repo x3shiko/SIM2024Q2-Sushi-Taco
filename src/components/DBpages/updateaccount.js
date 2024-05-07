@@ -28,6 +28,7 @@ const TableU = () => {
     const [assignroles, setAssignRoles] = useState(''); // handle roles
     const [showEmail, setShowEmail] = useState(false); //pop out for Email
     const [showPassword, setShowPassword] = useState(false); //pop out for Password
+    const [showProfileD, setShowProfileD] = useState(false); //pop out for Profile Description
     const [showSuspend, setShowSuspend] = useState(false); //pop out for Suspend
     const [accounts, setAccounts] = useState([])
     const [accountUpdating, setAccountUpdating] = useState(null)
@@ -42,6 +43,7 @@ const TableU = () => {
     const toggleRole = () => setShowRole(!showRole); // toggle role
     const toggleEmail = () => setShowEmail(!showEmail); // toggle email
     const togglePassword = () => setShowPassword(!showPassword); // toggle password
+    const toggleProfileD = () => setShowProfileD(!showProfileD); // toggle Profile Description
     const toggleSuspend = () => setShowSuspend(!showSuspend); // toggle Suspend
 
     const handleAssignRole = (e) => { // handle roles
@@ -87,6 +89,7 @@ const TableU = () => {
         setShowRole(value === 'role');
         setShowEmail(value === 'email');
         setShowPassword(value === 'password');
+        setShowProfileD(value === 'profileD');
         setShowSuspend(value === 'suspend');
     };
 
@@ -132,7 +135,19 @@ const TableU = () => {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            Role
+                            Password
+                        </th>
+                        <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                            Profile
+                        </th>
+                        <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                            Profile Description
                         </th>
                         <th
                             scope="col"
@@ -152,7 +167,11 @@ const TableU = () => {
                             <td className="px-6 py-4 whitespace-nowrap">{account.firstName}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.lastName}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.email}</td>
+                            {/* password */}
+                            <td className="px-6 py-4 whitespace-nowrap">123123</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.role}</td>
+                            {/* profile description */}
+                            <td className="px-6 py-4 whitespace-nowrap">I am .....</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.status}</td>
                             <button className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600" onClick={() => openModal(account.id)}>
                                 Update
@@ -167,9 +186,10 @@ const TableU = () => {
                     <label htmlFor="roles" className="block mb-4 text-sm font-medium text-white">Select Changes</label>
                         <select id="roles" value={update} onChange={handleUpdate} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="" disabled>Select changes</option>
-                            <option value="role" onClick={toggleRole}>Roles</option>
+                            <option value="role" onClick={toggleRole}>Profile</option>
                             <option value="email" onClick={toggleEmail}>Email</option>
                             <option value="password" onClick={togglePassword}>Password</option>
+                            <option value="profileD" onClick={toggleProfileD}>Profile Description</option>
                             <option value="suspend" onClick={toggleSuspend}>Suspend</option>
                         </select>
                         {/* Roles update */}
@@ -202,15 +222,21 @@ const TableU = () => {
                         </div>
                     </form>
                     )}
+                    {/* Update Profile Description */}
+                        {showProfileD && (
+                            <div className="my-4 border-b-2">
+                                <textarea id="CreateProfile" placeholder='Profile Description' className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+                            </div>
+                    )}
                     {/* Suspend Account */}
-                                    {showSuspend && (
+                            {showSuspend && (
                                 <form onSubmit={handleSubmitSuspend}>
                                     <div className="my-4 border-b-2">
                                         <label htmlFor="suspend" className="block mb-2 text-sm font-medium text-white">Suspend Account</label>
                                         <ToggleButtonSuspend/>
                                     </div>
                                 </form>
-                                )}
+                            )}
                     </div>
                 <button className='p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300' onClick={closeModal}>Close</button>
                 <button type='submit' className='p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300' onClick={updateAccount}>Update</button>
