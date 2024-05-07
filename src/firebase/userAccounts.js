@@ -1,8 +1,23 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail  } from "firebase/auth";
 import { auth } from "./firebase";
 import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc} from 'firebase/firestore';
+import { httpsCallable } from "firebase/functions";
+import { functions } from "./firebase";
 
 
+class User{
+    constructor(){
+        this.db = getFirestore();
+    }
+
+    async updatePassword(userID, newPassword){
+        const changePassword = httpsCallable(functions, 'changeUserPassword');
+        await changePassword({userId: userID, newPassword: newPassword});
+        console.log(`user ID ${userID} has successfully change password to ${newPassword}`)
+    }
+}
+ 
+export const user = new User();
 
 class NewUser{
 
@@ -70,8 +85,7 @@ class UserSignIn {
                         return "None";
                     }
                 } catch (error) {
-                    console.error("Error getting user role:", error);
-                    throw error;
+                    console.log(error);
                 }
             };
 
@@ -79,8 +93,7 @@ class UserSignIn {
             const userRole = await getUserRole(userID);
             return userRole;
         } catch (error) {
-            console.error("Error signing in:", error);
-            throw error;
+            console.log(error);
         }
     }
 }

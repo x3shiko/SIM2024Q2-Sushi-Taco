@@ -18,29 +18,34 @@ const logger = require("firebase-functions/logger");
 //   response.send("Hello from Firebase!");
 // });
 
-// const functions = require('firebase-functions');
+const functions = require('firebase-functions');
 // const admin = require("firebase-admin");
 // admin.initializeApp();
 
-// exports.addAdminRole = functions.https.onCall((data, context) => {
-//   return admin.auth().getUserByEmail(data.email).then(user => {
-//     return admin.auth().setCustomerUserClaims(user.uid, {
-//       admin: true
-//     })
-//   }).then(() => {
-//     return {
-//       message: `Success! ${data.email} has been made an admin`
-//     }
-//   }).catch(err => {
-//     return err
-//   })
-// })
+const {initializeApp} = require("firebase-admin/app");
+const app = initializeApp();
+const {getAuth} = require("firebase-admin/auth");
+const admin = getAuth(app);
 
-// export async function changeUserPassword(userId, newPassword) {
-//     try {
-//       await admin.auth().updateUser(userId, { password: newPassword });
-//       console.log("Password updated successfully!");
-//     } catch (error) {
-//       console.error("Error updating password:", error);
-//     }
-//   }
+exports.addAdminRole = functions.https.onCall((data, context) => {
+  return admin.getUserByEmail(data.email).then(user => {
+    return admin.setCustomerUserClaims(user.uid, {
+      admin: true
+    })
+  }).then(() => {
+    return {
+      message: `Success! ${data.email} has been made an admin`
+    }
+  }).catch(err => {
+    return err
+  })
+})
+
+exports.changeUserPassword = functions.https.onCall(async (data, context) => {
+    try {
+        await admin.updateUser(data.userId, { password: data.newPassword });
+        console.log("Password updated successfully!");
+    } catch (error) {
+        console.error("Error updating password:", error);
+    }
+})

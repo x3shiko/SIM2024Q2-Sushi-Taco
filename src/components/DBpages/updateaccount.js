@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import Dashboard from './dashboard';
-import { viewAccountController, updateAccountController } from '../../controller';
+import { viewAccountController, updateAccountController, updatePasswordController } from '../../controller';
 
 const ToggleButtonSuspend = () => {
     const [isToggledSuspend, setIsToggledSuspend] = useState(false); // state for toggle button for suspend
@@ -76,7 +76,8 @@ const TableU = () => {
             } else if (update === 'password') {
                 // Update user password
                 // changeUserPassword(accountUpdating, "321321")
-                await updateAccountController.updateAccount(accountUpdating, { password: password });
+                // await updateAccountController.updateAccount(accountUpdating, { password: password });
+                await updatePasswordController.updatePassword(accountUpdating, "456456");
             } else {
                 console.log('No valid update operation selected.');
             }

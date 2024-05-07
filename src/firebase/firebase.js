@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 // import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from "firebase/auth";
+import { getFunctions } from "firebase/functions";
 
 
 const firebaseConfig = {
@@ -14,9 +15,10 @@ const firebaseConfig = {
   };
   
 const firebaseApp = initializeApp(firebaseConfig);
-// const { initializeApp } = require('firebase-admin/app');
 
 const auth = getAuth(firebaseApp);
+
+const functions = getFunctions(firebaseApp)
 // const serviceAccount = require('./csit314-sushitaco-firebase-adminsdk-2gk26-61d7b202d0.json');
 // const admin = require("firebase-admin");
 // admin.initializeApp({
@@ -45,5 +47,5 @@ const auth = getAuth(firebaseApp);
 //     console.error('Error creating user:', error);
 //   });
 
-export {firebaseApp, auth};
+export {firebaseApp, auth, functions};
   

@@ -1,4 +1,4 @@
-import { userSignOut, userSignIn, newUser, existingUsers, updateUser } from "./firebase/userAccounts";
+import { userSignOut, userSignIn, newUser, existingUsers, updateUser, user } from "./firebase/userAccounts";
 import { userProfiles } from './firebase/userProfile';
 import { properties } from "./properties";
 
@@ -32,6 +32,14 @@ class UpdateAccountController{
 }
 
 export const updateAccountController = new UpdateAccountController();
+
+class UpdatePasswordController{
+    async updatePassword(userID, newPassword){
+        await user.updatePassword(userID, newPassword);
+    }
+}
+
+export const updatePasswordController = new UpdatePasswordController();
 
 class ViewPropertiesController{
     fetchProperties = () =>{
