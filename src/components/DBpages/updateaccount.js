@@ -222,7 +222,6 @@ const TableU = () => {
                                     <select id="roles" value={assignSuspend} onChange={handleAssignSuspend} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option value="" disabled>Choose Suspend</option>
                                         <option value="suspend">Suspend</option>
-                                        <option value="suspendProfile">Suspend Profile</option>
                                         <option value="unsuspend">Unsuspend</option>
                                     </select>
                                     </div>
