@@ -87,6 +87,7 @@ const TableU = () => {
         setShowRole(value === 'role');
         setShowEmail(value === 'email');
         setShowPassword(value === 'password');
+        setShowSuspend(value === 'suspend');
     };
 
     const handleSubmitEmail = (e) => {
