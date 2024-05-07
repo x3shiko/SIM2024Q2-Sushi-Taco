@@ -82,9 +82,9 @@ const Signup = () => {
                         <input type='password' id="password" placeholder='Password' className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
                     </div>
                     <div className="my-4">
-                        <label htmlFor="roles" className="block text-sm font-medium text-gray-700">Roles</label>
+                        <label htmlFor="roles" className="block text-sm font-medium text-gray-700">Profile</label>
                         <select id="roles" value={roles} onChange={handleRoleChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                        <option value="" disabled>Select a role</option>
+                        <option value="" disabled>Select a Profile</option>
                         <option value="buyer">Buy</option>
                         <option value="seller">Sell</option>
                         <option value="agency">Agent</option>
