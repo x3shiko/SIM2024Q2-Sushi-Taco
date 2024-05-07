@@ -202,7 +202,7 @@ const TableU = () => {
                     <div className="mt-4 mb-3 border-b-2">
                         <label htmlFor="roles" className="block mb-4 text-sm font-medium text-white">Roles</label>
                         <select id="roles" value={assignroles} onChange={handleAssignRole} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="" disabled>Assign role</option>
+                            <option value="" disabled>Assign Profile</option>
                             <option value="buyer">Buy</option>
                             <option value="seller">Sell</option>
                             <option value="agency">Agent</option>
