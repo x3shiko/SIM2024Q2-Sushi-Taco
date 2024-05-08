@@ -95,12 +95,6 @@ const TableA = ({ data, onSearch }) => {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            Profile Description
-                        </th>
-                        <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
                             Status
                         </th>
                         <th scope="col" className="relative px-6 py-3">
@@ -117,7 +111,6 @@ const TableA = ({ data, onSearch }) => {
                             <td className="px-6 py-4 whitespace-nowrap">{account.email}</td>
                             <td className="px-6 py-4 whitespace-nowrap">123123</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.role}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">I am .....</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.status}</td>
                             {/*<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <a href="##" className="text-indigo-600 hover:text-indigo-900">

@@ -49,3 +49,12 @@ exports.changeUserPassword = functions.https.onCall(async (data, context) => {
         console.error("Error updating password:", error);
     }
 })
+
+exports.changeUserEmail = functions.https.onCall(async (data, context) => {
+  try {
+    await admin.updateUser(data.userId, {email: data.newEmail});
+    console.log(`User with UID ${data.userId}'s email changed successfully to ${data.newEmail}`);
+  } catch (error) {
+    console.error('Error changing user email:', error);
+  }
+})

@@ -52,10 +52,11 @@ const TableU = () => {
     const handleAssignSuspend = (e) => { // handle Suspend
         setAssignSuspend(e.target.value);
     };
+
     const fetchAccounts = async () => {
             const fetchedAccounts = await viewAccountController.getAccounts()
             setAccounts(fetchedAccounts);
-        };
+    };
 
     useEffect(() => {
         fetchAccounts();
@@ -64,19 +65,16 @@ const TableU = () => {
     const updateAccount = async (e) => {
         e.preventDefault();
         try {
-            if (update === 'role' && assignroles !== '') {
-                // Update user role
-                await updateAccountController.updateAccount(accountUpdating, { role: assignroles });
-                console.log(`Successfully changed user role to ${assignroles}`);
-            } else if (update === 'email') {
+            if (update === 'email') {
                 // Update user email
                 await updateAccountController.updateAccount(accountUpdating, { email: email });
             } else if (update === 'password') {
                 // Update user password
-                // changeUserPassword(accountUpdating, "321321")
-                // await updateAccountController.updateAccount(accountUpdating, { password: password });
-                await updatePasswordController.updatePassword(accountUpdating, "456456");
-            } else {
+                await updateAccountController.updateAccount(accountUpdating, { password: password });
+            } else if (update === 'suspend'){
+                await updateAccountController.updateAccount(accountUpdating, { status: assignSuspend });
+            }
+             else {
                 console.log('No valid update operation selected.');
             }
             fetchAccounts();
@@ -162,10 +160,8 @@ const TableU = () => {
                             <td className="px-6 py-4 whitespace-nowrap">{account.lastName}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.email}</td>
                             {/* password */}
-                            <td className="px-6 py-4 whitespace-nowrap">123123</td>
+                            <td className="px-6 py-4 whitespace-nowrap">{account.password}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.role}</td>
-                            {/* profile description */}
-                            <td className="px-6 py-4 whitespace-nowrap">I am .....</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.status}</td>
                             <button className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600" onClick={() => openModal(account.id)}>
                                 Update
@@ -180,23 +176,10 @@ const TableU = () => {
                     <label htmlFor="roles" className="block mb-4 text-sm font-medium text-white">Select Changes</label>
                         <select id="roles" value={update} onChange={handleUpdate} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="" disabled>Select changes</option>
-                            <option value="role" onClick={toggleRole}>Profile</option>
                             <option value="email" onClick={toggleEmail}>Email</option>
                             <option value="password" onClick={togglePassword}>Password</option>
                             <option value="suspend" onClick={toggleSuspend}>Suspend</option>
                         </select>
-                        {/* Roles update */}
-                        {showRole && (
-                    <div className="mt-4 mb-3 border-b-2">
-                        <label htmlFor="roles" className="block mb-4 text-sm font-medium text-white">Roles</label>
-                        <select id="roles" value={assignroles} onChange={handleAssignRole} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="" disabled>Assign Profile</option>
-                            <option value="buyer">Buy</option>
-                            <option value="seller">Sell</option>
-                            <option value="agency">Agent</option>
-                        </select>
-                    </div>
-                        )}
                         {/* Email Update */}
                         {showEmail && (
                     <form>
@@ -221,8 +204,8 @@ const TableU = () => {
                                     <div className="my-4 border-b-2">
                                     <select id="roles" value={assignSuspend} onChange={handleAssignSuspend} className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option value="" disabled>Choose Suspend</option>
-                                        <option value="suspend">Suspend</option>
-                                        <option value="unsuspend">Unsuspend</option>
+                                        <option value="Suspend">Suspend</option>
+                                        <option value="Active">Unsuspend</option>
                                     </select>
                                     </div>
                                 </form>
