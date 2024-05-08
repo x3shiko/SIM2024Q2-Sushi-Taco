@@ -97,53 +97,6 @@ const Profile = () => {
           />
         </div>
       </div>
-      <Modal
-        isOpen={isOpenCreateP}
-        onRequestClose={closeModalCreateP}
-        className="block p-2 w-1/2 mx-auto bg-gray-600"
-      >
-        <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
-          Create Profile
-        </div>{" "}
-        {/* header*/}
-        {/* input search */}
-        <div className="flex my-4 items-center justify-center">
-          <input
-            type="text"
-            placeholder="Search Profile Name"
-            value={whenChange}
-            onChange={handleInputChange}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-          />
-          {/* add their data accordingly to search profile */}
-          {profileShow && (
-            <div className="relative h-auto justify-center items-center border rounded-md">
-              <ul className="absolute p-1 top-0 w-40 bg-gray-400 z-auto">
-                <li className="text-center text-white rounded-md hover:bg-gray-200 hover:text-black cursor-pointer">
-                  Profile 1
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-        <div className="my-4 border-b-2">
-          <textarea
-            id="CreateProfile"
-            placeholder="Profile Description"
-            className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            required
-          />
-        </div>
-        <button
-          className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
-          onClick={closeModalCreateP}
-        >
-          Close
-        </button>
-        <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
-          Create
-        </button>
-      </Modal>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -163,13 +116,13 @@ const Profile = () => {
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              Edit
+              Profile Description
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              Profile Description
+              Edit
             </th>
             <th
               scope="col"
@@ -187,12 +140,74 @@ const Profile = () => {
               <StatusColor type="unsuspend" />
             </td>
             <td className="m-2 px-6 py-4 whitespace-nowrap">Profile</td>
-            <button
-              className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-              onClick={openModalEdit}
+            <td className="m-2 px-6 py-4 whitespace-nowrap">
+              Hi, I am a .....
+            </td>
+            <td>
+              <button
+                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                onClick={openModalEdit}
+              >
+                Edit
+              </button>
+            </td>
+
+            <td>
+              <button
+                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                onClick={openModal}
+              >
+                Assign Profile
+              </button>
+            </td>
+            {/* create profile modal here */}
+            <Modal
+              isOpen={isOpenCreateP}
+              onRequestClose={closeModalCreateP}
+              className="block p-2 w-1/2 mx-auto bg-gray-600"
             >
-              Edit
-            </button>
+              <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
+                Create Profile
+              </div>{" "}
+              {/* header*/}
+              {/* input search */}
+              <div className="flex my-4 items-center justify-center">
+                <input
+                  type="text"
+                  placeholder="Search Profile Name"
+                  value={whenChange}
+                  onChange={handleInputChange}
+                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+                />
+                {/* add their data accordingly to search profile */}
+                {profileShow && (
+                  <div className="relative h-auto justify-center items-center border rounded-md">
+                    <ul className="absolute p-1 top-0 w-40 bg-gray-400 z-auto">
+                      <li className="text-center text-white rounded-md hover:bg-gray-200 hover:text-black cursor-pointer">
+                        Profile 1
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <div className="my-4 border-b-2">
+                <textarea
+                  id="CreateProfile"
+                  placeholder="Profile Description"
+                  className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  required
+                />
+              </div>
+              <button
+                className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
+                onClick={closeModalCreateP}
+              >
+                Close
+              </button>
+              <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
+                Create
+              </button>
+            </Modal>
             {/* edit profile modal here */}
             <Modal
               isOpen={isOpenEdit}
@@ -233,26 +248,12 @@ const Profile = () => {
               {/* Profile Name add their data for each option */}
               {showProfileN && (
                 <div className="mt-4 mb-3 border-b-2">
-                  <label
-                    htmlFor="roles"
-                    className="block mb-4 text-sm font-medium text-white"
-                  >
-                    Roles
-                  </label>
-                  <select
-                    id="roles"
-                    value={editProfile}
-                    onChange={handleEditProfile}
-                    className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    <option value="" disabled>
-                      Assign Profile
-                    </option>
-                    <option value="buyer">Buy</option>
-                    <option value="seller">Sell</option>
-                    <option value="agency">Agent</option>
-                    <option value="admin">Admin</option>
-                  </select>
+                  <textarea
+                    id="editProfileN"
+                    placeholder="Profile Name"
+                    className="my-2 h-20 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
                 </div>
               )}
               {/* Profile Description add save data for textarea */}
@@ -303,15 +304,6 @@ const Profile = () => {
                 Edit
               </button>
             </Modal>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">
-              Hi, I am a .....
-            </td>
-            <button
-              className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-              onClick={openModal}
-            >
-              Assign Profile
-            </button>
             {/* assign profile modal here */}
             <Modal
               isOpen={isOpen}
