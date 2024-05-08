@@ -100,7 +100,7 @@ const Navbar = () => {
         </button>
         *
         <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 hover:text-white mx-2">
-          <a href="dbsellerhome">Test login</a>
+          <a href="dbrealhome">Test login</a>
         </button>
         *
       </div>

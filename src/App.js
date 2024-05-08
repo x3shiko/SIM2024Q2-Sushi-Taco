@@ -22,10 +22,15 @@ import BuyerSaveProperty from "./components/DBbuyer/buyersaveproperty";
 //Seller page
 import SellerProperties from "./components/DBseller/sellerproperties";
 import rrAgentSeller from "./components/DBseller/rrAgentSeller";
+//Real-estate page
+import Listing from "./components/DBreal/propertylisting";
+import RealViewRR from "./components/DBreal/realviewrr";
+import ViewRP from "./components/DBreal/viewrealproperty";
 // route to dashboard of each roles
 import DBHome from "./components/DBpages/dbhome";
 import DBBuyerHome from "./components/DBbuyer/dbbuyerhome";
 import SellerHome from "./components/DBseller/dbsellerhome";
+import DBReal from "./components/DBreal/dbrealhome";
 import "./index.css";
 
 function App() {
@@ -57,6 +62,11 @@ function App() {
           <Route path="/dbsellerhome" component={SellerHome} />
           <Route path="/sellerproperties" component={SellerProperties} />
           <Route path="/rrAgentSeller" component={rrAgentSeller} />
+          {/* Real-estate page */}
+          <Route path="/dbrealhome" component={DBReal} />
+          <Route path="/propertylisting" component={Listing} />
+          <Route path="/viewrealproperty" component={ViewRP} />
+          <Route path="/realviewrr" component={RealViewRR} />
         </Switch>
       </div>
     </Router>
