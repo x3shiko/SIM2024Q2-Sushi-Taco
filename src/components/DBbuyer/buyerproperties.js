@@ -15,17 +15,13 @@ const BProperties = ({ data, onSearch}) => {
 
     useEffect(() => {
         const fetchProperties = async () => {
-            const properties = viewPropertiesController.fetchProperties()
-            console.log("Properties:", properties);
-            setProperties(properties)
-        }
-        const fetchSoldProperties = async () => {
-            const soldProperties = viewSoldPropertiesController.fetchProperties()
-            console.log("Sold Properties:", soldProperties);
+            const properties = await viewPropertiesController.fetchProperties()
+            const unSoldProperties = properties.filter(property => property.status === 'unsold')
+            const soldProperties = properties.filter(property => property.status === 'sold')
+            setProperties(unSoldProperties)
             setSoldProperties(soldProperties)
         }
         fetchProperties()
-        fetchSoldProperties()
     }, [])
 
     //toggle for sold/unsold property

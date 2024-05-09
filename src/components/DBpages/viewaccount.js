@@ -109,7 +109,7 @@ const TableA = ({ data, onSearch }) => {
                             <td className="px-6 py-4 whitespace-nowrap">{account.firstName}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.lastName}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.email}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">123123</td>
+                            <td className="px-6 py-4 whitespace-nowrap">{account.password}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.role}</td>
                             <td className="px-6 py-4 whitespace-nowrap">{account.status}</td>
                             {/*<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
