@@ -1,5 +1,5 @@
 //import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 //import Navbar from "./components/navbar";
 //import Footer from "./components/footer";
 import Home from "./components/pages/home";
@@ -11,21 +11,29 @@ import Login from "./components/pages/login";
 //Admin pages
 import CreateA from "./components/DBpages/createaccount";
 import MainPage from "./components/mainpage";
-import ViewA from './components/DBpages/viewaccount';
-import UpdateA from './components/DBpages/updateaccount';
-import ProfileDB from './components/DBpages/profile';
+import ViewA from "./components/DBpages/viewaccount";
+import UpdateA from "./components/DBpages/updateaccount";
+import ProfileDB from "./components/DBpages/profile";
 //Buyer page
-import BProperties from './components/DBbuyer/buyerproperties';
-import RateReviewAgents from './components/DBbuyer/rrAgents';
-import CalculateMortgage from './components/DBbuyer/calculateMort';
-import BuyerSaveProperty from './components/DBbuyer/buyersaveproperty';
+import BProperties from "./components/DBbuyer/buyerproperties";
+import RateReviewAgents from "./components/DBbuyer/rrAgents";
+import CalculateMortgage from "./components/DBbuyer/calculateMort";
+import BuyerSaveProperty from "./components/DBbuyer/buyersaveproperty";
+//Seller page
+import SellerProperties from "./components/DBseller/sellerproperties";
+import rrAgentSeller from "./components/DBseller/rrAgentSeller";
+//Real-estate page
+import Listing from "./components/DBreal/propertylisting";
+import RealViewRR from "./components/DBreal/realviewrr";
+import ViewRP from "./components/DBreal/viewrealproperty";
 // route to dashboard of each roles
-import DBHome from './components/DBpages/dbhome';
-import DBBuyerHome from './components/DBbuyer/dbbuyerhome';
-import './index.css'
+import DBHome from "./components/DBpages/dbhome";
+import DBBuyerHome from "./components/DBbuyer/dbbuyerhome";
+import SellerHome from "./components/DBseller/dbsellerhome";
+import DBReal from "./components/DBreal/dbrealhome";
+import "./index.css";
 
 function App() {
-
   return (
     <Router>
       <div>
@@ -50,6 +58,15 @@ function App() {
           <Route path="/rrAgents" component={RateReviewAgents} />
           <Route path="/calculateMort" component={CalculateMortgage} />
           <Route path="/buyersaveproperty" component={BuyerSaveProperty} />
+          {/* Seller page */}
+          <Route path="/dbsellerhome" component={SellerHome} />
+          <Route path="/sellerproperties" component={SellerProperties} />
+          <Route path="/rrAgentSeller" component={rrAgentSeller} />
+          {/* Real-estate page */}
+          <Route path="/dbrealhome" component={DBReal} />
+          <Route path="/propertylisting" component={Listing} />
+          <Route path="/viewrealproperty" component={ViewRP} />
+          <Route path="/realviewrr" component={RealViewRR} />
         </Switch>
       </div>
     </Router>
@@ -57,14 +74,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
