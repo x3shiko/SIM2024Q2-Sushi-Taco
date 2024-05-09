@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react';
 import DashboardBuyer from './dbbuyer';
 import Image1 from "../../assets/1.png";
 import Image2 from "../../assets/2.png";
-import { viewPropertiesController, viewSoldPropertiesController } from '../../controller';
+import { viewPropertiesController } from '../../controller';
 
 const BProperties = ({ data, onSearch}) => {
     const [query, setQuery] = useState('');

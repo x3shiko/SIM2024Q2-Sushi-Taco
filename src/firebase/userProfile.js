@@ -1,27 +1,4 @@
-import { getFirestore, doc, updateDoc, setDoc, getDoc, collection } from 'firebase/firestore';
-
-class NewProfile{
-
-    constructor(){
-        this.db = getFirestore();
-    }
-
-    createProfile = async (userID, email, firstName, lastName, roles) => {
-        const userDocRef = doc(this.db, 'users', userID); // 'users' is the collection name
-        setDoc(userDocRef, {
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
-            role: roles,
-            status: "Active"
-            // Add other details as needed
-        }).then(() => {
-            console.log("User data successfully created and stored in database");
-        }).catch((error) => {
-            console.error("Error storing user data:", error);
-        });
-    };
-}
+import { getFirestore, doc, updateDoc, setDoc, getDocs, collection, addDoc } from 'firebase/firestore';
 
 class UserProfiles{
 
@@ -29,7 +6,37 @@ class UserProfiles{
         this.db = getFirestore();
     }
 
-    
+    async createProfile(profileName, profileDescription){
+        try{
+            const profilesCollectionRef = collection(this.db, 'profiles');
+            await addDoc(profilesCollectionRef, {
+                profileName: profileName,
+                profileDescription: profileDescription,
+                userIDs: [],
+                status: "Active"
+            })
+            return true
+        } catch(error){
+            return false
+        }
+    };
+
+    async getProfiles(){
+        const profilesCollection = collection(this.db, 'profiles');
+        const profilesSnapshot = await getDocs(profilesCollection);
+        const profilesData = profilesSnapshot.docs.map(doc => {
+            return{
+                id:doc.id,
+                ...doc.data()
+            }
+        })
+        return profilesData;
+    }
+
+    async updateProfile(profileID, fieldToUpdate){
+        const profileDocRef = doc(this.db, 'profiles', profileID);
+        await updateDoc(profileDocRef, fieldToUpdate);
+    }
 }
 
 export const userProfiles = new UserProfiles();

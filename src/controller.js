@@ -1,5 +1,6 @@
 import { user } from "./firebase/userAccounts";
 import { properties } from "./properties";
+import { userProfiles } from "./firebase/userProfile";
 
 
 class CreateAccountController{
@@ -79,3 +80,27 @@ class SignInController {
 }
 
 export const signInController = new SignInController();
+
+class CreateProfileController {
+    async createProfile(profileName, profileDescription){
+        return await userProfiles.createProfile(profileName, profileDescription)
+    }
+}
+
+export const createProfileController = new CreateProfileController()
+
+class ViewProfilesController {
+    async viewProfiles(){
+        return userProfiles.getProfiles()
+    }
+}
+
+export const viewProfilesController = new ViewProfilesController()
+
+class UpdateProfileController{
+    async updateProfile(profileID, fieldToUpdate){
+        await userProfiles.updateProfile(profileID, fieldToUpdate)
+    }
+}
+
+export const updateProfileController = new UpdateProfileController()

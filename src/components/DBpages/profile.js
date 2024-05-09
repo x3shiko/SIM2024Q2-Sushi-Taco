@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Dashboard from "./dashboard";
+import { createProfileController, updateProfileController, viewProfilesController } from "../../controller";
 
 const StatusColor = ({ type }) => {
   // Status dot color function
@@ -31,11 +32,28 @@ const Profile = () => {
   const [showProfileS, setShowProfileS] = useState(false); //state for profile suspend modal
   const [editProfile, setEditProfile] = useState(""); //state for edit profile
   const [editSuspend, setEditSuspend] = useState(""); //state for edit suspend
+  const [profileDescription, setProfileDescription] = useState("");
+  const [profiles, setProfiles] = useState([])
+  const [updateProfileStatus, setUpdateProfileStatus] = useState("")
+  const [profileUpdate, setProfileUpdate] = useState("")
+  const [profileIDToUpdate, setProfileIDToUpdate] = useState("")
+  const [updateValue, setUpdateValue] = useState("")
 
   const toggleChange = () => setProfileShow(!profileShow); // toggle profile search
-  const toggleProfileN = () => setShowProfileN(!showProfileN); // toggle Profile Name
-  const toggleProfileD = () => setShowProfileD(!showProfileD); // toggle Profile Description
-  const toggleProfileS = () => setShowProfileS(!showProfileS); // toggle Profile Suspend
+  // toggle Profile Name
+  const toggleProfileN = () => {
+    setShowProfileN(!showProfileN)
+  };
+  // toggle Profile Description
+  const toggleProfileD = () => {
+    setProfileUpdate("profileDescription")
+    setShowProfileD(!showProfileD)
+  };
+  // toggle Profile Suspend
+  const toggleProfileS = () => {
+    setProfileUpdate("status")
+    setShowProfileS(!showProfileS)
+  };
 
   // handle edit profile
   const handleEditProfile = (e) => {
@@ -54,8 +72,20 @@ const Profile = () => {
   const openModalCreateP = () => setIsOpenCreateP(true);
   const closeModalCreateP = () => setIsOpenCreateP(false);
   // edit profile open/close modal
-  const openModalEdit = () => setIsOpenEdit(true);
+  const openModalEdit = (profileID) => {
+    setProfileIDToUpdate(profileID)
+    setIsOpenEdit(true)
+  };
   const closeModalEdit = () => setIsOpenEdit(false);
+
+  useEffect(() => {
+    const fetchProfiles = async () => {
+        const profiles = await viewProfilesController.viewProfiles()
+        setProfiles(profiles)
+    };
+
+    fetchProfiles();
+}, []);
 
   // handle edit modal
   const handleEdit = (e) => {
@@ -77,6 +107,45 @@ const Profile = () => {
       toggleChange(false);
     }
   };
+
+  const handleProfileDescription = (e) => {
+    setProfileDescription(e.target.value)
+  }
+
+  const handleCreateProfile = async (e) => {
+    e.preventDefault()
+    let profileName = whenChange
+    await createProfileController.createProfile(profileName, profileDescription)
+    closeModalCreateP()
+  }
+
+  const handleUpdateValue = (e) => {
+    setUpdateValue(e.target.value)
+  }
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault()
+    let fieldToUpdate = {}
+    console.log(edit)
+    if (edit === "profileN"){
+      fieldToUpdate = {
+        profileName: updateValue
+      }
+    } else if (edit === 'profileD'){
+      fieldToUpdate = {
+        profileDescription: updateValue
+      }
+    } else if (edit === 'profileS'){
+      fieldToUpdate = {
+        status: editSuspend
+      }
+    }
+    else{
+      console.log("No field to update")
+    }
+    await updateProfileController.updateProfile(profileIDToUpdate, fieldToUpdate)
+    closeModalEdit()
+  }
 
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
@@ -133,20 +202,23 @@ const Profile = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          <tr>
+          {profiles.map((profile) => (
+            <tr>
             {/* add profile and profile description data into the td */}
             {/* add status color to the status base on types*/}
             <td>
+            {profile.status === 'Active' ? (
               <StatusColor type="unsuspend" />
+            ) : (
+              <StatusColor type="suspend" />
+            )}
             </td>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">Profile</td>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">
-              Hi, I am a .....
-            </td>
+            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileName}</td>
+            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileDescription}</td>
             <td>
               <button
                 className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-                onClick={openModalEdit}
+                onClick={() => openModalEdit(profile.id)}
               >
                 Edit
               </button>
@@ -160,12 +232,15 @@ const Profile = () => {
                 Assign Profile
               </button>
             </td>
+          </tr>
+          ))}
             {/* create profile modal here */}
             <Modal
               isOpen={isOpenCreateP}
               onRequestClose={closeModalCreateP}
               className="block p-2 w-1/2 mx-auto bg-gray-600"
             >
+              <form onSubmit={handleCreateProfile}>
               <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
                 Create Profile
               </div>{" "}
@@ -174,26 +249,17 @@ const Profile = () => {
               <div className="flex my-4 items-center justify-center">
                 <input
                   type="text"
-                  placeholder="Search Profile Name"
+                  placeholder="Profile Name"
                   value={whenChange}
                   onChange={handleInputChange}
                   className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
                 />
-                {/* add their data accordingly to search profile */}
-                {profileShow && (
-                  <div className="relative h-auto justify-center items-center border rounded-md">
-                    <ul className="absolute p-1 top-0 w-40 bg-gray-400 z-auto">
-                      <li className="text-center text-white rounded-md hover:bg-gray-200 hover:text-black cursor-pointer">
-                        Profile 1
-                      </li>
-                    </ul>
-                  </div>
-                )}
               </div>
               <div className="my-4 border-b-2">
                 <textarea
                   id="CreateProfile"
                   placeholder="Profile Description"
+                  onChange={handleProfileDescription}
                   className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
@@ -204,9 +270,10 @@ const Profile = () => {
               >
                 Close
               </button>
-              <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
+              <button type="submit" className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
                 Create
               </button>
+              </form>
             </Modal>
             {/* edit profile modal here */}
             <Modal
@@ -214,6 +281,7 @@ const Profile = () => {
               onRequestClose={closeModalEdit}
               className="block p-2 w-1/2 mx-auto bg-gray-600"
             >
+              <form onSubmit={handleUpdateProfile}>
               <div className="flex p-3 mb-5 border-b-4 justify-evenly align-middle text-white">
                 Select Changes
               </div>{" "}
@@ -251,6 +319,7 @@ const Profile = () => {
                   <textarea
                     id="editProfileN"
                     placeholder="Profile Name"
+                    onChange={handleUpdateValue}
                     className="my-2 h-20 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required
                   />
@@ -262,6 +331,7 @@ const Profile = () => {
                   <textarea
                     id="editProfileD"
                     placeholder="Profile Description"
+                    onChange={handleUpdateValue}
                     className="my-2 h-32 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required
                   />
@@ -285,8 +355,8 @@ const Profile = () => {
                     <option value="" disabled>
                       Suspend Profile
                     </option>
-                    <option value="suspend">Suspend</option>
-                    <option value="unsuspend">Unsuspend</option>
+                    <option value="Suspend">Suspend</option>
+                    <option value="Active">Unsuspend</option>
                   </select>
                 </div>
               )}
@@ -303,6 +373,7 @@ const Profile = () => {
               >
                 Edit
               </button>
+              </form>
             </Modal>
             {/* assign profile modal here */}
             <Modal
@@ -371,7 +442,6 @@ const Profile = () => {
                 Assign
               </button>
             </Modal>
-          </tr>
         </tbody>
       </table>
     </div>
