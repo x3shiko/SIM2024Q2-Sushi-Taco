@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Dashboard from "./dashboard";
-import { createProfileController, updateProfileController, viewProfilesController } from "../../controller";
+import { createProfileController, updateProfileController, viewProfilesController, viewAccountController, updateAccountController, addUserIDsToProfileController } from "../../controller";
 
 const StatusColor = ({ type }) => {
   // Status dot color function
@@ -38,6 +38,9 @@ const Profile = () => {
   const [profileUpdate, setProfileUpdate] = useState("")
   const [profileIDToUpdate, setProfileIDToUpdate] = useState("")
   const [updateValue, setUpdateValue] = useState("")
+  const [accounts, setAccounts] = useState([])
+  const [selectedAccounts, setSelectedAccounts] = useState([]);
+  const [profileNameToUpdate, setProfileNameToUpdate] = useState('')
 
   const toggleChange = () => setProfileShow(!profileShow); // toggle profile search
   // toggle Profile Name
@@ -66,7 +69,11 @@ const Profile = () => {
   };
 
   // assign profile open/close modal
-  const openModal = () => setIsOpen(true);
+  const openModal = (profileID, profileName) => {
+    setProfileIDToUpdate(profileID)
+    setProfileNameToUpdate(profileName)
+    setIsOpen(true)
+  };
   const closeModal = () => setIsOpen(false);
   // create profile open/close modal
   const openModalCreateP = () => setIsOpenCreateP(true);
@@ -83,9 +90,41 @@ const Profile = () => {
         const profiles = await viewProfilesController.viewProfiles()
         setProfiles(profiles)
     };
+    const fetchAccounts = async () => {
+      const fetchedAccounts = await viewAccountController.getAccounts()
+      setAccounts(fetchedAccounts);
+    };
 
+    fetchAccounts();
     fetchProfiles();
 }, []);
+
+//assign profile
+const handleCheckboxChange = (accountId) => {
+  setSelectedAccounts((prevSelectedAccounts) => {
+    if (prevSelectedAccounts.includes(accountId)) {
+      return prevSelectedAccounts.filter((id) => id !== accountId);
+    } else {
+      return [...prevSelectedAccounts, accountId];
+    }
+  });
+};
+
+const handleAssignButtonClick = () => {
+  //update user's profile
+  selectedAccounts.map(async (userID) => {
+    await updateAccountController.updateAccount(userID, {
+      profile: profileNameToUpdate,
+    });
+    console.log(`Updated user ${userID} to ${profileNameToUpdate}`)
+  })
+  //update profile
+  selectedAccounts.map(async (userID) => {
+    await addUserIDsToProfileController.addUserIDsProfile(profileIDToUpdate, userID)
+    console.log(`Add user ID ${userID} to profile ID ${profileIDToUpdate}`)
+  })
+  closeModal();
+};
 
   // handle edit modal
   const handleEdit = (e) => {
@@ -227,7 +266,7 @@ const Profile = () => {
             <td>
               <button
                 className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-                onClick={openModal}
+                onClick={() => openModal(profile.id, profile.profileName)}
               >
                 Assign Profile
               </button>
@@ -416,20 +455,24 @@ const Profile = () => {
                 </thead>
                 {/* Profile Data to select which profile to reassign */}
                 <tbody className="bg-white divide-y divide-gray-200">
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">firstName</td>
-                    <td className="px-6 py-4 whitespace-nowrap">lastName</td>
-                    <td className="px-6 py-4 whitespace-nowrap">email</td>
-                    <input
-                      id="default-checkbox"
-                      type="checkbox"
-                      value=""
-                      className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100
-                                             border-gray-300 rounded focus:ring-blue-500
-                                              dark:focus:ring-blue-600 dark:ring-offset-gray-800
-                                               focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                  </tr>
+                  {accounts.map((account) => (
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap">{account.firstName}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{account.lastName}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{account.email}</td>
+                      <input
+                        id="default-checkbox"
+                        type="checkbox"
+                        value=""
+                        checked={selectedAccounts.includes(account.id)}
+                        onChange={() => handleCheckboxChange(account.id)}
+                        className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100
+                                              border-gray-300 rounded focus:ring-blue-500
+                                                dark:focus:ring-blue-600 dark:ring-offset-gray-800
+                                                focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                    </tr>
+                  ))}
                 </tbody>
               </table>
               <button
@@ -438,7 +481,7 @@ const Profile = () => {
               >
                 Close
               </button>
-              <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
+              <button onClick={handleAssignButtonClick} className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
                 Assign
               </button>
             </Modal>

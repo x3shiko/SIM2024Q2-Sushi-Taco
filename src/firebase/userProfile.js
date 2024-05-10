@@ -1,4 +1,4 @@
-import { getFirestore, doc, updateDoc, setDoc, getDocs, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, doc, updateDoc, setDoc, getDocs, collection, addDoc, arrayUnion } from 'firebase/firestore';
 
 class UserProfiles{
 
@@ -36,6 +36,13 @@ class UserProfiles{
     async updateProfile(profileID, fieldToUpdate){
         const profileDocRef = doc(this.db, 'profiles', profileID);
         await updateDoc(profileDocRef, fieldToUpdate);
+    }
+
+    async addUserIDsProfile(profileID, userID){
+        const profileDocRef = doc(this.db, 'profiles', profileID);
+        await updateDoc(profileDocRef, {
+            userIDs: arrayUnion(userID)
+        });
     }
 }
 

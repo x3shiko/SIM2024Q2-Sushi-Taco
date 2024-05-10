@@ -104,3 +104,11 @@ class UpdateProfileController{
 }
 
 export const updateProfileController = new UpdateProfileController()
+
+class AddUserIDsToProfileController{
+    async addUserIDsProfile(profileID, userID){
+        await userProfiles.addUserIDsProfile(profileID, userID)
+    }
+}
+
+export const addUserIDsToProfileController = new AddUserIDsToProfileController()
