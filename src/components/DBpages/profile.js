@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Modal from "react-modal";
 import Dashboard from "./dashboard";
 import { createProfileController, updateProfileController, viewProfilesController, viewAccountController, updateAccountController, addUserIDsToProfileController } from "../../controller";
@@ -41,6 +41,9 @@ const Profile = () => {
   const [accounts, setAccounts] = useState([])
   const [selectedAccounts, setSelectedAccounts] = useState([]);
   const [profileNameToUpdate, setProfileNameToUpdate] = useState('')
+  const [filteredProfiles, setFilteredProfiles] = useState([])
+  const [showFilteredProfiles, setShowFilteredProfiles] = useState(false)
+  const [query, setQuery] = useState('');
 
   const toggleChange = () => setProfileShow(!profileShow); // toggle profile search
   // toggle Profile Name
@@ -147,6 +150,21 @@ const handleAssignButtonClick = () => {
     }
   };
 
+  const handleSearch = useCallback((e) => {
+    const inputValue = e.target.value;
+    setQuery(inputValue.toLowerCase());
+    if (inputValue === '') {
+        setShowFilteredProfiles(false);
+    } else {
+        setShowFilteredProfiles(true);
+        const filtered = profiles.filter((profile) => {
+            const profileName = profile.profileName.toLowerCase();
+            return profileName.includes(inputValue);
+        });
+        setFilteredProfiles(filtered);
+    }
+  }, [profiles]);
+
   const handleProfileDescription = (e) => {
     setProfileDescription(e.target.value)
   }
@@ -200,7 +218,9 @@ const handleAssignButtonClick = () => {
         <div className="flex my-2 items-center">
           <input
             type="text"
-            placeholder="Search by Profile"
+            placeholder="Search by Profile Name"
+            value={query}
+            onChange={handleSearch}
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
           />
         </div>
@@ -241,7 +261,39 @@ const handleAssignButtonClick = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {profiles.map((profile) => (
+          {!showFilteredProfiles && profiles.map((profile) => (
+            <tr>
+            {/* add profile and profile description data into the td */}
+            {/* add status color to the status base on types*/}
+            <td>
+            {profile.status === 'Active' ? (
+              <StatusColor type="unsuspend" />
+            ) : (
+              <StatusColor type="suspend" />
+            )}
+            </td>
+            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileName}</td>
+            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileDescription}</td>
+            <td>
+              <button
+                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                onClick={() => openModalEdit(profile.id)}
+              >
+                Edit
+              </button>
+            </td>
+
+            <td>
+              <button
+                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                onClick={() => openModal(profile.id, profile.profileName)}
+              >
+                Assign Profile
+              </button>
+            </td>
+          </tr>
+          ))}
+          {showFilteredProfiles && filteredProfiles.map((profile) => (
             <tr>
             {/* add profile and profile description data into the td */}
             {/* add status color to the status base on types*/}
