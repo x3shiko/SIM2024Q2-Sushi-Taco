@@ -32,20 +32,25 @@ class Properties{
     }
 
     getSavedProperties = async () => {
+        // Wait for currentUser to be defined
+        while (!currentUser) {
+          await new Promise(resolve => setTimeout(resolve, 100)); // Wait for 100 milliseconds
+        }
+        
         const propertiesCollection = collection(this.db, 'properties');
         const q = query(propertiesCollection, where("userIDs", "array-contains", currentUser.uid));
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot.docs)
         const properties = [];
         querySnapshot.forEach((doc) => {
-            properties.push({
+          properties.push({
             id: doc.id,
             ...doc.data()
-            });
+          });
         });
         console.log(properties)
         return properties;
-    }
+      }
 }
 
 export const properties = new Properties();

@@ -4,6 +4,8 @@ import DashboardBuyer from "./dbbuyer";
 
 const Rating = () => {
   const [rating, setRating] = useState(0); // state for rating
+  const [agents, setAgents] = useState('');
+  
 
   // handle rating onclick
   const handleClick = (value) => {
