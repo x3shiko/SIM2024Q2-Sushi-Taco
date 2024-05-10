@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail  } from "firebase/auth";
 import { auth } from "./firebase";
-import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc} from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion} from 'firebase/firestore';
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
 
@@ -160,7 +160,18 @@ class User{
             console.error('User document not found.');
             return null;
         }
-    } 
+    }
+
+    async saveProperty(userID, propertyID){
+        const userDocRef = doc(this.db, 'users', userID);
+        await updateDoc(userDocRef, {
+            savedProperties: arrayUnion(propertyID)
+        });
+        const propertyDocRef = doc(this.db, 'properties', propertyID);
+        await updateDoc(propertyDocRef, {
+            userIDs: arrayUnion(userID)
+        });
+    }
 }
  
 export const user = new User();

@@ -112,3 +112,19 @@ class AddUserIDsToProfileController{
 }
 
 export const addUserIDsToProfileController = new AddUserIDsToProfileController()
+
+class SavePropertyToUserController{
+    async saveProperty(userID, propertyID){
+        await user.saveProperty(userID, propertyID)
+    }
+}
+
+export const savePropertyToUserController = new SavePropertyToUserController()
+
+class GetSavedPropertiesController{
+    async getSavedProperties(){
+        return await properties.getSavedProperties()
+    }
+}
+
+export const getSavedPropertiesController = new GetSavedPropertiesController()

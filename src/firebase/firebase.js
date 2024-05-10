@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
-// import { initializeApp } from 'firebase-admin/app';
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
 
 
@@ -19,6 +18,19 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
 const functions = getFunctions(firebaseApp)
+
+let currentUser
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    currentUser = user
+    console.log(user.uid); // Print the user's ID
+  } else {
+    // No user is signed in
+    console.log("No user signed in");
+  }
+});
 // const serviceAccount = require('./csit314-sushitaco-firebase-adminsdk-2gk26-61d7b202d0.json');
 // const admin = require("firebase-admin");
 // admin.initializeApp({
@@ -47,5 +59,5 @@ const functions = getFunctions(firebaseApp)
 //     console.error('Error creating user:', error);
 //   });
 
-export {firebaseApp, auth, functions};
+export {firebaseApp, auth, functions, currentUser};
   

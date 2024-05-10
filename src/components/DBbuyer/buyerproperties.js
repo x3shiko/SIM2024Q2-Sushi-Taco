@@ -1,8 +1,7 @@
-import React,{useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import DashboardBuyer from './dbbuyer';
-import Image1 from "../../assets/1.png";
-import Image2 from "../../assets/2.png";
-import { viewPropertiesController } from '../../controller';
+import { viewPropertiesController, savePropertyToUserController } from '../../controller';
+import { currentUser } from '../../firebase/firebase';
 
 const BProperties = ({ data, onSearch}) => {
     const [query, setQuery] = useState('');
@@ -42,6 +41,11 @@ const BProperties = ({ data, onSearch}) => {
       setQuery(inputValue);
       onSearch(inputValue);
     };
+
+    const handleSaveProperty = async (propertyID) =>{
+        await savePropertyToUserController.saveProperty(currentUser.uid, propertyID)
+        console.log(`User ID ${currentUser.uid} have save the property ID ${propertyID}`)
+    }
 
     return (
         
@@ -88,7 +92,7 @@ const BProperties = ({ data, onSearch}) => {
                                             {/*<button id='sold1' onClick={handleSave} className={`inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ${isSaved ? 'bg-green-500' : ''}`}>
                                                 Save
                                     </button>*/}
-                                            <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                            <button onClick={() => handleSaveProperty(soldProperty.id)} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                                                         Save
                                             </button>
                                         </div>
@@ -115,7 +119,7 @@ const BProperties = ({ data, onSearch}) => {
                                             {/*<button id='unsold1' onClick={handleSave} className={`inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ${isSaved ? 'bg-green-500' : ''}`}>
                                                 Save
                                     </button>*/}
-                                            <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                                            <button onClick={() => handleSaveProperty(property.id)} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                                                         Save
                                             </button>
                                             </div>

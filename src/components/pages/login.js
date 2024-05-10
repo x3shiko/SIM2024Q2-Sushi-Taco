@@ -48,9 +48,9 @@ const Login = () => {
             //login logic here
             const role = await signInController.signIn(email, password)
             console.log(role)
-            if (role == "admin"){
+            if (role == "admin" || role == "Admin"){
               history.push('/dbhome');
-            } else if (role == "buyer"){
+            } else if (role == "buyer" || role == "Buyer"){
               history.push('/DBBuyerHome');
             } else {
               handleShowAlert()

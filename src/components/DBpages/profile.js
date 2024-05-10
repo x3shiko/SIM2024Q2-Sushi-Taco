@@ -117,7 +117,7 @@ const handleAssignButtonClick = () => {
   //update user's profile
   selectedAccounts.map(async (userID) => {
     await updateAccountController.updateAccount(userID, {
-      profile: profileNameToUpdate,
+      role: profileNameToUpdate,
     });
     console.log(`Updated user ${userID} to ${profileNameToUpdate}`)
   })
