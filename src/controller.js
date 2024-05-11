@@ -1,6 +1,8 @@
 import { user } from "./firebase/userAccounts";
 import { properties } from "./properties";
 import { userProfiles } from "./firebase/userProfile";
+import { reviews } from "./firebase/reviews";
+import { ratings } from "./firebase/ratings";
 
 
 class CreateAccountController{
@@ -128,3 +130,27 @@ class GetSavedPropertiesController{
 }
 
 export const getSavedPropertiesController = new GetSavedPropertiesController()
+
+class CreateReviewController{
+    async createReview(agentID, review){
+        await reviews.createReview(agentID, review)
+    }
+}
+
+export const createReviewController = new CreateReviewController()
+
+class GetAgentUsers{
+    async getAgents(){
+        return await user.getAgents()
+    }
+}
+
+export const getAgentUsers = new GetAgentUsers()
+
+class CreateRatingController{
+    async createRating(agentID, rating){
+        await ratings.createRating(agentID, rating)
+    }
+}
+
+export const createRatingController = new CreateRatingController()

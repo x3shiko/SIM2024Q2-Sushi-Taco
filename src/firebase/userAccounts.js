@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail  } from "firebase/auth";
 import { auth } from "./firebase";
-import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion} from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc, setDoc, getDoc, arrayUnion, query, where} from 'firebase/firestore';
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
 
@@ -171,6 +171,22 @@ class User{
         await updateDoc(propertyDocRef, {
             userIDs: arrayUnion(userID)
         });
+    }
+
+    async getAgents(){
+        const usersCollectionRef = collection(this.db, 'users');
+        const q = query(usersCollectionRef, where("role", "==", "Real Estate Agent"));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot.docs)
+        const agents = [];
+        querySnapshot.forEach((doc) => {
+            agents.push({
+            id: doc.id,
+            ...doc.data()
+        });
+        });
+        console.log(agents)
+        return agents;
     }
 }
  

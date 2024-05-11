@@ -1,18 +1,18 @@
 import { getFirestore, doc, updateDoc, setDoc, getDocs, collection, addDoc, arrayUnion, query, where } from 'firebase/firestore';
 import { currentUser } from './firebase';
 
-class Reviews{
+class Ratings{
 
     constructor(){
         this.db = getFirestore();
     }
 
-    async createReview(userID, review){
+    async createRating(userID, rating){
         try{
-            const reviewsCollectionRef = collection(this.db, 'reviews');
+            const reviewsCollectionRef = collection(this.db, 'ratings');
             await addDoc(reviewsCollectionRef, {
                 agentID: userID,
-                review: review,
+                review: rating,
             })
             return true
         } catch(error){
@@ -41,4 +41,4 @@ class Reviews{
     }
 }
 
-export const reviews = new Reviews();
+export const ratings = new Ratings();
