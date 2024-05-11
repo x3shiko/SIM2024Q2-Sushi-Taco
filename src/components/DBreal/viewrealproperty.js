@@ -54,10 +54,10 @@ const ViewRealProperty = () => {
               Remove
             </button>
 
-            {/* modal for edit */}
+            {/* modal for Remove */}
             <Modal
-              isOpen={isOpenPEdit}
-              onRequestClose={closeModalPEdit}
+              isOpen={isOpenPRemove}
+              onRequestClose={closeModalPRemove}
               className="block p-4 w-1/2 mx-auto rounded-md bg-gray-600"
             >
               {/* Add property name in span*/}
@@ -74,17 +74,17 @@ const ViewRealProperty = () => {
               </button>
               <button
                 className="p-2 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
-                onClick={closeModalPEdit}
+                onClick={closeModalPRemove}
               >
                 No
               </button>
               {/* add onclick to create into database */}
             </Modal>
 
-            {/* modal for Remove */}
+            {/* modal for Edit */}
             <Modal
-              isOpen={isOpenPRemove}
-              onRequestClose={closeModalPRemove}
+              isOpen={isOpenPEdit}
+              onRequestClose={closeModalPEdit}
               className="block p-2 w-1/2 mx-auto rounded-md bg-gray-600"
             >
               <div className="flex p-3 mb-3 border-b-4 justify-evenly align-middle text-white">
@@ -107,7 +107,7 @@ const ViewRealProperty = () => {
               </button>
               <button
                 className="p-2 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
-                onClick={closeModalPRemove}
+                onClick={closeModalPEdit}
               >
                 Close
               </button>

@@ -23,10 +23,34 @@ const Alert = ({ type, message }) => {
   );
 };
 
+// Change image to uploaded image
+const UploadImage = ({ onUploadImage }) => {
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    onUploadImage(file);
+  };
+  return (
+    <div>
+      <input type="file" onChange={handleImageChange} />
+      {image && <img src={URL.createObjectURL(image)} alt="Uploaded" />}
+    </div>
+  );
+};
+
 const CreateListing = () => {
   //alert function
   const [showAlert, setShowAlert] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null); // state for uploaded image
+
+  //handle image upload
+  const handleImageUpload = (image) => {
+    setUploadedImage(image);
+    console.log("Image uploaded", image);
+  };
 
   // handle alert when created
   const handleShowAlert = () => {
@@ -67,17 +91,22 @@ const CreateListing = () => {
           />
           <form onSubmit={handleSubmit} id="signup-form">
             <div className="my-4">
-              <div className="mt-1 flex w-full px-3 py-2 bg-white border border-gray-300 justify-evenly text-center rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <span className="flex pt-2.5 text-sm font-medium text-gray-700">
-                  Add Photo
-                </span>
+              <h1 className="pt-2.5 text-sm font-medium text-gray-400">
+                Upload Photo
+              </h1>
+              <div className="mt-1 flex w-full px-3 py-2 bg-white border border-gray-300 justify-evenly text-center rounded-md shadow-sm">
                 {/* to store photo */}
-                <button
-                  className="flex items-center justify-center w-32 h-10 border border-indigo-500 rounded-lg shadow-md cursor-pointer hover:border-indigo-300 hover:text-indigo-500"
-                  type="file"
-                >
-                  Upload
-                </button>
+                <UploadImage onImageUpload={handleImageUpload} />
+                {uploadedImage && (
+                  <div className="mt-4">
+                    <h2 className="text-lg font-semibold">Uploaded Image:</h2>
+                    <img
+                      src={URL.createObjectURL(uploadedImage)}
+                      alt="Uploaded"
+                      className="mt-2"
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div className="my-4">
@@ -86,7 +115,6 @@ const CreateListing = () => {
                 id="address"
                 placeholder="Address"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
               />
             </div>
             <div className="my-4">
@@ -99,7 +127,6 @@ const CreateListing = () => {
                   id="price"
                   placeholder="Price"
                   className="mt-1 flex w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  required
                 />
               </div>
             </div>
@@ -112,7 +139,6 @@ const CreateListing = () => {
                 id="propertyDescription"
                 placeholder="Description"
                 className="my-2 block w-full px-3 py-2 h-32 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
               />
             </div>
             {/* button should be onSubmit but i'll leave it as onClick for you to see first */}

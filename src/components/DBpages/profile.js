@@ -1,23 +1,33 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Modal from "react-modal";
 import Dashboard from "./dashboard";
-import { createProfileController, updateProfileController, viewProfilesController, viewAccountController, updateAccountController, addUserIDsToProfileController } from "../../controller";
+import {
+  createProfileController,
+  updateProfileController,
+  viewProfilesController,
+  viewAccountController,
+  updateAccountController,
+  addUserIDsToProfileController,
+} from "../../controller";
 
 const StatusColor = ({ type }) => {
   // Status dot color function
-  let statusDot = "flex w-3 h-3 ml-10 rounded-full"; // circle shape
-  switch (type) {
-    case "suspend":
-      statusDot += " bg-red-500"; // red when suspend
-      break;
-    case "unsuspend":
-      statusDot += " bg-green-500"; // green when unsuspend
-      break;
-    default:
-      statusDot += " bg-gray-500"; // grey when no status
-  }
-
-  return <span className={statusDot}></span>;
+  const dotStatus = (type) => {
+    let statusDot = "flex w-3 h-3 ml-10 rounded-full"; // circle shape
+    switch (type) {
+      case "Suspend":
+        statusDot += " bg-red-500"; // red when suspend
+        break;
+      case "Active":
+        statusDot += " bg-green-500"; // green when unsuspend
+        break;
+      default:
+        statusDot += " bg-gray-500"; // grey when no status
+    }
+    return statusDot;
+  };
+  const colorStatus = useMemo(() => dotStatus(type), [type]);
+  return <span className={`${colorStatus}`}></span>;
 };
 
 const Profile = () => {
@@ -33,49 +43,45 @@ const Profile = () => {
   const [editProfile, setEditProfile] = useState(""); //state for edit profile
   const [editSuspend, setEditSuspend] = useState(""); //state for edit suspend
   const [profileDescription, setProfileDescription] = useState("");
-  const [profiles, setProfiles] = useState([])
-  const [updateProfileStatus, setUpdateProfileStatus] = useState("")
-  const [profileUpdate, setProfileUpdate] = useState("")
-  const [profileIDToUpdate, setProfileIDToUpdate] = useState("")
-  const [updateValue, setUpdateValue] = useState("")
-  const [accounts, setAccounts] = useState([])
+  const [profiles, setProfiles] = useState([]);
+  const [updateProfileStatus, setUpdateProfileStatus] = useState("");
+  const [profileUpdate, setProfileUpdate] = useState("");
+  const [profileIDToUpdate, setProfileIDToUpdate] = useState("");
+  const [updateValue, setUpdateValue] = useState("");
+  const [accounts, setAccounts] = useState([]);
   const [selectedAccounts, setSelectedAccounts] = useState([]);
-  const [profileNameToUpdate, setProfileNameToUpdate] = useState('')
-  const [filteredProfiles, setFilteredProfiles] = useState([])
-  const [showFilteredProfiles, setShowFilteredProfiles] = useState(false)
-  const [query, setQuery] = useState('');
+  const [profileNameToUpdate, setProfileNameToUpdate] = useState("");
+  const [filteredProfiles, setFilteredProfiles] = useState([]);
+  const [showFilteredProfiles, setShowFilteredProfiles] = useState(false);
+  const [query, setQuery] = useState("");
 
   const toggleChange = () => setProfileShow(!profileShow); // toggle profile search
   // toggle Profile Name
   const toggleProfileN = () => {
-    setShowProfileN(!showProfileN)
+    setShowProfileN(!showProfileN);
   };
   // toggle Profile Description
   const toggleProfileD = () => {
-    setProfileUpdate("profileDescription")
-    setShowProfileD(!showProfileD)
+    setProfileUpdate("profileDescription");
+    setShowProfileD(!showProfileD);
   };
   // toggle Profile Suspend
   const toggleProfileS = () => {
-    setProfileUpdate("status")
-    setShowProfileS(!showProfileS)
-  };
-
-  // handle edit profile
-  const handleEditProfile = (e) => {
-    setEditProfile(e.target.value);
+    setProfileUpdate("status");
+    setShowProfileS(!showProfileS);
   };
 
   // handle edit suspend
   const handleEditSuspend = (e) => {
     setEditSuspend(e.target.value);
+    console.log(editSuspend);
   };
 
   // assign profile open/close modal
   const openModal = (profileID, profileName) => {
-    setProfileIDToUpdate(profileID)
-    setProfileNameToUpdate(profileName)
-    setIsOpen(true)
+    setProfileIDToUpdate(profileID);
+    setProfileNameToUpdate(profileName);
+    setIsOpen(true);
   };
   const closeModal = () => setIsOpen(false);
   // create profile open/close modal
@@ -83,51 +89,54 @@ const Profile = () => {
   const closeModalCreateP = () => setIsOpenCreateP(false);
   // edit profile open/close modal
   const openModalEdit = (profileID) => {
-    setProfileIDToUpdate(profileID)
-    setIsOpenEdit(true)
+    setProfileIDToUpdate(profileID);
+    setIsOpenEdit(true);
   };
   const closeModalEdit = () => setIsOpenEdit(false);
 
   useEffect(() => {
     const fetchProfiles = async () => {
-        const profiles = await viewProfilesController.viewProfiles()
-        setProfiles(profiles)
+      const profiles = await viewProfilesController.viewProfiles();
+      setProfiles(profiles);
     };
     const fetchAccounts = async () => {
-      const fetchedAccounts = await viewAccountController.getAccounts()
+      const fetchedAccounts = await viewAccountController.getAccounts();
       setAccounts(fetchedAccounts);
     };
 
     fetchAccounts();
     fetchProfiles();
-}, []);
+  }, []);
 
-//assign profile
-const handleCheckboxChange = (accountId) => {
-  setSelectedAccounts((prevSelectedAccounts) => {
-    if (prevSelectedAccounts.includes(accountId)) {
-      return prevSelectedAccounts.filter((id) => id !== accountId);
-    } else {
-      return [...prevSelectedAccounts, accountId];
-    }
-  });
-};
-
-const handleAssignButtonClick = () => {
-  //update user's profile
-  selectedAccounts.map(async (userID) => {
-    await updateAccountController.updateAccount(userID, {
-      role: profileNameToUpdate,
+  //assign profile
+  const handleCheckboxChange = (accountId) => {
+    setSelectedAccounts((prevSelectedAccounts) => {
+      if (prevSelectedAccounts.includes(accountId)) {
+        return prevSelectedAccounts.filter((id) => id !== accountId);
+      } else {
+        return [...prevSelectedAccounts, accountId];
+      }
     });
-    console.log(`Updated user ${userID} to ${profileNameToUpdate}`)
-  })
-  //update profile
-  selectedAccounts.map(async (userID) => {
-    await addUserIDsToProfileController.addUserIDsProfile(profileIDToUpdate, userID)
-    console.log(`Add user ID ${userID} to profile ID ${profileIDToUpdate}`)
-  })
-  closeModal();
-};
+  };
+
+  const handleAssignButtonClick = () => {
+    //update user's profile
+    selectedAccounts.map(async (userID) => {
+      await updateAccountController.updateAccount(userID, {
+        role: profileNameToUpdate,
+      });
+      console.log(`Updated user ${userID} to ${profileNameToUpdate}`);
+    });
+    //update profile
+    selectedAccounts.map(async (userID) => {
+      await addUserIDsToProfileController.addUserIDsProfile(
+        profileIDToUpdate,
+        userID
+      );
+      console.log(`Add user ID ${userID} to profile ID ${profileIDToUpdate}`);
+    });
+    closeModal();
+  };
 
   // handle edit modal
   const handleEdit = (e) => {
@@ -150,59 +159,66 @@ const handleAssignButtonClick = () => {
     }
   };
 
-  const handleSearch = useCallback((e) => {
-    const inputValue = e.target.value;
-    setQuery(inputValue.toLowerCase());
-    if (inputValue === '') {
+  const handleSearch = useCallback(
+    (e) => {
+      const inputValue = e.target.value;
+      setQuery(inputValue.toLowerCase());
+      if (inputValue === "") {
         setShowFilteredProfiles(false);
-    } else {
+      } else {
         setShowFilteredProfiles(true);
         const filtered = profiles.filter((profile) => {
-            const profileName = profile.profileName.toLowerCase();
-            return profileName.includes(inputValue);
+          const profileName = profile.profileName.toLowerCase();
+          return profileName.includes(inputValue);
         });
         setFilteredProfiles(filtered);
-    }
-  }, [profiles]);
-
+      }
+    },
+    [profiles]
+  );
   const handleProfileDescription = (e) => {
-    setProfileDescription(e.target.value)
-  }
+    setProfileDescription(e.target.value);
+  };
 
   const handleCreateProfile = async (e) => {
-    e.preventDefault()
-    let profileName = whenChange
-    await createProfileController.createProfile(profileName, profileDescription)
-    closeModalCreateP()
-  }
+    e.preventDefault();
+    let profileName = whenChange;
+    await createProfileController.createProfile(
+      profileName,
+      profileDescription
+    );
+    closeModalCreateP();
+  };
 
   const handleUpdateValue = (e) => {
-    setUpdateValue(e.target.value)
-  }
+    setUpdateValue(e.target.value);
+  };
 
   const handleUpdateProfile = async (e) => {
-    e.preventDefault()
-    let fieldToUpdate = {}
-    console.log(edit)
-    if (edit === "profileN"){
+    e.preventDefault();
+    let fieldToUpdate = {};
+    console.log(edit);
+    if (edit === "profileN") {
       fieldToUpdate = {
-        profileName: updateValue
-      }
-    } else if (edit === 'profileD'){
+        profileName: updateValue,
+      };
+    } else if (edit === "profileD") {
       fieldToUpdate = {
-        profileDescription: updateValue
-      }
-    } else if (edit === 'profileS'){
+        profileDescription: updateValue,
+      };
+    } else if (edit === "profileS") {
       fieldToUpdate = {
-        status: editSuspend
-      }
+        status: editSuspend,
+      };
+    } else {
+      console.log("No field to update");
     }
-    else{
-      console.log("No field to update")
-    }
-    await updateProfileController.updateProfile(profileIDToUpdate, fieldToUpdate)
-    closeModalEdit()
-  }
+    await updateProfileController.updateProfile(
+      profileIDToUpdate,
+      fieldToUpdate
+    );
+    closeModalEdit();
+  };
 
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
@@ -261,77 +277,89 @@ const handleAssignButtonClick = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {!showFilteredProfiles && profiles.map((profile) => (
-            <tr>
-            {/* add profile and profile description data into the td */}
-            {/* add status color to the status base on types*/}
-            <td>
-            {profile.status === 'Active' ? (
-              <StatusColor type="unsuspend" />
-            ) : (
-              <StatusColor type="suspend" />
-            )}
-            </td>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileName}</td>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileDescription}</td>
-            <td>
-              <button
-                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModalEdit(profile.id)}
-              >
-                Edit
-              </button>
-            </td>
+          {!showFilteredProfiles &&
+            profiles.map((profile) => (
+              <tr>
+                {/* add profile and profile description data into the td */}
+                {/* add status color to the status base on types*/}
+                <td>
+                  <StatusColor type={profile.status} />
+                  {/*{profile.status === "Active" ? (
+                    <StatusColor type="unsuspend" />
+                  ) : (
+                    <StatusColor type="suspend" />
+                  )}*/}
+                </td>
+                <td className="m-2 px-6 py-4 whitespace-nowrap">
+                  {profile.profileName}
+                </td>
+                <td className="m-2 px-6 py-4 whitespace-nowrap">
+                  {profile.profileDescription}
+                </td>
+                <td>
+                  <button
+                    className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                    onClick={() => openModalEdit(profile.id)}
+                  >
+                    Edit
+                  </button>
+                </td>
 
-            <td>
-              <button
-                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModal(profile.id, profile.profileName)}
-              >
-                Assign Profile
-              </button>
-            </td>
-          </tr>
-          ))}
-          {showFilteredProfiles && filteredProfiles.map((profile) => (
-            <tr>
-            {/* add profile and profile description data into the td */}
-            {/* add status color to the status base on types*/}
-            <td>
-            {profile.status === 'Active' ? (
-              <StatusColor type="unsuspend" />
-            ) : (
-              <StatusColor type="suspend" />
-            )}
-            </td>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileName}</td>
-            <td className="m-2 px-6 py-4 whitespace-nowrap">{profile.profileDescription}</td>
-            <td>
-              <button
-                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModalEdit(profile.id)}
-              >
-                Edit
-              </button>
-            </td>
+                <td>
+                  <button
+                    className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                    onClick={() => openModal(profile.id, profile.profileName)}
+                  >
+                    Assign Profile
+                  </button>
+                </td>
+              </tr>
+            ))}
+          {showFilteredProfiles &&
+            filteredProfiles.map((profile) => (
+              <tr>
+                {/* add profile and profile description data into the td */}
+                {/* add status color to the status base on types*/}
+                <td>
+                  <StatusColor type={profile.status} />
+                  {/*{profile.status === "Active" ? (
+                    <StatusColor type="unsuspend" />
+                  ) : (
+                    <StatusColor type="suspend" />
+                  )}*/}
+                </td>
+                <td className="m-2 px-6 py-4 whitespace-nowrap">
+                  {profile.profileName}
+                </td>
+                <td className="m-2 px-6 py-4 whitespace-nowrap">
+                  {profile.profileDescription}
+                </td>
+                <td>
+                  <button
+                    className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                    onClick={() => openModalEdit(profile.id)}
+                  >
+                    Edit
+                  </button>
+                </td>
 
-            <td>
-              <button
-                className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModal(profile.id, profile.profileName)}
-              >
-                Assign Profile
-              </button>
-            </td>
-          </tr>
-          ))}
-            {/* create profile modal here */}
-            <Modal
-              isOpen={isOpenCreateP}
-              onRequestClose={closeModalCreateP}
-              className="block p-2 w-1/2 mx-auto bg-gray-600"
-            >
-              <form onSubmit={handleCreateProfile}>
+                <td>
+                  <button
+                    className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
+                    onClick={() => openModal(profile.id, profile.profileName)}
+                  >
+                    Assign Profile
+                  </button>
+                </td>
+              </tr>
+            ))}
+          {/* create profile modal here */}
+          <Modal
+            isOpen={isOpenCreateP}
+            onRequestClose={closeModalCreateP}
+            className="block p-2 w-1/2 mx-auto bg-gray-600"
+          >
+            <form onSubmit={handleCreateProfile}>
               <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
                 Create Profile
               </div>{" "}
@@ -361,18 +389,21 @@ const handleAssignButtonClick = () => {
               >
                 Close
               </button>
-              <button type="submit" className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
+              <button
+                type="submit"
+                className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
+              >
                 Create
               </button>
-              </form>
-            </Modal>
-            {/* edit profile modal here */}
-            <Modal
-              isOpen={isOpenEdit}
-              onRequestClose={closeModalEdit}
-              className="block p-2 w-1/2 mx-auto bg-gray-600"
-            >
-              <form onSubmit={handleUpdateProfile}>
+            </form>
+          </Modal>
+          {/* edit profile modal here */}
+          <Modal
+            isOpen={isOpenEdit}
+            onRequestClose={closeModalEdit}
+            className="block p-2 w-1/2 mx-auto bg-gray-600"
+          >
+            <form onSubmit={handleUpdateProfile}>
               <div className="flex p-3 mb-5 border-b-4 justify-evenly align-middle text-white">
                 Select Changes
               </div>{" "}
@@ -464,79 +495,88 @@ const handleAssignButtonClick = () => {
               >
                 Edit
               </button>
-              </form>
-            </Modal>
-            {/* assign profile modal here */}
-            <Modal
-              isOpen={isOpen}
-              onRequestClose={closeModal}
-              className="block p-2 w-3/4 mx-auto bg-gray-600"
-            >
-              <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
-                Assign Profile
-              </div>{" "}
-              {/* header*/}
-              <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+            </form>
+          </Modal>
+          {/* assign profile modal here */}
+          <Modal
+            isOpen={isOpen}
+            onRequestClose={closeModal}
+            className="block p-2 w-3/4 mx-auto bg-gray-600"
+          >
+            <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
+              Assign Profile
+            </div>{" "}
+            {/* header*/}
+            <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    First Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Last Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Email
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Select
+                  </th>
+                </tr>
+              </thead>
+              {/* Profile Data to select which profile to reassign */}
+              <tbody className="bg-white divide-y divide-gray-200">
+                {accounts.map((account) => (
                   <tr>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      First Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Last Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Email
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Select
-                    </th>
-                  </tr>
-                </thead>
-                {/* Profile Data to select which profile to reassign */}
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {accounts.map((account) => (
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap">{account.firstName}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{account.lastName}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{account.email}</td>
-                      <input
-                        id="default-checkbox"
-                        type="checkbox"
-                        value=""
-                        checked={selectedAccounts.includes(account.id)}
-                        onChange={() => handleCheckboxChange(account.id)}
-                        className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {account.firstName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {account.lastName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {account.email}
+                    </td>
+                    <input
+                      id="default-checkbox"
+                      type="checkbox"
+                      value=""
+                      checked={selectedAccounts.includes(account.id)}
+                      onChange={() => handleCheckboxChange(account.id)}
+                      className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100
                                               border-gray-300 rounded focus:ring-blue-500
                                                 dark:focus:ring-blue-600 dark:ring-offset-gray-800
                                                 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button
-                className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-              <button onClick={handleAssignButtonClick} className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
-                Assign
-              </button>
-            </Modal>
+                    />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
+              onClick={closeModal}
+            >
+              Close
+            </button>
+            <button
+              onClick={handleAssignButtonClick}
+              className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
+            >
+              Assign
+            </button>
+          </Modal>
         </tbody>
       </table>
     </div>
