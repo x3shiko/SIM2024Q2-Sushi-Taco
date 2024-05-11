@@ -99,7 +99,7 @@ const DashboardBuyer = () => {
         </a>
         <a href="/"
           className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={handleDropClick}
+          onClick={handleLogOut}
         >
            Logout
         </a>

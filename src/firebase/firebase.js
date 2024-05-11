@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
+import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -14,6 +15,8 @@ const firebaseConfig = {
   };
   
 const firebaseApp = initializeApp(firebaseConfig);
+
+const storage = getStorage(firebaseApp);
 
 const auth = getAuth(firebaseApp);
 
@@ -59,5 +62,5 @@ onAuthStateChanged(auth, (user) => {
 //     console.error('Error creating user:', error);
 //   });
 
-export {firebaseApp, auth, functions, currentUser};
+export {firebaseApp, auth, functions, currentUser, storage};
   

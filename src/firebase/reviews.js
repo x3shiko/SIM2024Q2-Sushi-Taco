@@ -14,6 +14,7 @@ class Reviews{
                 agentID: userID,
                 review: review,
             })
+            console.log(`Successfully added review:${review} to user ID ${userID}`)
             return true
         } catch(error){
             return false

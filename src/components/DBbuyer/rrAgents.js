@@ -52,9 +52,11 @@ const RateReviewAgents = () => {
     setReview(e.target.value)
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     await createReviewController.createReview(selectedAgentID, review)
     await createRatingController.createRating(selectedAgentID, rating)
+    closeModalBReview()
   }
 
   return (

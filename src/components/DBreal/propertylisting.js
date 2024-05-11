@@ -26,10 +26,28 @@ const Alert = ({ type, message }) => {
 const CreateListing = () => {
   //alert function
   const [showAlert, setShowAlert] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // handle alert when created
   const handleShowAlert = () => {
     setShowAlert(true);
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+  };
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Set the image preview to the result of reading the file
+        setImagePreview(reader.result);
+      };
+      // Read the file as a data URL (base64 encoded)
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = (e) => {

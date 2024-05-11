@@ -1,38 +1,63 @@
-import React, { useEffect, useState, useCallback } from "react";
-import Modal from "react-modal";
 import DBSeller from "./dbseller";
-
-const Rating = () => {
-  const [rating, setRating] = useState(0); // state for rating
-
-  // handle rating onclick
-  const handleClick = (value) => {
-    setRating(value);
-  };
-
-  return (
-    <div className="flex items-center">
-      {[1, 2, 3, 4, 5].map((value) => (
-        <button
-          key={value}
-          className={`${
-            value <= rating ? "text-yellow-300" : "text-gray-300"
-          } focus:outline-none text-2xl`}
-          onClick={() => handleClick(value)}
-        >
-          ★
-        </button>
-      ))}
-    </div>
-  );
-};
+import React, { useEffect, useState } from "react";
+import Modal from "react-modal";
+import { createReviewController, getAgentUsers, createRatingController } from "../../controller";
 
 const SellerAgent = () => {
-  const [isOpenSReview, setIsOpenSReview] = useState(false); // state for review modal
+  const [isOpenBReview, setIsOpenBReview] = useState(false); // state for review modal
+  const [rating, setRating] = useState(0); // state for rating
+  const [agents, setAgents] = useState([]);
+  const [selectedAgentID, setSelectedAgentID] = useState('')
+  const [review, setReview] = useState('')
+  
+  useEffect(() => {
+    const fetchAgents = async () => {
+      const existingAgents = await getAgentUsers.getAgents()
+      setAgents(existingAgents)
+    }
+    fetchAgents()
+  },[])
+
+  const Rating = () => {
+    // handle rating onclick
+    const handleClick = (value) => {
+      setRating(value);
+    };
+  
+    return (
+      <div className="flex items-center">
+        {[1, 2, 3, 4, 5].map((value) => (
+          <button
+            key={value}
+            className={`${
+              value <= rating ? "text-yellow-300" : "text-gray-300"
+            } focus:outline-none text-2xl`}
+            onClick={() => handleClick(value)}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+    );
+  };
 
   // open and close modal for review
-  const openModalSReview = () => setIsOpenSReview(true);
-  const closeModalSReview = () => setIsOpenSReview(false);
+  const openModalBReview = (agentID) => {
+    setSelectedAgentID(agentID)
+    setIsOpenBReview(true);
+  }
+  const closeModalBReview = () => setIsOpenBReview(false);
+
+  const handleReviewInput = (e) => {
+    setReview(e.target.value)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await createReviewController.createReview(selectedAgentID, review)
+    await createRatingController.createRating(selectedAgentID, rating)
+    closeModalBReview()
+  }
 
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
@@ -64,26 +89,27 @@ const SellerAgent = () => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {/* View Agent add key and mapping here */}
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap">Brian</td>
-            <td className="px-6 py-4 whitespace-nowrap">Low</td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              realestatebrian@gmail.com
-            </td>
+          {agents.map((agent) => (
+            <tr>
+            <td className="px-6 py-4 whitespace-nowrap">{agent.firstName}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{agent.lastName}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{agent.email}</td>
             <button
               className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
-              onClick={openModalSReview}
+              onClick={() => openModalBReview(agent.id)}
             >
               Rate & Review
             </button>
           </tr>
+          ))}
         </tbody>
       </table>
       <Modal
-        isOpen={isOpenSReview}
-        onRequestClose={closeModalSReview}
+        isOpen={isOpenBReview}
+        onRequestClose={closeModalBReview}
         className="block p-2 w-1/2 mx-auto bg-gray-600"
       >
+        <form onSubmit={handleSubmit}>
         {/* header for modal*/}
         <div className="flex p-3 mb-5 border-b-4 justify-evenly align-middle text-white">
           Rate & Review
@@ -95,15 +121,17 @@ const SellerAgent = () => {
           <Rating />
           <div className="my-3"></div>
           <textarea
-            id="SellerReview"
+            id="BuyerReview"
             placeholder="Review"
+            value = {review}
+            onChange={handleReviewInput}
             className="my-2 block w-full px-3 py-2 h-32 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             required
           />
         </div>
         <button
           className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
-          onClick={closeModalSReview}
+          onClick={closeModalBReview}
         >
           Close
         </button>
@@ -113,6 +141,7 @@ const SellerAgent = () => {
         >
           Post
         </button>{" "}
+        </form>
         {/* add onclick to create into database */}
       </Modal>
     </div>

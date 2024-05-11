@@ -52,6 +52,10 @@ const Login = () => {
               history.push('/dbhome');
             } else if (role == "buyer" || role == "Buyer"){
               history.push('/DBBuyerHome');
+            } else if (role == "seller" || role == "Seller"){
+              history.push('/dbsellerhome');
+            } else if (role == "Real Estate Agent"){
+              history.push('/dbrealhome');
             } else {
               handleShowAlert()
             }

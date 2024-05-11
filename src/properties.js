@@ -1,5 +1,7 @@
 import { getFirestore, collection, getDocs, doc, updateDoc, query, where } from 'firebase/firestore';
 import { currentUser } from './firebase/firebase';
+import { storage } from './firebase/firebase';
+import { ref, uploadBytes } from 'firebase/storage';
 
 class Properties{
 
@@ -50,6 +52,14 @@ class Properties{
         });
         console.log(properties)
         return properties;
+      }
+
+      createPropertyListing = async (file) => {
+        // Create a reference to the storage location where you want to upload the file
+        const storageRef = ref(storage, 'images/' + file.name);
+        
+        // Upload the file to the specified storage location
+        await uploadBytes(storageRef, file);
       }
 }
 

@@ -14,6 +14,7 @@ class Ratings{
                 agentID: userID,
                 review: rating,
             })
+            console.log(`Successfully added rating (${rating} star) to user ID ${userID}`)
             return true
         } catch(error){
             return false
