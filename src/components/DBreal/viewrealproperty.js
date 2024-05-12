@@ -106,12 +106,16 @@ const ViewRealProperty = () => {
           <div className="px-6 py-4">
             {/* If u save property name can add here */}
             <div className="font-bold text-xl mb-2">123 Main St</div>
-            <p className="text-green-500 text-base">$500,000</p>{" "}
+            <p className="text-green-500 text-base">$500,000</p>
             {/* If u save property price can add here */}
             {/* If u save property address can add here */}
             <p className="text-gray-700 text-base">3 bd | 2 ba | 1,500 sqft</p>
+            <p className="text-blue-700 text-base">
+              UserID:{" "}
+              <span className="font-semibold">selleraccount@gmail.com</span>
+            </p>
           </div>
-          <div className="px-6 py-4">
+          <div className="px-6 py-2">
             <button
               className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
               onClick={openModalPEdit}
