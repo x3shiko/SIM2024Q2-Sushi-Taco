@@ -2,10 +2,53 @@ import React, { useEffect, useState, useCallback } from "react";
 import Modal from "react-modal";
 import DBReal from "./dbrealestate";
 import imageProp from "../../assets/1.png";
+import { set } from "firebase/database";
+
+const EditImage = ({ onEditImage }) => {
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    onEditImage(file);
+  };
+  return (
+    <div>
+      <input type="file" onChange={handleImageChange} />
+      {image && <img src={URL.createObjectURL(image)} alt="Uploaded" />}
+    </div>
+  );
+};
 
 const ViewRealProperty = () => {
   const [isOpenPEdit, setIsOpenPEdit] = useState(false); // state for review modal
   const [isOpenPRemove, setIsOpenPRemove] = useState(false); // state for review modal
+  const [realAddress, setRealAddress] = useState(false); // hide for edit address
+  const [realDescription, setRealDescription] = useState(false); // hide for edit description
+  const [realImage, setRealImage] = useState(false); // hide for edit image
+  const [realSold, setRealSold] = useState(false); // hide for sold/unsold
+  const [realPrice, setRealPrice] = useState(false); // hide for Price
+  const [realEdit, setRealEdit] = useState(""); // state for edit
+  const [updateEdit, setUpdateEdit] = useState("");
+  const [editImage, setEditImage] = useState(null); // state for uploaded image
+  const [editSold, setEditSold] = useState(""); // state for suspend/unsuspend
+
+  //toggle to show options to edit
+  const toggleEditAddress = () => {
+    setRealAddress(!realAddress);
+  };
+  const toggleEditDescription = () => {
+    setRealDescription(!realDescription);
+  };
+  const toggleEditImage = () => {
+    setRealImage(!realImage);
+  };
+  const toggleEditSold = () => {
+    setRealSold(!realSold);
+  };
+  const toggleEditPrice = () => {
+    setRealPrice(!realPrice);
+  };
 
   // open and close modal for edit
   const openModalPEdit = () => setIsOpenPEdit(true);
@@ -18,6 +61,32 @@ const ViewRealProperty = () => {
   // handle search change
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
+  };
+
+  const handleUpdateEdit = (e) => {
+    setUpdateEdit(e.target.value);
+  };
+
+  const handleEditSold = (e) => {
+    setEditSold(e.target.value);
+    console.log(editSold);
+  };
+
+  // handle edit option
+  const handleRealEdit = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    setRealEdit(value);
+    setRealAddress(value === "address");
+    setRealDescription(value === "description");
+    setRealImage(value === "image");
+    setRealSold(value === "sold");
+    setRealPrice(value === "price");
+  };
+
+  const handleImageEdit = (image) => {
+    setEditImage(image);
+    console.log("Image uploaded", image);
   };
 
   return (
@@ -36,7 +105,9 @@ const ViewRealProperty = () => {
           <img className="w-full" src={imageProp} alt="Placeholder" />
           <div className="px-6 py-4">
             {/* If u save property name can add here */}
-            <div className="font-bold text-xl mb-2">123 Main St</div>
+            <div className="font-bold text-xl mb-2">
+              123 Main St <p className="text-green-500 text-base">$500,000</p>
+            </div>
             {/* If u save property address can add here */}
             <p className="text-gray-700 text-base">3 bd | 2 ba | 1,500 sqft</p>
           </div>
@@ -90,14 +161,123 @@ const ViewRealProperty = () => {
               <div className="flex p-3 mb-3 border-b-4 justify-evenly align-middle text-white">
                 Edit
               </div>
-              <div className="flex p-3 justify-evenly align-middle text-white">
-                Field to update ▽
+              <div className="mt-4 mb-3">
+                <label
+                  htmlFor="roles"
+                  className="block mb-4 text-sm font-medium text-white"
+                >
+                  Select Changes
+                </label>
+                <select
+                  id="roles"
+                  value={realEdit}
+                  onChange={handleRealEdit}
+                  className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="" disabled>
+                    Select Edit
+                  </option>
+                  <option value="address" onClick={toggleEditAddress}>
+                    Address
+                  </option>
+                  <option value="description" onClick={toggleEditDescription}>
+                    Property Description
+                  </option>
+                  <option value="image" onClick={toggleEditImage}>
+                    Image
+                  </option>
+                  <option value="sold" onClick={toggleEditSold}>
+                    Sold/Unsold
+                  </option>
+                  <option value="price" onClick={toggleEditPrice}>
+                    Price
+                  </option>
+                </select>
               </div>
-              {/* Add value with pre-existing description into textarea*/}
-              <textarea
-                className="my-4 block w-full px-3 py-2 h-32 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
+              {/* Edit address */}
+              {realAddress && (
+                <div className="mt-4 mb-3 border-b-2">
+                  <textarea
+                    id="Address"
+                    placeholder="Update Address"
+                    onChange={handleUpdateEdit}
+                    className="my-2 h-20 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+              )}
+              {/* Edit description */}
+              {realDescription && (
+                <div className="mt-4 mb-3 border-b-2">
+                  <textarea
+                    id="Description"
+                    placeholder="Update Property Description"
+                    onChange={handleUpdateEdit}
+                    className="my-2 h-20 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+              )}
+              {/* Edit image */}
+              {realImage && (
+                <div className="mt-4 mb-3 border-b-2">
+                  <h1 className="pt-2.5 text-sm font-medium text-gray-400">
+                    Edit Photo
+                  </h1>
+                  <div className="mt-1 my-2 flex w-full px-3 py-2 bg-white border border-gray-300 justify-evenly text-center rounded-md shadow-sm">
+                    {/* to store photo */}
+                    <EditImage onImageUpload={handleImageEdit} />
+                    {editImage && (
+                      <div className="mt-4">
+                        <h2 className="text-lg font-semibold">
+                          Uploaded Image:
+                        </h2>
+                        <img
+                          src={URL.createObjectURL(editImage)}
+                          alt="Uploaded"
+                          className="mt-2"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              {/* Edit sold/unsold */}
+              {realSold && (
+                <div className="mt-4 mb-3 border-b-2">
+                  <label
+                    htmlFor="roles"
+                    className="block mb-4 text-sm font-medium text-white"
+                  >
+                    Edit Sold/Unsold
+                  </label>
+                  <select
+                    id="roles"
+                    value={editSold}
+                    onChange={handleEditSold}
+                    className="mb-3 block w-full px-3 py-2 border rounded-md shadow-sm hover:cursor-pointer focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value="" disabled>
+                      Sold/Unsold
+                    </option>
+                    <option value="sold">Sold</option>
+                    <option value="unsold">Unsold</option>
+                  </select>
+                </div>
+              )}
+              {/* Edit price */}
+              {realPrice && (
+                <div className="mt-4 mb-3 border-b-2">
+                  <input
+                    id="Price"
+                    type="number"
+                    placeholder="Edit Price in $"
+                    onChange={handleUpdateEdit}
+                    className="my-2 h-auto block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    required
+                  />
+                </div>
+              )}
               {/* Button to submit */}
               <button
                 type="submit"
