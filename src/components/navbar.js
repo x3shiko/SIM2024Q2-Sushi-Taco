@@ -98,11 +98,10 @@ const Navbar = () => {
         <button className="px-4 py-2 bg-white border border-blue-400 text-black rounded-md hover:bg-blue-600 hover:text-white mx-2">
           <a href="login">Login</a>
         </button>
-        *
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 hover:text-white mx-2">
+        {/* for testing only */}
+        <button className="hidden px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 hover:text-white mx-2">
           <a href="dbrealhome">Test login</a>
         </button>
-        *
       </div>
       <div
         className={`${

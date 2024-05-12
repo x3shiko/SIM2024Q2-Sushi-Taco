@@ -105,9 +105,9 @@ const ViewRealProperty = () => {
           <img className="w-full" src={imageProp} alt="Placeholder" />
           <div className="px-6 py-4">
             {/* If u save property name can add here */}
-            <div className="font-bold text-xl mb-2">
-              123 Main St <p className="text-green-500 text-base">$500,000</p>
-            </div>
+            <div className="font-bold text-xl mb-2">123 Main St</div>
+            <p className="text-green-500 text-base">$500,000</p>{" "}
+            {/* If u save property price can add here */}
             {/* If u save property address can add here */}
             <p className="text-gray-700 text-base">3 bd | 2 ba | 1,500 sqft</p>
           </div>
