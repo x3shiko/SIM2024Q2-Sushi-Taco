@@ -176,6 +176,7 @@ const Profile = () => {
     },
     [profiles]
   );
+  
   const handleProfileDescription = (e) => {
     setProfileDescription(e.target.value);
   };

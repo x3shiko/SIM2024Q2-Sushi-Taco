@@ -169,7 +169,7 @@ class User{
         });
         const propertyDocRef = doc(this.db, 'properties', propertyID);
         await updateDoc(propertyDocRef, {
-            userIDs: arrayUnion(userID)
+            savedByUserID: arrayUnion(userID)
         });
     }
 
