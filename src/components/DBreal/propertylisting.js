@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Modal from "react-modal";
 import DBReal from "./dbrealestate";
 import SnTLogo from "../../assets/SnTLogo.png";
 
@@ -45,6 +46,11 @@ const CreateListing = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null); // state for uploaded image
+  const [isOpenAccount, setIsOpenAccount] = useState(false); // false state for Selecting account
+
+  // open modal to select account
+  const openModalAccount = () => setIsOpenAccount(true);
+  const closeModalAccount = () => setIsOpenAccount(false);
 
   //handle image upload
   const handleImageUpload = (image) => {
@@ -109,6 +115,23 @@ const CreateListing = () => {
                 )}
               </div>
             </div>
+            {/* Show account */}
+            <div className="my-4">
+              <div className="p-1 flex justify-evenly">
+                <button
+                  className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+                  onClick={openModalAccount}
+                >
+                  Select Account
+                </button>
+                {/* Show account add account choosen inside as {Data} instead of selleraccount */}
+                <div className="p-2 flex justify-center bg-white border rounded-md">
+                  <p className="mt-2 text-2x1 font-medium">
+                    selleraccount@gmail.com
+                  </p>
+                </div>
+              </div>
+            </div>
             <div className="my-4">
               <input
                 type="address"
@@ -155,6 +178,73 @@ const CreateListing = () => {
               />
             )}
           </form>
+          <Modal
+            isOpen={isOpenAccount}
+            onRequestClose={closeModalAccount}
+            className="block p-2 w-3/4 mx-auto bg-gray-600"
+          >
+            <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
+              Select Account
+            </div>
+            {/* header*/}
+            <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    First Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Last Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Email
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Select
+                  </th>
+                </tr>
+              </thead>
+              {/* Profile Data to select which profile to reassign */}
+              <tbody className="bg-white divide-y divide-gray-200">
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap">Seller</td>
+                  <td className="px-6 py-4 whitespace-nowrap">Account</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    selleraccount@gmail.com
+                  </td>
+                  {/* Add onchange and checked  */}
+                  <input
+                    id="default-checkbox"
+                    type="checkbox"
+                    value=""
+                    className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                </tr>
+              </tbody>
+            </table>
+            <button
+              className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
+              onClick={closeModalAccount}
+            >
+              Close
+            </button>
+            {/* Add onclick handle  */}
+            <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
+              Select
+            </button>
+          </Modal>
         </div>
       </div>
     </div>
