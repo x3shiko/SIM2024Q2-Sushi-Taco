@@ -154,3 +154,11 @@ class CreateRatingController{
 }
 
 export const createRatingController = new CreateRatingController()
+
+class GetSellingPropertiesController{
+    async getSellingProperties(){
+        return await properties.getSellingProperties()
+    }
+}
+
+export const getSellingPropertiesController = new GetSellingPropertiesController()

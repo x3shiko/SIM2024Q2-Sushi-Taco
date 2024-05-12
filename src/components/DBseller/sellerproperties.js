@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from "react";
 import DBSeller from "./dbseller";
-import Imagee1 from "../../assets/1.png";
+import { getSellingPropertiesController } from "../../controller";
 
 const SellerProperties = () => {
+  const [sellingProperties, setSellingProperties] = useState([])
+  
+  useEffect(() => {
+    const fetchSellingProperties = async () => {
+        const properties = await getSellingPropertiesController.getSellingProperties()
+        setSellingProperties(properties)
+    }
+    fetchSellingProperties()
+  }, [])
+
+
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
       {/* Start of Property Grid */}
       <div className="grid grid-cols-3 grid-rows-3 my-3">
         {/* show properties listing */}
         {/* add image/address/description data here */}
-        <div className="m-3 max-w-sm rounded overflow-hidden shadow-lg">
+          <div className="m-3 max-w-sm rounded overflow-hidden shadow-lg">
           <img className="w-full" src={Imagee1} alt="Placeholder" />
           <div className="px-6 py-4">
             <div className="font-bold text-xl mb-2">123 Main St</div>

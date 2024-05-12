@@ -69,7 +69,7 @@ class Properties{
         }
         
         const propertiesCollection = collection(this.db, 'properties');
-        const q = query(propertiesCollection, where("savedByUserID", "array-contains", currentUser.uid));
+        const q = query(propertiesCollection, where("ownByUserID", "==", currentUser.uid));
         const querySnapshot = await getDocs(q);
         console.log(querySnapshot.docs)
         const properties = [];
