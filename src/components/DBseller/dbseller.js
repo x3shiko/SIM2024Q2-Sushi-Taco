@@ -51,7 +51,7 @@ const DBSeller = () => {
           </h1>
           <ul>
             <li className="py-2 hover:bg-blue-700 cursor-pointer">
-              <a href="sellerproperties">View Property</a>
+              <a href="sellerproperties">View My Property</a>
             </li>
             <li className="py-2 hover:bg-blue-700 cursor-pointer">
               <a href="rrAgentSeller">View Agents</a>

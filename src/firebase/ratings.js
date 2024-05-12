@@ -12,7 +12,7 @@ class Ratings{
             const reviewsCollectionRef = collection(this.db, 'ratings');
             await addDoc(reviewsCollectionRef, {
                 agentID: userID,
-                review: rating,
+                rating: rating,
             })
             console.log(`Successfully added rating (${rating} star) to user ID ${userID}`)
             return true
