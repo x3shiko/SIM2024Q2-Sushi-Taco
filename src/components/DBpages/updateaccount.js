@@ -261,13 +261,15 @@ const TableU = () => {
                   type="password"
                   id="password"
                   placeholder="Password"
+                  pattern=".{6,}"
                   className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
                 <input
                   type="password"
-                  id="password"
+                  id="cpassword"
                   placeholder="Confirm Password"
+                  pattern=".{6,}"
                   onChange={handleSubmitPassword}
                   className="my-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
