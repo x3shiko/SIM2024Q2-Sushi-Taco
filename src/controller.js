@@ -162,3 +162,19 @@ class GetSellingPropertiesController{
 }
 
 export const getSellingPropertiesController = new GetSellingPropertiesController()
+
+class UpdatePropertiesController{
+    async updateProperties(propertyID, fieldToUpdate){
+        await properties.updateProperties(propertyID, fieldToUpdate)
+    }
+}
+
+export const updatePropertiesController = new UpdatePropertiesController()
+
+class DeletePropertyController{
+    async deleteProperty(propertyID){
+        await properties.deleteProperty(propertyID)
+    }
+}
+
+export const deletePropertyController = new DeletePropertyController()

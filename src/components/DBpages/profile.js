@@ -93,17 +93,16 @@ const Profile = () => {
     setIsOpenEdit(true);
   };
   const closeModalEdit = () => setIsOpenEdit(false);
+  const fetchProfiles = async () => {
+    const profiles = await viewProfilesController.viewProfiles();
+    setProfiles(profiles);
+  };
+  const fetchAccounts = async () => {
+    const fetchedAccounts = await viewAccountController.getAccounts();
+    setAccounts(fetchedAccounts);
+  };
 
   useEffect(() => {
-    const fetchProfiles = async () => {
-      const profiles = await viewProfilesController.viewProfiles();
-      setProfiles(profiles);
-    };
-    const fetchAccounts = async () => {
-      const fetchedAccounts = await viewAccountController.getAccounts();
-      setAccounts(fetchedAccounts);
-    };
-
     fetchAccounts();
     fetchProfiles();
   }, []);
@@ -218,6 +217,8 @@ const Profile = () => {
       profileIDToUpdate,
       fieldToUpdate
     );
+    fetchAccounts();
+    fetchProfiles();
     closeModalEdit();
   };
 

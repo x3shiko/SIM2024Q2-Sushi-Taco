@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Modal from "react-modal";
 import DBReal from "./dbrealestate";
 import imageProp from "../../assets/1.png";
-import { viewPropertiesController } from "../../controller";
+import { viewPropertiesController, updatePropertiesController, deletePropertyController } from "../../controller";
 
 const EditImage = ({ onEditImage }) => {
   const [image, setImage] = useState(null);
@@ -32,14 +32,15 @@ const ViewRealProperty = () => {
   const [updateEdit, setUpdateEdit] = useState("");
   const [editImage, setEditImage] = useState(null); // state for uploaded image
   const [editSold, setEditSold] = useState(""); // state for suspend/unsuspend
+  const [updatingPropertyID, setUpdatingPropertyID] = useState("")
+  const [removePropertyID, setRemovePropertyID] = useState("")
 
   const [properties, setProperties] = useState([]);
-
+  const fetchProperties = async () => {
+    const properties = await viewPropertiesController.fetchProperties();
+    setProperties(properties);
+  };
   useEffect(() => {
-    const fetchProperties = async () => {
-      const properties = await viewPropertiesController.fetchProperties();
-      setProperties(properties);
-    };
     fetchProperties();
   }, []);
 
@@ -61,11 +62,18 @@ const ViewRealProperty = () => {
   };
 
   // open and close modal for edit
-  const openModalPEdit = () => setIsOpenPEdit(true);
+  const openModalPEdit = (propertyID) => {
+    setUpdatingPropertyID(propertyID)
+    setIsOpenPEdit(true);
+  }
   const closeModalPEdit = () => setIsOpenPEdit(false);
 
   // open and close modal for remove
-  const openModalPRemove = () => setIsOpenPRemove(true);
+  const openModalPRemove = (propertyID) => {
+    setRemovePropertyID(propertyID)
+    console.log(`remove this property ID: ${propertyID}`)
+    setIsOpenPRemove(true);
+  }
   const closeModalPRemove = () => setIsOpenPRemove(false);
 
   // handle search change
@@ -99,6 +107,45 @@ const ViewRealProperty = () => {
     console.log("Image uploaded", image);
   };
 
+  const handleUpdateProperty = async (e) => {
+    e.preventDefault();
+    try {
+      if (realEdit === "address") {
+        // Update user email
+        await updatePropertiesController.updateProperties(updatingPropertyID, {
+          address: updateEdit,
+        });
+      } else if (realEdit === "description") {
+        // Update user password
+        await updatePropertiesController.updateProperties(updatingPropertyID, {
+          description: updateEdit,
+        });
+      } else if (realEdit === "image") {
+        await updatePropertiesController.updateProperties(updatingPropertyID, {
+          image: editImage,
+        });
+      } else if (realEdit === "sold"){
+        await updatePropertiesController.updateProperties(updatingPropertyID, {
+          status: editSold,
+        });
+      } else if (realEdit === "price"){
+        await updatePropertiesController.updateProperties(updatingPropertyID, {
+          price: updateEdit,
+        });
+      } else {
+        console.log("No valid update operation selected.");
+      }
+      fetchProperties();
+      closeModalPEdit();
+    } catch (error) {
+      console.error("Error updating property:", error);
+    }
+  };
+
+  const handleDeleteProperty = async () => {
+    await deletePropertyController.deleteProperty(removePropertyID)
+  }
+
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
       {/* Search input add value and */}
@@ -113,29 +160,29 @@ const ViewRealProperty = () => {
       <div className="grid grid-cols-3 grid-rows-3 my-3">
         {properties.map((property) => (
           <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
-          <img className="w-full" src={imageProp} alt="Placeholder" />
+          <img className="w-full" src={property.image} alt="Placeholder" />
           <div className="px-6 py-4">
             {/* If u save property name can add here */}
-            <div className="font-bold text-xl mb-2">123 Main St</div>
-            <p className="text-green-500 text-base">$500,000</p>
+            <div className="font-bold text-xl mb-2">{property.address}</div>
+            <p className="text-green-500 text-base">{"$" + property.price}</p>
             {/* If u save property price can add here */}
             {/* If u save property address can add here */}
-            <p className="text-gray-700 text-base">3 bd | 2 ba | 1,500 sqft</p>
+            <p className="text-gray-700 text-base">{property.description}</p>
             <p className="text-blue-700 text-base">
               UserID:{" "}
-              <span className="font-semibold">selleraccount@gmail.com</span>
+              <span className="font-semibold">{property.ownByUserID}</span>
             </p>
           </div>
           <div className="px-6 py-2">
             <button
               className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
-              onClick={openModalPEdit}
+              onClick={() => openModalPEdit(property.id)}
             >
               Edit
             </button>
             <button
               className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
-              onClick={openModalPRemove}
+              onClick={() => openModalPRemove(property.id)}
             >
               Remove
             </button>
@@ -148,10 +195,9 @@ const ViewRealProperty = () => {
               onRequestClose={closeModalPRemove}
               className="block p-4 w-1/2 mx-auto rounded-md bg-gray-600"
             >
-              {/* Add property name in span*/}
+              <form onSubmit={handleDeleteProperty}>
               <div className="flex p-3 mb-2 align-middle text-white">
                 Do you want to remove this property?
-                <span className="ml-2 text-red-500 font-semibold">Main st</span>
               </div>
               {/* Button to submit */}
               <button
@@ -166,7 +212,7 @@ const ViewRealProperty = () => {
               >
                 No
               </button>
-              {/* add onclick to create into database */}
+              </form>
             </Modal>
 
             {/* modal for Edit */}
@@ -175,6 +221,7 @@ const ViewRealProperty = () => {
               onRequestClose={closeModalPEdit}
               className="block p-2 w-1/2 mx-auto rounded-md bg-gray-600"
             >
+              <form onSubmit={handleUpdateProperty}>
               <div className="flex p-3 mb-3 border-b-4 justify-evenly align-middle text-white">
                 Edit
               </div>
@@ -308,6 +355,7 @@ const ViewRealProperty = () => {
               >
                 Close
               </button>
+              </form>
             </Modal>
           </div>
         </div>
