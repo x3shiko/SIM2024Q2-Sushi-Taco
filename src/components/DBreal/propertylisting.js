@@ -57,6 +57,13 @@ const CreateListing = () => {
     setUploadedImage(image);
     console.log("Image uploaded", image);
   };
+  /*const [image, setImage] = useState(null);
+  
+    const handleImageChange = (e) => {
+      const file = e.target.files[0];
+      setImage(file);
+      onUploadImage(file);
+    };*/
 
   // handle alert when created
   const handleShowAlert = () => {
@@ -102,8 +109,8 @@ const CreateListing = () => {
               </h1>
               <div className="mt-1 flex w-full px-3 py-2 bg-white border border-gray-300 justify-evenly text-center rounded-md shadow-sm">
                 {/* to store photo */}
-                <UploadImage onImageUpload={handleImageUpload} />
-                {uploadedImage && (
+                <UploadImage onUploadImage={handleImageUpload} />
+                {/*{uploadedImage && (
                   <div className="mt-4">
                     <h2 className="text-lg font-semibold">Uploaded Image:</h2>
                     <img
@@ -112,7 +119,7 @@ const CreateListing = () => {
                       className="mt-2"
                     />
                   </div>
-                )}
+                )}*/}
               </div>
             </div>
             {/* Show account */}
