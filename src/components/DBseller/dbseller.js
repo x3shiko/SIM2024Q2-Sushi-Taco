@@ -2,8 +2,14 @@
 import React, { useState } from "react";
 import { signOutController } from "../../controller";
 
-const DBSeller = () => {
+// change both data to profile.status or whatever u called it for Suspend and Active
+const DBSeller = ({ data }) => {
   const [showDrop, setShowDrop] = useState(false);
+
+  const status = data;
+  //testing
+  //const status = "Suspend";
+
   const handleDropClick = () => {
     setShowDrop(!showDrop);
   };
@@ -50,11 +56,27 @@ const DBSeller = () => {
             <a href="dbsellerhome">Seller Homepage</a>
           </h1>
           <ul>
-            <li className="py-2 hover:bg-blue-700 cursor-pointer">
-              <a href="sellerproperties">View My Property</a>
+            <li
+              className={`py-2 ${
+                status === "Suspend"
+                  ? "opacity-50 cursor-not-allowed disabled"
+                  : "hover:bg-blue-700 cursor-pointer"
+              }`}
+            >
+              <a href={status === "Suspend" ? "#" : "sellerproperties"}>
+                View My Property
+              </a>
             </li>
-            <li className="py-2 hover:bg-blue-700 cursor-pointer">
-              <a href="rrAgentSeller">View Agents</a>
+            <li
+              className={`py-2 ${
+                status === "Suspend"
+                  ? "opacity-50 cursor-not-allowed disabled"
+                  : "hover:bg-blue-700 cursor-pointer"
+              }`}
+            >
+              <a href={status === "Suspend" ? "#" : "rrAgentSeller"}>
+                View Agents
+              </a>
             </li>
             <li className="py-2 hover:bg-blue-700 cursor-pointer">
               <a href="/">Logout</a>
@@ -70,21 +92,29 @@ const DBSeller = () => {
       >
         <a
           href="dbsellerhome"
-          className="p-4 hover:bg-gray-700 cursor-pointer"
+          className="hover:bg-gray-700 cursor-pointer"
           onClick={handleDropClick}
         >
           Homepage
         </a>
         <a
-          href="viewSP"
-          className="p-4 hover:bg-gray-700 cursor-pointer"
+          href={status === "Suspend" ? "#" : "sellerproperties"}
+          className={`py-4 ${
+            status === "Suspend"
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-700 cursor-pointer"
+          }`}
           onClick={handleDropClick}
         >
           View Property
         </a>
         <a
-          href="rrAgentSeller"
-          className="p-4 hover:bg-gray-700 cursor-pointer"
+          href={status === "Suspend" ? "#" : "rrAgentSeller"}
+          className={`py-4 ${
+            status === "Suspend"
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-700 cursor-pointer"
+          }`}
           onClick={handleDropClick}
         >
           View Agents

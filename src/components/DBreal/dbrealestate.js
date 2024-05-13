@@ -2,8 +2,14 @@
 import React, { useState } from "react";
 import { signOutController } from "../../controller";
 
-const DBReal = () => {
+// change both data to profile.status or whatever u called it for Suspend and Active
+const DBReal = ({ data }) => {
   const [showDrop, setShowDrop] = useState(false);
+
+  const status = data;
+  //testing
+  //const status = "Suspend";
+
   const handleDropClick = () => {
     setShowDrop(!showDrop);
   };
@@ -50,14 +56,38 @@ const DBReal = () => {
             <a href="dbrealhome">Real-Estate Homepage</a>
           </h1>
           <ul>
-            <li className="py-2 hover:bg-blue-700 cursor-pointer">
-              <a href="propertylisting">Create Property Listing</a>
+            <li
+              className={`py-2 ${
+                status === "Suspend"
+                  ? "opacity-50 cursor-not-allowed disabled"
+                  : "hover:bg-blue-700 cursor-pointer"
+              }`}
+            >
+              <a href={status === "Suspend" ? "#" : "propertylisting"}>
+                Create Property Listing
+              </a>
             </li>
-            <li className="py-2 hover:bg-blue-700 cursor-pointer">
-              <a href="viewrealproperty">View Properties</a>
+            <li
+              className={`py-2 ${
+                status === "Suspend"
+                  ? "opacity-50 cursor-not-allowed disabled"
+                  : "hover:bg-blue-700 cursor-pointer"
+              }`}
+            >
+              <a href={status === "Suspend" ? "#" : "viewrealproperty"}>
+                View Properties
+              </a>
             </li>
-            <li className="py-2 hover:bg-blue-700 cursor-pointer">
-              <a href="realviewrr">View Review & Rating</a>
+            <li
+              className={`py-2 ${
+                status === "Suspend"
+                  ? "opacity-50 cursor-not-allowed disabled"
+                  : "hover:bg-blue-700 cursor-pointer"
+              }`}
+            >
+              <a href={status === "Suspend" ? "#" : "realviewrr"}>
+                View Review & Rating
+              </a>
             </li>
             <li className="py-2 hover:bg-blue-700 cursor-pointer">
               <a href="/">Logout</a>
@@ -79,22 +109,34 @@ const DBReal = () => {
           Homepage
         </a>
         <a
-          href="propertylisting"
-          className="p-4 hover:bg-gray-700 cursor-pointer"
+          href={status === "Suspend" ? "#" : "propertylisting"}
+          className={`py-4 ${
+            status === "Suspend"
+              ? "opacity-50 cursor-not-allowed disabled"
+              : "hover:bg-gray-700 cursor-pointer"
+          }`}
           onClick={handleDropClick}
         >
           Create Property Listing
         </a>
         <a
-          href="viewrealproperty"
-          className="p-4 hover:bg-gray-700 cursor-pointer"
+          href={status === "Suspend" ? "#" : "viewrealproperty"}
+          className={`py-4 ${
+            status === "Suspend"
+              ? "opacity-50 cursor-not-allowed disabled"
+              : "hover:bg-gray-700 cursor-pointer"
+          }`}
           onClick={handleDropClick}
         >
           View Properties
         </a>
         <a
-          href="realviewrr"
-          className="p-4 hover:bg-gray-700 cursor-pointer"
+          href={status === "Suspend" ? "#" : "realviewrr"}
+          className={`py-4 ${
+            status === "Suspend"
+              ? "opacity-50 cursor-not-allowed disabled"
+              : "hover:bg-gray-700 cursor-pointer"
+          }`}
           onClick={handleDropClick}
         >
           View Review & Rating
