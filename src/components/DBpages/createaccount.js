@@ -27,12 +27,17 @@ const Alert = ({ type, message }) => {
 const Signup = () => {
         //alert function
         const [showAlert, setShowAlert] = useState(false);
+        const [showErrorAlert, setShowErrorAlert] = useState(false);
 
         const handleShowAlert = () => {
           setShowAlert(true);
         };
 
-        const handleSubmit = (e) => {
+        const handleShowErrorAlert = () => {
+          setShowErrorAlert(true);
+        };
+
+        const handleSubmit = async (e) => {
             e.preventDefault();
             // Sign up logic here
             const signupForm = document.querySelector('#signup-form');
@@ -41,13 +46,13 @@ const Signup = () => {
             const firstName = signupForm['firstN'].value;
             const lastName = signupForm['lastN'].value;
 
-            createAccountController.createAccount(email, password, firstName, lastName).then((createAccountSuccess) => {
-              console.log(createAccountSuccess)
-              if (createAccountSuccess){
-                signupForm.reset();
-                handleShowAlert()
-              }
-            })
+            const isSuccessful = await createAccountController.createAccount(email, password, firstName, lastName)
+            if(isSuccessful){
+              signupForm.reset();
+              handleShowAlert()
+            } else{
+              handleShowErrorAlert()
+            }
              
         };
     return (
@@ -72,12 +77,15 @@ const Signup = () => {
                     </div>
                     <div className="my-4">
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700"></label>
-                        <input type='password' id="password" placeholder='Password' className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+                        <input type='password' id="password" placeholder='Password' pattern=".{6,}" className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
                     </div>
                     {/* button should be onSubmit but i'll leave it as onClick for you to see first */}
                     <button type="submit" className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Create</button>
                     {showAlert && (
                         <Alert type="success" message="Account have been created successfully" />
+                    )}
+                    {showErrorAlert && (
+                        <Alert type="error" message="Existing email have been used" />
                     )}
                 </form>
                 </div>

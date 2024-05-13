@@ -16,32 +16,26 @@ class User{
         console.log(`user ID ${userID} has successfully change password to ${newPassword}`)
     }
 
-    createNewUser(email, password, firstName, lastName){
-        return new Promise((resolve, reject) => {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const userID = userCredential.user.uid;
-                    const userDocRef = doc(this.db, 'users', userID); // 'users' is the collection name
-                    setDoc(userDocRef, {
-                        email: email,
-                        password: password,
-                        firstName: firstName,
-                        lastName: lastName,
-                        role: "None",
-                        status: "Active"
-                        // Add other details as needed
-                    }).then(() => {
-                        console.log("User data successfully created and stored in database");
-                        resolve(true);
-                    }).catch((error) => {
-                        console.error("Error storing user data:", error);
-                        reject(false);
-                    });
-                }).catch((error) => {
-                    console.error("Error creating user:", error);
-                    reject(false); // Reject with false if there's an error creating user
-                });
-        });
+    async createNewUser(email, password, firstName, lastName){
+        try{
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const userID = userCredential.user.uid;
+            const userDocRef = doc(this.db, 'users', userID);
+            await setDoc(userDocRef, {
+                email: email,
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                role: "None",
+                status: "Active"
+                // Add other details as needed
+            })
+            console.log("User data successfully created and stored in database");
+            return true
+        }catch(error){
+            console.error("Error creating user:", error);
+            return false
+        }
     }
 
     async doSignInWithEmailAndPassword(email, password) {
@@ -49,37 +43,17 @@ class User{
             // Sign in the user
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const userID = userCredential.user.uid;
+            const userDocRef = doc(this.db, 'users', userID);
+            const userDocSnapshot = await getDoc(userDocRef);
 
-            // Define the inner function to get the user's role
-            const getUserRole = async (userId) => {
-                try {
-                    // Get the user document from Firestore
-                    const userDocRef = doc(this.db, 'users', userId);
-                    const userDocSnapshot = await getDoc(userDocRef);
-
-                    // Check if the user document exists
-                    if (userDocSnapshot.exists()) {
-                        const userData = userDocSnapshot.data();
-
-                        // Check if the user has a role field
-                        if (userData.role) {
-                            return userData.role;
-                        } else {
-                            return "None";
-                        }
-                    } else {
-                        return "None";
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-            };
-
-            // Get the user's role using the inner function
-            const userRole = await getUserRole(userID);
-            return userRole;
+            // Check if the user document exists
+            if (userDocSnapshot.exists()) {
+                return userDocSnapshot.data();
+            } else { //if user doesnt exist
+                throw new Error('User document does not exist');
+            }
         } catch (error) {
-            console.log(error);
+            throw error
         }
     }
 

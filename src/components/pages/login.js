@@ -34,6 +34,7 @@ const Alert = ({ type, message }) => {
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginState, setLoginState] = useState("")
   const history = useHistory();
 
   const handleEmailChange = (e) => {
@@ -53,18 +54,46 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //login logic here
-    const role = await signInController.signIn(email, password);
-    console.log(role);
-    if (role == "admin" || role == "Admin") {
-      history.push("/dbhome");
-    } else if (role == "buyer" || role == "Buyer") {
-      history.push("/DBBuyerHome");
-    } else if (role == "seller" || role == "Seller") {
-      history.push("/dbsellerhome");
-    } else if (role == "Real Estate Agent") {
-      history.push("/dbrealhome");
-    } else {
+    try {
+      // Attempt to sign in
+      const userData = await signInController.signIn(email, password);
+      if (userData.role == "admin" || userData.role == "Admin") {
+        if (userData.status == "Suspend"){ //check for suspend
+          setLoginState("Suspend")
+          handleShowAlert();
+        } else{
+          history.push("/dbhome");
+        }
+      } else if (userData.role == "buyer" || userData.role == "Buyer") {
+        if (userData.status == "Suspend"){ //check for suspend
+          setLoginState("Suspend")
+          handleShowAlert();
+        } else{
+          history.push("/DBBuyerHome");
+        }
+      } else if (userData.role == "seller" || userData.role == "Seller") {
+        if (userData.status == "Suspend"){ //check for suspend
+          setLoginState("Suspend")
+          handleShowAlert();
+        } else{
+          history.push("/dbsellerhome");
+        }
+      } else if (userData.role == "Real Estate Agent") {
+        if (userData.status == "Suspend"){ //check for suspend
+          setLoginState("Suspend")
+          handleShowAlert();
+        } else{
+          history.push("/dbrealhome");
+        }
+      } else {
+        setLoginState("")
+        handleShowAlert();
+      }
+      // If sign-in is successful, do something with userCredential
+    } catch (error) {
+      setLoginState("error")
       handleShowAlert();
+      console.error('Sign-in failed:', error.message);
     }
   };
 
@@ -125,7 +154,7 @@ const Login = () => {
           </form>
           {/* add datatype into Alert type={data} as of now theres only success/error/Suspend */}
           {/* please change the alert function type on top */}
-          {showAlert && <Alert type="error" />}
+          {showAlert && <Alert type={loginState} />}
         </div>
       </div>
     </div>

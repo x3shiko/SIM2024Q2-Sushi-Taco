@@ -7,8 +7,8 @@ import { ratings } from "./firebase/ratings";
 
 class CreateAccountController{
 
-    createAccount(email, password, firstName, lastName){
-        return user.createNewUser(email, password, firstName, lastName)
+    async createAccount(email, password, firstName, lastName){
+        return await user.createNewUser(email, password, firstName, lastName)
     }
     
 }

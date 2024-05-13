@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Modal from "react-modal";
 import DBReal from "./dbrealestate";
 import imageProp from "../../assets/1.png";
-import { set } from "firebase/database";
+import { viewPropertiesController } from "../../controller";
 
 const EditImage = ({ onEditImage }) => {
   const [image, setImage] = useState(null);
@@ -32,6 +32,16 @@ const ViewRealProperty = () => {
   const [updateEdit, setUpdateEdit] = useState("");
   const [editImage, setEditImage] = useState(null); // state for uploaded image
   const [editSold, setEditSold] = useState(""); // state for suspend/unsuspend
+
+  const [properties, setProperties] = useState([]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      const properties = await viewPropertiesController.fetchProperties();
+      setProperties(properties);
+    };
+    fetchProperties();
+  }, []);
 
   //toggle to show options to edit
   const toggleEditAddress = () => {
@@ -101,7 +111,8 @@ const ViewRealProperty = () => {
         />
       </div>
       <div className="grid grid-cols-3 grid-rows-3 my-3">
-        <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
+        {properties.map((property) => (
+          <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
           <img className="w-full" src={imageProp} alt="Placeholder" />
           <div className="px-6 py-4">
             {/* If u save property name can add here */}
@@ -128,7 +139,9 @@ const ViewRealProperty = () => {
             >
               Remove
             </button>
-
+          </div>
+          </div>
+        ))}
             {/* modal for Remove */}
             <Modal
               isOpen={isOpenPRemove}
@@ -298,8 +311,6 @@ const ViewRealProperty = () => {
             </Modal>
           </div>
         </div>
-      </div>
-    </div>
   );
 };
 
