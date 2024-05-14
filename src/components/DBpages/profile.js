@@ -504,11 +504,22 @@ const Profile = () => {
             isOpen={isOpen}
             onRequestClose={closeModal}
             className="block p-2 w-3/4 mx-auto bg-gray-600"
+            style={{
+              content: {
+                maxHeight: '90vh', // Set a maximum height for the modal
+              },
+            }}
           >
             <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
               Assign Profile
             </div>{" "}
             {/* header*/}
+            <div
+              style={{
+                maxHeight: '60vh', // Limit the height of the table container
+                overflowY: 'auto', // Enable vertical scrolling
+              }}
+            >
             <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -566,6 +577,7 @@ const Profile = () => {
                 ))}
               </tbody>
             </table>
+            </div>
             <button
               className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
               onClick={closeModal}

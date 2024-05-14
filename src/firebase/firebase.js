@@ -34,33 +34,6 @@ onAuthStateChanged(auth, (user) => {
     console.log("No user signed in");
   }
 });
-// const serviceAccount = require('./csit314-sushitaco-firebase-adminsdk-2gk26-61d7b202d0.json');
-// const admin = require("firebase-admin");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
-// async function changeUserPassword(userId, newPassword) {
-//   try {
-//     await admin.auth().updateUser(userId, { password: newPassword });
-//     console.log("Password updated successfully!");
-//   } catch (error) {
-//     console.error("Error updating password:", error);
-//   }
-// }
-
-// // Create admin user
-// admin.auth().createUser({
-//   email: 'SushiAndTaco@gmail.com',
-//   password: '123123',
-//   displayName: 'S&T Admin',
-//   // Additional user properties can be added here
-// })
-//   .then((userRecord) => {
-//     console.log('Successfully created new user:', userRecord.uid);
-//   })
-//   .catch((error) => {
-//     console.error('Error creating user:', error);
-//   });
 
 export {firebaseApp, auth, functions, currentUser, storage};
   

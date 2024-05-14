@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Dashboard from "./dashboard";
-import { viewAccountController } from "../../controller";
+import { viewAccountController, searchUserByEmailController } from "../../controller";
 
 const TableA = ({ data, onSearch }) => {
   const [query, setQuery] = useState("");
@@ -18,17 +18,14 @@ const TableA = ({ data, onSearch }) => {
   }, []);
 
   const handleInputChange = useCallback(
-    (e) => {
+    async (e) => {
       const inputValue = e.target.value;
       setQuery(inputValue.toLowerCase());
       if (inputValue === "") {
         setShowFilteredAccounts(false);
       } else {
         setShowFilteredAccounts(true);
-        const filtered = accounts.filter((account) => {
-          const email = account.email.toLowerCase();
-          return email.includes(inputValue);
-        });
+        const filtered = await searchUserByEmailController.searchUserByEmail(inputValue)
         setFilteredAccounts(filtered);
       }
     },

@@ -1,45 +1,63 @@
-import { getFirestore, doc, updateDoc, setDoc, getDocs, collection, addDoc, arrayUnion, query, where } from 'firebase/firestore';
-import { currentUser } from './firebase';
+import {
+  getFirestore,
+  doc,
+  updateDoc,
+  setDoc,
+  getDocs,
+  collection,
+  addDoc,
+  arrayUnion,
+  query,
+  where,
+} from "firebase/firestore";
+import { currentUser } from "./firebase";
 
-class Ratings{
+class Ratings {
+  constructor() {
+    this.db = getFirestore();
+  }
 
-    constructor(){
-        this.db = getFirestore();
+  async createRating(agentID, rating, byUserID) {
+    while (!currentUser) {
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
+    }
+    try {
+      const reviewsCollectionRef = collection(this.db, "ratings");
+      await addDoc(reviewsCollectionRef, {
+        agentID: agentID,
+        rating: rating,
+        reviewByUserID: currentUser.uid,
+      });
+      console.log(
+        `Successfully added rating (${rating} star) to user ID: ${agentID} by user ID: ${currentUser.uid}`
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async getRatings() {
+    while (!currentUser) {
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
     }
 
-    async createRating(userID, rating){
-        try{
-            const reviewsCollectionRef = collection(this.db, 'ratings');
-            await addDoc(reviewsCollectionRef, {
-                agentID: userID,
-                rating: rating,
-            })
-            console.log(`Successfully added rating (${rating} star) to user ID ${userID}`)
-            return true
-        } catch(error){
-            return false
-        }
-    };
-
-    getReviews = async () => {
-        // Wait for currentUser to be defined
-        while (!currentUser) {
-          await new Promise(resolve => setTimeout(resolve, 100)); // Wait for 100 milliseconds
-        }
-        const reviewsCollectionRef = collection(this.db, 'reviews');
-        const q = query(reviewsCollectionRef, where("role", "===", "Real Estate Agent"));
-        const querySnapshot = await getDocs(q);
-        console.log(querySnapshot.docs)
-        const reviews = [];
-        querySnapshot.forEach((doc) => {
-            reviews.push({
-            id: doc.id,
-            ...doc.data()
-          });
-        });
-        console.log(reviews)
-        return reviews;
-    }
+    const ratingsCollectionRef = collection(this.db, "ratings");
+    const q = query(
+        ratingsCollectionRef,
+      where("agentID", "==", currentUser.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot.docs);
+    const ratings = [];
+    querySnapshot.forEach((doc) => {
+      ratings.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+    return ratings;
+  }
 }
 
 export const ratings = new Ratings();

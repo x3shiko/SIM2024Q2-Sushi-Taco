@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import DBReal from "./dbrealestate";
 import SnTLogo from "../../assets/SnTLogo.png";
+import { viewSellerController, createPropertyListingController } from "../../controller";
 
 const Alert = ({ type, message }) => {
   // Alert function
@@ -47,23 +48,36 @@ const CreateListing = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null); // state for uploaded image
   const [isOpenAccount, setIsOpenAccount] = useState(false); // false state for Selecting account
+  const [sellers, setSellers] = useState([]);
+  const [selectedSeller, setSelectedSeller] = useState("");
+  const [selectedSellerEmail, setSelectedSellerEmail] = useState("@gmail.com")
+  const [address, setAddress] = useState("")
+  const [price, setPrice] = useState(0)
+  const [description, setDescription] = useState("")
 
   // open modal to select account
   const openModalAccount = () => setIsOpenAccount(true);
   const closeModalAccount = () => setIsOpenAccount(false);
+
+  const fetchSellers = async () => {
+    const sellers = await viewSellerController.getSellers();
+    setSellers(sellers);
+  };
+
+  useEffect(() => {
+    fetchSellers();
+  }, []);
 
   //handle image upload
   const handleImageUpload = (image) => {
     setUploadedImage(image);
     console.log("Image uploaded", image);
   };
-  /*const [image, setImage] = useState(null);
-  
-    const handleImageChange = (e) => {
-      const file = e.target.files[0];
-      setImage(file);
-      onUploadImage(file);
-    };*/
+
+  const handleCheckboxChange = (sellerID, sellerEmail) => {
+    setSelectedSeller(sellerID)
+    setSelectedSellerEmail(sellerEmail)
+  };
 
   // handle alert when created
   const handleShowAlert = () => {
@@ -87,9 +101,14 @@ const CreateListing = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const isSuccess = await createPropertyListingController.createProperty(uploadedImage, selectedSeller, address, price, description)
+    if (isSuccess){
+      handleShowAlert()
+    }
   };
+
   return (
     <div className="min-h-screen w-3/4 flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 p-10 bg-gray-100">
@@ -110,16 +129,6 @@ const CreateListing = () => {
               <div className="mt-1 flex w-full px-3 py-2 bg-white border border-gray-300 justify-evenly text-center rounded-md shadow-sm">
                 {/* to store photo */}
                 <UploadImage onUploadImage={handleImageUpload} />
-                {/*{uploadedImage && (
-                  <div className="mt-4">
-                    <h2 className="text-lg font-semibold">Uploaded Image:</h2>
-                    <img
-                      src={URL.createObjectURL(uploadedImage)}
-                      alt="Uploaded"
-                      className="mt-2"
-                    />
-                  </div>
-                )}*/}
               </div>
             </div>
             {/* Show account */}
@@ -134,7 +143,7 @@ const CreateListing = () => {
                 {/* Show account add account choosen inside as {Data} instead of selleraccount */}
                 <div className="p-2 flex justify-center bg-white border rounded-md">
                   <p className="mt-2 text-2x1 font-medium">
-                    selleraccount@gmail.com
+                    {selectedSellerEmail}
                   </p>
                 </div>
               </div>
@@ -144,6 +153,7 @@ const CreateListing = () => {
                 type="address"
                 id="address"
                 placeholder="Address"
+                onChange={(e) => setAddress(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
@@ -156,6 +166,7 @@ const CreateListing = () => {
                   type="number"
                   id="price"
                   placeholder="Price"
+                  onChange={(e) => setPrice(e.target.value)}
                   className="mt-1 flex w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
@@ -168,6 +179,7 @@ const CreateListing = () => {
               <textarea
                 id="propertyDescription"
                 placeholder="Description"
+                onChange={(e) => setDescription(e.target.value)}
                 className="my-2 block w-full px-3 py-2 h-32 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
@@ -189,11 +201,22 @@ const CreateListing = () => {
             isOpen={isOpenAccount}
             onRequestClose={closeModalAccount}
             className="block p-2 w-3/4 mx-auto bg-gray-600"
+            style={{
+              content: {
+                maxHeight: '80vh', // Set a maximum height for the modal
+              },
+            }}
           >
             <div className="flex p-3 mb-2 border-b-4 justify-evenly align-middle text-white">
               Select Account
             </div>
             {/* header*/}
+            <div
+              style={{
+                maxHeight: '60vh', // Limit the height of the table container
+                overflowY: 'auto', // Enable vertical scrolling
+              }}
+            >
             <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -225,22 +248,25 @@ const CreateListing = () => {
               </thead>
               {/* Profile Data to select which profile to reassign */}
               <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">Seller</td>
-                  <td className="px-6 py-4 whitespace-nowrap">Account</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    selleraccount@gmail.com
-                  </td>
-                  {/* Add onchange and checked  */}
-                  <input
-                    id="default-checkbox"
-                    type="checkbox"
-                    value=""
-                    className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                </tr>
+                {sellers.map((seller) => (
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap">{seller.firstName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{seller.lastName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{seller.email}</td>
+                    {/* Add onchange and checked  */}
+                    <input
+                      id="default-checkbox"
+                      type="checkbox"
+                      value=""
+                      checked={selectedSeller === seller.id}
+                      onChange={() => handleCheckboxChange(seller.id, seller.email)}
+                      className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                  </tr>
+                ))}
               </tbody>
             </table>
+            </div>
             <button
               className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
               onClick={closeModalAccount}
@@ -248,7 +274,7 @@ const CreateListing = () => {
               Close
             </button>
             {/* Add onclick handle  */}
-            <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300">
+            <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300" onClick={closeModalAccount}>
               Select
             </button>
           </Modal>

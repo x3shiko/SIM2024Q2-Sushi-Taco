@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import DashboardBuyer from "./dbbuyer";
 import {
   viewPropertiesController,
   savePropertyToUserController,
+  searchPropertiesByLocationController,
 } from "../../controller";
 import { currentUser } from "../../firebase/firebase";
 
@@ -14,6 +15,8 @@ const BProperties = ({ data, onSearch }) => {
   const [selectSS, setSelectSS] = useState("");
   const [properties, setProperties] = useState([]);
   const [soldProperties, setSoldProperties] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [showFilteredProperties, setShowFilteredProperties] = useState(false);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -43,11 +46,21 @@ const BProperties = ({ data, onSearch }) => {
   };
 
   //handle search input
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    setQuery(inputValue);
-    onSearch(inputValue);
-  };
+  const handleInputChange = useCallback( async (e) => {
+      const inputValue = e.target.value;
+      setQuery(inputValue);
+      // onSearch(inputValue);
+      setQuery(inputValue.toLowerCase());
+      if (inputValue === "") {
+        setShowFilteredProperties(false);
+      } else {
+        setShowFilteredProperties(true);
+        const filtered = await searchPropertiesByLocationController.searchPropertyByLocation(inputValue)
+        setFilteredProperties(filtered);
+      }
+    },
+    [properties]
+  );
 
   const handleSaveProperty = async (propertyID) => {
     await savePropertyToUserController.saveProperty(
@@ -94,7 +107,7 @@ const BProperties = ({ data, onSearch }) => {
       {/* Start of Property Grid */}
       <div className="grid grid-cols-3 grid-rows-3 my-3">
         {/* show sold properties */}
-        {showSold &&
+        {!showFilteredProperties && showSold &&
           soldProperties.map((soldProperty) => (
             <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
               <img
@@ -106,7 +119,7 @@ const BProperties = ({ data, onSearch }) => {
                 <div className="font-bold text-xl mb-2">
                   {soldProperty.address}
                 </div>
-                <p className="text-green-500 text-base">$500,000</p>
+                <p className="text-green-500 text-base">{soldProperty.price}</p>
                 <p className="text-gray-700 text-base">
                   {soldProperty.description}
                 </p>
@@ -132,14 +145,52 @@ const BProperties = ({ data, onSearch }) => {
               </div>
             </div>
           ))}
+          {showFilteredProperties &&
+          filteredProperties.map((filteredProperty) => (
+            <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
+              <img
+                className="w-full"
+                src={filteredProperty.image}
+                alt="Placeholder"
+              />
+              <div className="px-6 py-4">
+                <div className="font-bold text-xl mb-2">
+                  {filteredProperty.address}
+                </div>
+                <p className="text-green-500 text-base">{filteredProperty.price}</p>
+                <p className="text-gray-700 text-base">
+                  {filteredProperty.description}
+                </p>
+              </div>
+              <div className="px-6 py-4">
+                {/* doesnt need any function or buy */}
+                <button
+                  className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                  disabled
+                >
+                  Sold
+                </button>
+                {/* Save property please edit the id to its corresponding object*/}
+                {/*<button id='sold1' onClick={handleSave} className={`inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ${isSaved ? 'bg-green-500' : ''}`}>
+                                                Save
+                                    </button>*/}
+                <button
+                  onClick={() => handleSaveProperty(filteredProperty.id)}
+                  className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          ))}
         {/* show unsold properties */}
-        {showUnsold &&
+        {!showFilteredProperties && showUnsold &&
           properties.map((property) => (
             <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
               <img className="w-full" src={property.image} alt="Placeholder" />
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">{property.address}</div>
-                <p className="text-green-500 text-base">$500,000</p>{" "}
+                <p className="text-green-500 text-base">{property.price}</p>{" "}
                 {/* If u save property price can add here */}
                 <p className="text-gray-700 text-base">
                   {property.description}

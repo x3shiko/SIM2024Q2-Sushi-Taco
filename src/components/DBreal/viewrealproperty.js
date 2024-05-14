@@ -169,7 +169,7 @@ const ViewRealProperty = () => {
             {/* If u save property address can add here */}
             <p className="text-gray-700 text-base">{property.description}</p>
             <p className="text-blue-700 text-base">
-              UserID:{" "}
+              Owned by UserID:{" "}
               <span className="font-semibold">{property.ownByUserID}</span>
             </p>
           </div>

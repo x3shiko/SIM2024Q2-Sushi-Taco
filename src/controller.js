@@ -25,6 +25,14 @@ class ViewAccountController{
 
 export const viewAccountController = new ViewAccountController();
 
+class SearchUserByEmailController{
+    async searchUserByEmail(email){
+        return await user.searchUserByEmail(email)
+    }
+}
+
+export const searchUserByEmailController = new SearchUserByEmailController();
+
 class UpdateAccountController{
     async updateAccount(userID, fieldToUpdate){
         return await user.updateAccount(userID, fieldToUpdate)
@@ -178,3 +186,43 @@ class DeletePropertyController{
 }
 
 export const deletePropertyController = new DeletePropertyController()
+
+class SearchPropertiesByLocationController{
+    async searchPropertyByLocation(location){
+        return await properties.searchPropertyByLocation(location)
+    }
+}
+
+export const searchPropertiesByLocationController = new SearchPropertiesByLocationController()
+
+class ViewRatingController{
+    async getRatings(){
+        return await ratings.getRatings()
+    }
+}
+
+export const viewRatingController = new ViewRatingController()
+
+class ViewReviewController{
+    async getReviews(){
+        return await reviews.getReviews()
+    }
+}
+
+export const viewReviewController = new ViewReviewController()
+
+class ViewSellerController{
+    async getSellers(){
+        return await user.getSellers()
+    }
+}
+
+export const viewSellerController = new ViewSellerController()
+
+class CreatePropertyListingController{
+    async createProperty(file, sellerID, address, price, description){
+        return await properties.createPropertyListing(file, sellerID, address, price, description)
+    }
+}
+
+export const createPropertyListingController = new CreatePropertyListingController()
