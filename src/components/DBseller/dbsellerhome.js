@@ -1,5 +1,6 @@
 import React from "react";
 import DBSeller from "./dbseller";
+import { viewProfilesController } from "../../controller";
 
 const SellerHome = () => {
   return (
@@ -16,10 +17,29 @@ const SellerHome = () => {
 };
 
 const DBSellerHome = () => {
+  const [profileStatus, setProfileStatus] = useState("");
+  const checkProfileStatus = async () => {
+    const profiles = await viewProfilesController.viewProfiles();
+    let status;
+    profiles.forEach((profile) => {
+      if (profile.profileName === "Buyer") {
+        status = profile.status;
+      }
+    });
+    return status;
+  };
+  useEffect(() => {
+    const fetchProfileStatus = async () => {
+      const status = await checkProfileStatus();
+      setProfileStatus(status);
+    };
+
+    fetchProfileStatus();
+  }, []);
   return (
     <div id="dbhome" className="flex item-start">
       <DBSeller />
-      <SellerHome />
+      <SellerHome data={profileStatus}/>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import DBReal from "./dbrealestate";
+import { viewProfilesController } from "../../controller";
 
 const RealHome = () => {
   return (
@@ -17,10 +18,29 @@ const RealHome = () => {
 };
 
 const DBRealHome = () => {
+  const [profileStatus, setProfileStatus] = useState("");
+  const checkProfileStatus = async () => {
+    const profiles = await viewProfilesController.viewProfiles();
+    let status;
+    profiles.forEach((profile) => {
+      if (profile.profileName === "Buyer") {
+        status = profile.status;
+      }
+    });
+    return status;
+  };
+  useEffect(() => {
+    const fetchProfileStatus = async () => {
+      const status = await checkProfileStatus();
+      setProfileStatus(status);
+    };
+
+    fetchProfileStatus();
+  }, []);
   return (
     <div id="dbhome" className="flex item-start">
       <DBReal />
-      <RealHome />
+      <RealHome data={profileStatus}/>
     </div>
   );
 };
