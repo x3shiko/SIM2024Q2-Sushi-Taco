@@ -52,7 +52,7 @@ const SellerProperties = () => {
                 className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
                 disabled
               >
-                <span className="font-semibold mr-1">11</span>
+                <span className="font-semibold mr-1">{property.view}</span>
                 View
               </button>
             </div>

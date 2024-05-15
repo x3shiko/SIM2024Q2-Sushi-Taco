@@ -99,7 +99,7 @@ class Properties {
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
       // Create a document in the "properties" collection
       const propertiesCollection = collection(this.db, "properties");
-      const newProperty = await addDoc(propertiesCollection, {
+      await addDoc(propertiesCollection, {
         address: address,
         description: description,
         image: downloadURL,
@@ -107,6 +107,7 @@ class Properties {
         price: price,
         savedByUserID: [],
         status: "unsold",
+        view: 0
         // Add more fields as needed
       });
       return true; // Return true for success
@@ -174,6 +175,16 @@ class Properties {
     const propertyDocRef = doc(this.db, "properties", propertyID);
     await updateDoc(propertyDocRef, {
       savedByUserID: arrayUnion(userID),
+    });
+  }
+
+  async addViewToProperty(propertyID){
+    const propertyDocRef = doc(this.db, "properties", propertyID);
+    const docSnapshot = await getDoc(propertyDocRef);
+    const currentViews = docSnapshot.data().view
+    const newViews = currentViews + 1
+    await updateDoc(propertyDocRef, {
+      view: newViews
     });
   }
 }

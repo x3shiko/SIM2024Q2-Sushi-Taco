@@ -4,6 +4,7 @@ import {
   viewPropertiesController,
   savePropertyToUserController,
   searchPropertiesByLocationController,
+  addViewsPropertyController
 } from "../../controller";
 import { currentUser } from "../../firebase/firebase";
 
@@ -69,6 +70,10 @@ const BProperties = ({ data, onSearch }) => {
       `User ID ${currentUser.uid} have save the property ID ${propertyID}`
     );
   };
+
+  const handleAddView = async (propertyID) => {
+    await addViewsPropertyController.addViewToProperty(propertyID)
+  }
 
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
@@ -164,9 +169,9 @@ const BProperties = ({ data, onSearch }) => {
                 {/* doesnt need any function or buy */}
                 <button
                   className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-                  disabled
+                  onClick={() => handleAddView(filteredProperty.id)}
                 >
-                  Sold
+                  {filteredProperty.status}
                 </button>
                 {/* Save property please edit the id to its corresponding object*/}
                 {/*<button id='sold1' onClick={handleSave} className={`inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ${isSaved ? 'bg-green-500' : ''}`}>
@@ -195,7 +200,7 @@ const BProperties = ({ data, onSearch }) => {
                 </p>
               </div>
               <div className="px-6 py-4">
-                <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2" onClick={() => handleAddView(property.id)}>
                   Buy
                 </button>
                 {/* Save property please edit the id to its corresponding object*/}

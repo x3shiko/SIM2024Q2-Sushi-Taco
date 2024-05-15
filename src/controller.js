@@ -155,6 +155,14 @@ class CreateReviewController{
 
 export const createReviewController = new CreateReviewController()
 
+class AddViewsPropertyController{
+    async addViewToProperty(propertyID){
+        await properties.addViewToProperty(propertyID)
+    }
+}
+
+export const addViewsPropertyController = new AddViewsPropertyController()
+
 class GetAgentUsers{
     async getAgents(){
         return await user.getAgents()
