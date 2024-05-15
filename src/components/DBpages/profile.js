@@ -8,7 +8,7 @@ import {
   viewAccountController,
   updateAccountController,
   addUserIDsToProfileController,
-  searchProfileController
+  searchProfileController,
 } from "../../controller";
 
 const StatusColor = ({ type }) => {
@@ -167,13 +167,15 @@ const Profile = () => {
         setShowFilteredProfiles(false);
       } else {
         setShowFilteredProfiles(true);
-        const filtered = await searchProfileController.searchProfileByName(inputValue)
+        const filtered = await searchProfileController.searchProfileByName(
+          inputValue
+        );
         setFilteredProfiles(filtered);
       }
     },
     [profiles]
   );
-  
+
   const handleProfileDescription = (e) => {
     setProfileDescription(e.target.value);
   };
@@ -301,7 +303,7 @@ const Profile = () => {
                     className="m-2 p-4 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium hover:border-blue-600 hover:text-blue-600"
                     onClick={() => openModalEdit(profile.id)}
                   >
-                    Edit
+                    Update
                   </button>
                 </td>
 
@@ -504,7 +506,7 @@ const Profile = () => {
             className="block p-2 w-3/4 mx-auto bg-gray-600"
             style={{
               content: {
-                maxHeight: '90vh', // Set a maximum height for the modal
+                maxHeight: "90vh", // Set a maximum height for the modal
               },
             }}
           >
@@ -514,67 +516,67 @@ const Profile = () => {
             {/* header*/}
             <div
               style={{
-                maxHeight: '60vh', // Limit the height of the table container
-                overflowY: 'auto', // Enable vertical scrolling
+                maxHeight: "60vh", // Limit the height of the table container
+                overflowY: "auto", // Enable vertical scrolling
               }}
             >
-            <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    First Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Last Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Email
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Select
-                  </th>
-                </tr>
-              </thead>
-              {/* Profile Data to select which profile to reassign */}
-              <tbody className="bg-white divide-y divide-gray-200">
-                {accounts.map((account) => (
+              <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {account.firstName}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {account.lastName}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {account.email}
-                    </td>
-                    <input
-                      id="default-checkbox"
-                      type="checkbox"
-                      value=""
-                      checked={selectedAccounts.includes(account.id)}
-                      onChange={() => handleCheckboxChange(account.id)}
-                      className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      First Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Last Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Select
+                    </th>
+                  </tr>
+                </thead>
+                {/* Profile Data to select which profile to reassign */}
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {accounts.map((account) => (
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {account.firstName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {account.lastName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {account.email}
+                      </td>
+                      <input
+                        id="default-checkbox"
+                        type="checkbox"
+                        value=""
+                        checked={selectedAccounts.includes(account.id)}
+                        onChange={() => handleCheckboxChange(account.id)}
+                        className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100
                                               border-gray-300 rounded focus:ring-blue-500
                                                 dark:focus:ring-blue-600 dark:ring-offset-gray-800
                                                 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
             <button
               className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
