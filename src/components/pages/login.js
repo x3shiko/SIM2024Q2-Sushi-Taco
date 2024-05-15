@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SnTLogo from "../../assets/SnTLogo.png";
 import { useHistory } from "react-router-dom";
 import { signInController } from "../../controller";
 
 const Alert = ({ type, message }) => {
+  // add or remove visibility of alert
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [type, message]);
+
+  if (!isVisible) return null;
   // Alert function
   let alertClasses = "my-2 px-4 py-2 rounded-md";
   switch (type) {
@@ -34,7 +45,7 @@ const Alert = ({ type, message }) => {
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginState, setLoginState] = useState("")
+  const [loginState, setLoginState] = useState("");
   const history = useHistory();
 
   const handleEmailChange = (e) => {
@@ -58,42 +69,46 @@ const Login = () => {
       // Attempt to sign in
       const userData = await signInController.signIn(email, password);
       if (userData.role == "admin" || userData.role == "Admin") {
-        if (userData.status == "Suspend"){ //check for suspend
-          setLoginState("Suspend")
+        if (userData.status == "Suspend") {
+          //check for suspend
+          setLoginState("Suspend");
           handleShowAlert();
-        } else{
+        } else {
           history.push("/dbhome");
         }
       } else if (userData.role == "buyer" || userData.role == "Buyer") {
-        if (userData.status == "Suspend"){ //check for suspend
-          setLoginState("Suspend")
+        if (userData.status == "Suspend") {
+          //check for suspend
+          setLoginState("Suspend");
           handleShowAlert();
-        } else{
+        } else {
           history.push("/DBBuyerHome");
         }
       } else if (userData.role == "seller" || userData.role == "Seller") {
-        if (userData.status == "Suspend"){ //check for suspend
-          setLoginState("Suspend")
+        if (userData.status == "Suspend") {
+          //check for suspend
+          setLoginState("Suspend");
           handleShowAlert();
-        } else{
+        } else {
           history.push("/dbsellerhome");
         }
       } else if (userData.role == "Real Estate Agent") {
-        if (userData.status == "Suspend"){ //check for suspend
-          setLoginState("Suspend")
+        if (userData.status == "Suspend") {
+          //check for suspend
+          setLoginState("Suspend");
           handleShowAlert();
-        } else{
+        } else {
           history.push("/dbrealhome");
         }
       } else {
-        setLoginState("")
+        setLoginState("");
         handleShowAlert();
       }
       // If sign-in is successful, do something with userCredential
     } catch (error) {
-      setLoginState("error")
+      setLoginState("error");
       handleShowAlert();
-      console.error('Sign-in failed:', error.message);
+      console.error("Sign-in failed:", error.message);
     }
   };
 

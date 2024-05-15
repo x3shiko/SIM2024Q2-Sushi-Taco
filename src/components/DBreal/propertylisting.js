@@ -2,9 +2,23 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import DBReal from "./dbrealestate";
 import SnTLogo from "../../assets/SnTLogo.png";
-import { viewSellerController, createPropertyListingController } from "../../controller";
+import {
+  viewSellerController,
+  createPropertyListingController,
+} from "../../controller";
 
 const Alert = ({ type, message }) => {
+  // add or remove visibility of alert
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [type, message]);
+
+  if (!isVisible) return null;
   // Alert function
   let alertClasses = "my-2 px-4 py-2 rounded-md";
   switch (type) {
@@ -50,10 +64,10 @@ const CreateListing = () => {
   const [isOpenAccount, setIsOpenAccount] = useState(false); // false state for Selecting account
   const [sellers, setSellers] = useState([]);
   const [selectedSeller, setSelectedSeller] = useState("");
-  const [selectedSellerEmail, setSelectedSellerEmail] = useState("@gmail.com")
-  const [address, setAddress] = useState("")
-  const [price, setPrice] = useState(0)
-  const [description, setDescription] = useState("")
+  const [selectedSellerEmail, setSelectedSellerEmail] = useState("@gmail.com");
+  const [address, setAddress] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
 
   // open modal to select account
   const openModalAccount = () => setIsOpenAccount(true);
@@ -75,8 +89,8 @@ const CreateListing = () => {
   };
 
   const handleCheckboxChange = (sellerID, sellerEmail) => {
-    setSelectedSeller(sellerID)
-    setSelectedSellerEmail(sellerEmail)
+    setSelectedSeller(sellerID);
+    setSelectedSellerEmail(sellerEmail);
   };
 
   // handle alert when created
@@ -95,10 +109,16 @@ const CreateListing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isSuccess = await createPropertyListingController.createProperty(uploadedImage, selectedSeller, address, price, description)
-    if (isSuccess){
-      handleShowAlert()
-      handleFormReset()
+    const isSuccess = await createPropertyListingController.createProperty(
+      uploadedImage,
+      selectedSeller,
+      address,
+      price,
+      description
+    );
+    if (isSuccess) {
+      handleShowAlert();
+      handleFormReset();
     }
   };
 
@@ -196,7 +216,7 @@ const CreateListing = () => {
             className="block p-2 w-3/4 mx-auto bg-gray-600"
             style={{
               content: {
-                maxHeight: '80vh', // Set a maximum height for the modal
+                maxHeight: "80vh", // Set a maximum height for the modal
               },
             }}
           >
@@ -206,59 +226,67 @@ const CreateListing = () => {
             {/* header*/}
             <div
               style={{
-                maxHeight: '60vh', // Limit the height of the table container
-                overflowY: 'auto', // Enable vertical scrolling
+                maxHeight: "60vh", // Limit the height of the table container
+                overflowY: "auto", // Enable vertical scrolling
               }}
             >
-            <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    First Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Last Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Email
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Select
-                  </th>
-                </tr>
-              </thead>
-              {/* Profile Data to select which profile to reassign */}
-              <tbody className="bg-white divide-y divide-gray-200">
-                {sellers.map((seller) => (
+              <table className="mb-5 min-w-full h-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">{seller.firstName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{seller.lastName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{seller.email}</td>
-                    {/* Add onchange and checked  */}
-                    <input
-                      id="default-checkbox"
-                      type="checkbox"
-                      value=""
-                      checked={selectedSeller === seller.id}
-                      onChange={() => handleCheckboxChange(seller.id, seller.email)}
-                      className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      First Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Last Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Select
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                {/* Profile Data to select which profile to reassign */}
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {sellers.map((seller) => (
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {seller.firstName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {seller.lastName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {seller.email}
+                      </td>
+                      {/* Add onchange and checked  */}
+                      <input
+                        id="default-checkbox"
+                        type="checkbox"
+                        value=""
+                        checked={selectedSeller === seller.id}
+                        onChange={() =>
+                          handleCheckboxChange(seller.id, seller.email)
+                        }
+                        className="ml-9 mt-4 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
             <button
               className="p-3 mr-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
@@ -267,7 +295,10 @@ const CreateListing = () => {
               Close
             </button>
             {/* Add onclick handle  */}
-            <button className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300" onClick={closeModalAccount}>
+            <button
+              className="p-3 mx-2 border border-white text-white text-sm rounded-md hover:cursor-pointer hover:bg-blue-300"
+              onClick={closeModalAccount}
+            >
               Select
             </button>
           </Modal>
