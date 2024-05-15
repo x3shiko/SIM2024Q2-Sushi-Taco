@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import DashboardBuyer from "./dbbuyer";
-import { getSavedPropertiesController } from "../../controller";
-
+import {
+  getSavedPropertiesController,
+  addViewsPropertyController,
+} from "../../controller";
+//
 const BuyerSaveProperty = () => {
   const [savedProperties, setSavedProperties] = useState([]);
 
@@ -13,6 +16,10 @@ const BuyerSaveProperty = () => {
     };
     fetchSavedProperties();
   }, []);
+
+  const handleAddView = async (propertyID) => {
+    await addViewsPropertyController.addViewToProperty(propertyID);
+  };
 
   return (
     <div className="grid grid-cols-3 grid-rows-3 p-4 min-h-screen w-3/4 overflow-x-auto">
@@ -29,8 +36,28 @@ const BuyerSaveProperty = () => {
               {savedProperty.description}
             </p>
           </div>
+          {savedProperty.status === "sold" ? (
+            <div className="px-6 py-4">
+              <button
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                disabled
+              >
+                Sold
+              </button>
+            </div>
+          ) : (
+            <div className="px-6 py-4">
+              <button
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                onClick={() => handleAddView(savedProperty.id)}
+              >
+                Buy
+              </button>
+            </div>
+          )}
         </div>
       ))}
+      ;
     </div>
   );
 };
