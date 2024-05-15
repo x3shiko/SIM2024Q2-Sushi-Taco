@@ -8,6 +8,7 @@ import {
   viewAccountController,
   updateAccountController,
   addUserIDsToProfileController,
+  searchProfileController
 } from "../../controller";
 
 const StatusColor = ({ type }) => {
@@ -159,17 +160,14 @@ const Profile = () => {
   };
 
   const handleSearch = useCallback(
-    (e) => {
+    async (e) => {
       const inputValue = e.target.value;
       setQuery(inputValue.toLowerCase());
       if (inputValue === "") {
         setShowFilteredProfiles(false);
       } else {
         setShowFilteredProfiles(true);
-        const filtered = profiles.filter((profile) => {
-          const profileName = profile.profileName.toLowerCase();
-          return profileName.includes(inputValue);
-        });
+        const filtered = await searchProfileController.searchProfileByName(inputValue)
         setFilteredProfiles(filtered);
       }
     },

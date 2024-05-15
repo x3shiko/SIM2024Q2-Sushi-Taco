@@ -48,8 +48,6 @@ const BProperties = ({ data, onSearch }) => {
   //handle search input
   const handleInputChange = useCallback( async (e) => {
       const inputValue = e.target.value;
-      setQuery(inputValue);
-      // onSearch(inputValue);
       setQuery(inputValue.toLowerCase());
       if (inputValue === "") {
         setShowFilteredProperties(false);
@@ -78,7 +76,7 @@ const BProperties = ({ data, onSearch }) => {
       <div className="flex mt-2 items-center justify-center">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search by area..."
           value={query}
           onChange={handleInputChange}
           className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
@@ -119,7 +117,7 @@ const BProperties = ({ data, onSearch }) => {
                 <div className="font-bold text-xl mb-2">
                   {soldProperty.address}
                 </div>
-                <p className="text-green-500 text-base">{soldProperty.price}</p>
+                <p className="text-green-500 text-base">{"$" + soldProperty.price}</p>
                 <p className="text-gray-700 text-base">
                   {soldProperty.description}
                 </p>
@@ -157,7 +155,7 @@ const BProperties = ({ data, onSearch }) => {
                 <div className="font-bold text-xl mb-2">
                   {filteredProperty.address}
                 </div>
-                <p className="text-green-500 text-base">{filteredProperty.price}</p>
+                <p className="text-green-500 text-base">{"$" + filteredProperty.price}</p>
                 <p className="text-gray-700 text-base">
                   {filteredProperty.description}
                 </p>
@@ -190,7 +188,7 @@ const BProperties = ({ data, onSearch }) => {
               <img className="w-full" src={property.image} alt="Placeholder" />
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">{property.address}</div>
-                <p className="text-green-500 text-base">{property.price}</p>{" "}
+                <p className="text-green-500 text-base">{"$" + property.price}</p>{" "}
                 {/* If u save property price can add here */}
                 <p className="text-gray-700 text-base">
                   {property.description}

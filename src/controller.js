@@ -8,7 +8,7 @@ import { ratings } from "./firebase/ratings";
 class CreateAccountController{
 
     async createAccount(email, password, firstName, lastName){
-        return await user.createNewUser(email, password, firstName, lastName)
+        return await user.createUser(email, password, firstName, lastName)
     }
     
 }
@@ -18,7 +18,7 @@ export const createAccountController = new CreateAccountController()
 class ViewAccountController{
     getAccounts = () =>{
         return new Promise((resolve, reject) => {
-            resolve(user.getAccounts())
+            resolve(user.getUsers())
         });
     }
 }
@@ -35,7 +35,7 @@ export const searchUserByEmailController = new SearchUserByEmailController();
 
 class UpdateAccountController{
     async updateAccount(userID, fieldToUpdate){
-        return await user.updateAccount(userID, fieldToUpdate)
+        return await user.updateUser(userID, fieldToUpdate)
     }
 }
 
@@ -107,6 +107,14 @@ class ViewProfilesController {
 
 export const viewProfilesController = new ViewProfilesController()
 
+class SearchProfileController{
+    async searchProfileByName(name){
+        return await userProfiles.searchProfileByName(name)
+    }
+}
+
+export const searchProfileController = new SearchProfileController()
+
 class UpdateProfileController{
     async updateProfile(profileID, fieldToUpdate){
         await userProfiles.updateProfile(profileID, fieldToUpdate)
@@ -125,7 +133,7 @@ export const addUserIDsToProfileController = new AddUserIDsToProfileController()
 
 class SavePropertyToUserController{
     async saveProperty(userID, propertyID){
-        await user.saveProperty(userID, propertyID)
+        await properties.saveProperty(userID, propertyID)
     }
 }
 

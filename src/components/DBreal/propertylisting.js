@@ -84,21 +84,13 @@ const CreateListing = () => {
     setShowAlert(true);
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-  };
-
-  const handleFileInputChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Set the image preview to the result of reading the file
-        setImagePreview(reader.result);
-      };
-      // Read the file as a data URL (base64 encoded)
-      reader.readAsDataURL(file);
-    }
+  const handleFormReset = () => {
+    setUploadedImage(null);
+    setSelectedSeller(null);
+    setSelectedSellerEmail("@gmail.com");
+    setAddress("");
+    setPrice("");
+    setDescription("");
   };
 
   const handleSubmit = async (e) => {
@@ -106,6 +98,7 @@ const CreateListing = () => {
     const isSuccess = await createPropertyListingController.createProperty(uploadedImage, selectedSeller, address, price, description)
     if (isSuccess){
       handleShowAlert()
+      handleFormReset()
     }
   };
 

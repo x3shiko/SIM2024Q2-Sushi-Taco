@@ -72,8 +72,11 @@ const SellerAgent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createReviewController.createReview(selectedAgentID, review);
-    await createRatingController.createRating(selectedAgentID, rating);
+    if (selectRR === "rate"){
+      await createRatingController.createRating(selectedAgentID, rating);
+    } else if (selectRR === "review"){
+      await createReviewController.createReview(selectedAgentID, review);
+    }
     closeModalBReview();
   };
 

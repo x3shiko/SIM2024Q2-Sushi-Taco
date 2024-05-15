@@ -7,18 +7,19 @@ import {
   query,
   where,
   deleteDoc,
-  addDoc
+  addDoc,
+  arrayUnion
 } from "firebase/firestore";
 import { currentUser } from "./firebase/firebase";
 import { storage } from "./firebase/firebase";
-import { ref, uploadBytes, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 class Properties {
   constructor() {
     this.db = getFirestore();
   }
 
-  getProperties = async () => {
+  async getProperties(){
     const propertiesCollection = collection(this.db, "properties");
     const propertiesDoc = await getDocs(propertiesCollection);
     const propertiesData = propertiesDoc.docs.map((doc) => {
@@ -30,7 +31,7 @@ class Properties {
     return propertiesData;
   };
 
-  getSoldProperties = async () => {
+  async getSoldProperties(){
     const propertiesCollection = collection(this.db, "properties");
     const propertiesDoc = await getDocs(propertiesCollection);
     const propertiesData = propertiesDoc.docs.map((doc) => {
@@ -42,7 +43,7 @@ class Properties {
     return propertiesData;
   };
 
-  getSavedProperties = async () => {
+ async getSavedProperties(){
     // Wait for currentUser to be defined
     while (!currentUser) {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
@@ -109,7 +110,7 @@ class Properties {
     }
   }
 
-  getSellingProperties = async () => {
+  async getSellingProperties(){
     // Wait for currentUser to be defined
     while (!currentUser) {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
@@ -152,10 +153,19 @@ class Properties {
   async searchPropertyByLocation(location) {
     const properties = await this.getProperties();
     return properties.filter((property) =>
-      Object.values(property).some((value) =>
-        String(value).toLowerCase().includes(location.toLowerCase())
-      )
+      property.address && property.address.toLowerCase().includes(location.toLowerCase())
     );
+  }
+
+  async saveProperty(userID, propertyID) {
+    const userDocRef = doc(this.db, "users", userID);
+    await updateDoc(userDocRef, {
+      savedProperties: arrayUnion(propertyID),
+    });
+    const propertyDocRef = doc(this.db, "properties", propertyID);
+    await updateDoc(propertyDocRef, {
+      savedByUserID: arrayUnion(userID),
+    });
   }
 }
 
