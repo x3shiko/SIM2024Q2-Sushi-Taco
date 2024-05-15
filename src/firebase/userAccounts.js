@@ -23,12 +23,19 @@ class User {
   }
 
   async createUser(email, password, firstName, lastName) {
+    let userCredential;
+    //creating user authentication
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
+    } catch (error) {
+      return false;
+    }
+    //creating and storing user data
+    try {
       const userID = userCredential.user.uid;
       const userDocRef = doc(this.db, "users", userID);
       await setDoc(userDocRef, {
@@ -72,9 +79,9 @@ class User {
     }
   }
 
-  async doSignOut(){
+  async doSignOut() {
     await auth.signOut();
-  };
+  }
 
   async getUsers() {
     const accountsCollection = collection(this.db, "users");
@@ -197,8 +204,9 @@ class User {
 
   async searchUserByEmail(email) {
     const users = await this.getUsers();
-    return users.filter((user) =>
-      user.email && user.email.toLowerCase().includes(email.toLowerCase())
+    return users.filter(
+      (user) =>
+        user.email && user.email.toLowerCase().includes(email.toLowerCase())
     );
   }
 }

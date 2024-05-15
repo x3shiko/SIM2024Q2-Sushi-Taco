@@ -8,18 +8,24 @@ import {
   where,
   deleteDoc,
   addDoc,
-  arrayUnion
+  arrayUnion,
+  getDoc
 } from "firebase/firestore";
 import { currentUser } from "./firebase/firebase";
 import { storage } from "./firebase/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 class Properties {
   constructor() {
     this.db = getFirestore();
   }
 
-  async getProperties(){
+  async getProperties() {
     const propertiesCollection = collection(this.db, "properties");
     const propertiesDoc = await getDocs(propertiesCollection);
     const propertiesData = propertiesDoc.docs.map((doc) => {
@@ -29,9 +35,9 @@ class Properties {
       };
     });
     return propertiesData;
-  };
+  }
 
-  async getSoldProperties(){
+  async getSoldProperties() {
     const propertiesCollection = collection(this.db, "properties");
     const propertiesDoc = await getDocs(propertiesCollection);
     const propertiesData = propertiesDoc.docs.map((doc) => {
@@ -41,9 +47,9 @@ class Properties {
       };
     });
     return propertiesData;
-  };
+  }
 
- async getSavedProperties(){
+  async getSavedProperties() {
     // Wait for currentUser to be defined
     while (!currentUser) {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
@@ -65,7 +71,7 @@ class Properties {
     });
     console.log(properties);
     return properties;
-  };
+  }
 
   async createPropertyListing(file, sellerID, address, price, description) {
     //create property listing method
@@ -86,7 +92,7 @@ class Properties {
       // Upload the image to Firebase Storage here if needed
       const storageRef = ref(storage, file.name);
       const metadata = {
-        contentType: contentType // Adjust according to your image type
+        contentType: contentType, // Adjust according to your image type
       };
 
       const uploadTask = uploadBytesResumable(storageRef, file, metadata);
@@ -105,12 +111,12 @@ class Properties {
       });
       return true; // Return true for success
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return false; // Return false for failure
     }
   }
 
-  async getSellingProperties(){
+  async getSellingProperties() {
     // Wait for currentUser to be defined
     while (!currentUser) {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
@@ -132,7 +138,7 @@ class Properties {
     });
     console.log(properties);
     return properties;
-  };
+  }
 
   async updateProperties(propertyID, fieldToUpdate) {
     const propertyDocRef = doc(this.db, "properties", propertyID);
@@ -141,19 +147,22 @@ class Properties {
 
   async deleteProperty(propertyID) {
     const propertyDocRef = doc(this.db, "properties", propertyID);
-    // Delete the document
-    try {
-      await deleteDoc(propertyDocRef);
-      console.log("Document successfully deleted!");
-    } catch (error) {
-      console.error("Error deleting document: ", error);
-    }
+    const propertyDocSnapshot = await getDoc(propertyDocRef);
+    const baseUrl = "https://firebasestorage.googleapis.com/v0/b/csit314-sushitaco.appspot.com/o/";
+    const startIndex = baseUrl.length;
+    const endIndex = propertyDocSnapshot.data().image.indexOf("?alt=media");
+    const filePath = decodeURIComponent(propertyDocSnapshot.data().image.substring(startIndex, endIndex));
+    const fileRef = ref(storage, filePath);
+    await deleteObject(fileRef);
+    await deleteDoc(propertyDocRef);
   }
 
   async searchPropertyByLocation(location) {
     const properties = await this.getProperties();
-    return properties.filter((property) =>
-      property.address && property.address.toLowerCase().includes(location.toLowerCase())
+    return properties.filter(
+      (property) =>
+        property.address &&
+        property.address.toLowerCase().includes(location.toLowerCase())
     );
   }
 

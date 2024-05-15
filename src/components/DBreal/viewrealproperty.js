@@ -161,8 +161,11 @@ const ViewRealProperty = () => {
     }
   };
 
-  const handleDeleteProperty = async () => {
+  const handleDeleteProperty = async (e) => {
+    e.preventDefault()
     await deletePropertyController.deleteProperty(removePropertyID);
+    closeModalPRemove()
+    fetchProperties()
   };
 
   return (
