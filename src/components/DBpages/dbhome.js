@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Dashboard from "./dashboard";
 import { viewProfilesController } from "../../controller";
 
