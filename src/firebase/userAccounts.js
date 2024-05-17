@@ -2,9 +2,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth, firestore } from "./firebase";
 import {
-  getFirestore,
   collection,
   getDocs,
   doc,
@@ -19,7 +18,7 @@ import { functions } from "./firebase";
 
 class User {
   constructor() {
-    this.db = getFirestore();
+    this.db = firestore;
   }
 
   async createUser(email, password, firstName, lastName) {
@@ -81,6 +80,7 @@ class User {
 
   async doSignOut() {
     await auth.signOut();
+    console.log("User successfully logged out")
   }
 
   async getUsers() {

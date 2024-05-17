@@ -1,5 +1,4 @@
 import {
-  getFirestore,
   getDocs,
   collection,
   addDoc,
@@ -7,13 +6,14 @@ import {
   where,
 } from "firebase/firestore";
 import { currentUser } from "./firebase";
+import { firestore } from "./firebase";
 
 class Ratings {
   constructor() {
-    this.db = getFirestore();
+    this.db = firestore;
   }
 
-  async createRating(agentID, rating, byUserID) {
+  async createRating(agentID, rating) {
     while (!currentUser) {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for 100 milliseconds
     }

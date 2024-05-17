@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 import { getStorage } from "firebase/storage";
 
@@ -22,6 +23,8 @@ const auth = getAuth(firebaseApp);
 
 const functions = getFunctions(firebaseApp)
 
+const firestore = getFirestore(firebaseApp)
+
 let currentUser
 
 onAuthStateChanged(auth, (user) => {
@@ -31,9 +34,10 @@ onAuthStateChanged(auth, (user) => {
     console.log(user.uid); // Print the user's ID
   } else {
     // No user is signed in
+    currentUser = null; 
     console.log("No user signed in");
   }
 });
 
-export {firebaseApp, auth, functions, currentUser, storage};
+export {firebaseApp, auth, functions, currentUser, storage, firestore};
   
