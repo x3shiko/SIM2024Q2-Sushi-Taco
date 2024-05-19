@@ -18,7 +18,7 @@ const DashboardBuyer = ({ data }) => {
     handleDropClick();
   };
   return (
-    <div id="dashboard" className="flex w-1/4 h-full bg-gray-100">
+    <div id="dashboard" className="flex w-1/4 h-screen bg-gray-100">
       <div className="md:hidden transition-all" onClick={handleDropClick}>
         {showDrop ? (
           <svg

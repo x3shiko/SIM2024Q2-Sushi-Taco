@@ -39,7 +39,7 @@ const BProperties = ({ data, onSearch }) => {
   const toggleUnsold = () => setShowUnsold(!showUnsold);
 
   //handle sold/unsold selection
-  const handleSelectSS = (e) => {
+  /*const handleSelectSS = (e) => {
     const value = e.target.value;
     setSelectSS(value);
     setShowSold(value === "sold");
@@ -57,13 +57,54 @@ const BProperties = ({ data, onSearch }) => {
         setShowFilteredProperties(true);
         const filtered =
           await searchPropertiesByLocationController.searchPropertyByLocation(
-            inputValue
-          );
+            inputValue);
         setFilteredProperties(filtered);
       }
     },
     [properties]
+  );*/
+
+  //handle sold/unsold selection
+  const handleSelectSS = (e) => {
+    const value = e.target.value;
+    setSelectSS(value);
+    setShowSold(value === "sold");
+    setShowUnsold(value === "unsold");
+
+    // Update the filtered properties based on the new selection
+    filterProperties(query, value);
+  };
+
+  //handle search input
+  const handleInputChange = useCallback(
+    async (e) => {
+      const inputValue = e.target.value.toLowerCase();
+      setQuery(inputValue);
+      filterProperties(inputValue, selectSS);
+    },
+    [selectSS, properties]
   );
+
+  //handle filterproperties
+  const filterProperties = async (inputValue, status) => {
+    if (inputValue === "") {
+      setShowFilteredProperties(false);
+    } else {
+      setShowFilteredProperties(true);
+      let filtered =
+        await searchPropertiesByLocationController.searchPropertyByLocation(
+          inputValue
+        );
+
+      if (status === "sold") {
+        filtered = filtered.filter((property) => property.status === "sold");
+      } else if (status === "unsold") {
+        filtered = filtered.filter((property) => property.status === "unsold");
+      }
+
+      setFilteredProperties(filtered);
+    }
+  };
 
   const handleSaveProperty = async (propertyID) => {
     await savePropertyToUserController.saveProperty(
@@ -251,7 +292,7 @@ const BProperties = ({ data, onSearch }) => {
 };
 const viewBP = () => {
   return (
-    <div id="viewA" className="flex">
+    <div id="viewA" className="flex h-screen">
       <DashboardBuyer />
       <BProperties />
     </div>
