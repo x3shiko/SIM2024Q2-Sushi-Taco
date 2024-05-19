@@ -61,6 +61,11 @@ class UserProfiles {
         profile.profileName.toLowerCase().includes(name.toLowerCase())
     );
   }
+
+  async suspendProfile(profileID, fieldToUpdate) {
+    const profileDocRef = doc(this.db, "profiles", profileID);
+    await updateDoc(profileDocRef, fieldToUpdate);
+  }
 }
 
 export const userProfiles = new UserProfiles();

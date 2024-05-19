@@ -41,13 +41,13 @@ class UpdateAccountController{
 
 export const updateAccountController = new UpdateAccountController();
 
-class UpdatePasswordController{
-    async updatePassword(userID, newPassword){
-        await user.updatePassword(userID, newPassword);
+class SuspendUserController{
+    async supendUser(userID, fieldToUpdate){
+        return await user.supendUser(userID, fieldToUpdate)
     }
 }
 
-export const updatePasswordController = new UpdatePasswordController();
+export const suspendUserController = new SuspendUserController();
 
 class ViewPropertiesController{
     fetchProperties = () =>{
@@ -98,6 +98,14 @@ class CreateProfileController {
 }
 
 export const createProfileController = new CreateProfileController()
+
+class SuspendProfileController{
+    async suspendProfile(profileID, fieldToUpdate){
+        await userProfiles.suspendProfile(profileID, fieldToUpdate)
+    }
+}
+
+export const suspendProfileController = new SuspendProfileController()
 
 class ViewProfilesController {
     async viewProfiles(){
