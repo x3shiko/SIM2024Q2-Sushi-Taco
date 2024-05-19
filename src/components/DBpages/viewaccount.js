@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Dashboard from "./dashboard";
-import { viewAccountController, searchUserByEmailController } from "../../controller";
+import {
+  viewAccountController,
+  searchUserByEmailController,
+} from "../../controller";
 
 const TableA = ({ data, onSearch }) => {
   const [query, setQuery] = useState("");
@@ -25,7 +28,9 @@ const TableA = ({ data, onSearch }) => {
         setShowFilteredAccounts(false);
       } else {
         setShowFilteredAccounts(true);
-        const filtered = await searchUserByEmailController.searchUserByEmail(inputValue)
+        const filtered = await searchUserByEmailController.searchUserByEmail(
+          inputValue
+        );
         setFilteredAccounts(filtered);
       }
     },
@@ -145,7 +150,7 @@ const TableA = ({ data, onSearch }) => {
 };
 const ViewA = () => {
   return (
-    <div id="viewA" className="flex">
+    <div id="viewA" className="flex h-screen">
       <Dashboard />
       <TableA />
     </div>

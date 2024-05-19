@@ -317,7 +317,7 @@ const TableU = () => {
 
 const UpdateA = () => {
   return (
-    <div id="updateA" className="flex">
+    <div id="updateA" className="flex h-screen">
       <Dashboard />
       <TableU />
     </div>
