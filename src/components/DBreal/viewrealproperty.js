@@ -162,10 +162,10 @@ const ViewRealProperty = () => {
   };
 
   const handleDeleteProperty = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     await deletePropertyController.deleteProperty(removePropertyID);
-    closeModalPRemove()
-    fetchProperties()
+    closeModalPRemove();
+    fetchProperties();
   };
 
   return (
@@ -180,68 +180,78 @@ const ViewRealProperty = () => {
         />
       </div>
       <div className="grid grid-cols-3 grid-rows-3 my-3">
-        {!showFilteredProperties && properties.map((property) => (
-          <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
-            <img className="w-full" src={property.image} alt="Placeholder" />
-            <div className="px-6 py-4">
-              {/* If u save property name can add here */}
-              <div className="font-bold text-xl mb-2">{property.address}</div>
-              <p className="text-green-500 text-base">{"$" + property.price}</p>
-              {/* If u save property price can add here */}
-              {/* If u save property address can add here */}
-              <p className="text-gray-700 text-base">{property.description}</p>
-              <p className="text-blue-700 text-base">
-                Owned by UserID:{" "}
-                <span className="font-semibold">{property.ownByUserID}</span>
-              </p>
+        {!showFilteredProperties &&
+          properties.map((property) => (
+            <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
+              <img className="w-full" src={property.image} alt="Placeholder" />
+              <div className="px-6 py-4">
+                {/* If u save property name can add here */}
+                <div className="font-bold text-xl mb-2">{property.address}</div>
+                <p className="text-green-500 text-base">
+                  {"$" + property.price}
+                </p>
+                {/* If u save property price can add here */}
+                {/* If u save property address can add here */}
+                <p className="text-gray-700 text-base">
+                  {property.description}
+                </p>
+                <p className="text-blue-700 text-base">
+                  Owned by UserID:{" "}
+                  <span className="font-semibold">{property.ownByUserID}</span>
+                </p>
+              </div>
+              <div className="px-6 py-2">
+                <button
+                  className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
+                  onClick={() => openModalPEdit(property.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
+                  onClick={() => openModalPRemove(property.id)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
-            <div className="px-6 py-2">
-              <button
-                className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModalPEdit(property.id)}
-              >
-                Edit
-              </button>
-              <button
-                className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModalPRemove(property.id)}
-              >
-                Remove
-              </button>
+          ))}
+        {showFilteredProperties &&
+          filteredProperties.map((property) => (
+            <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
+              <img className="w-full" src={property.image} alt="Placeholder" />
+              <div className="px-6 py-4">
+                {/* If u save property name can add here */}
+                <div className="font-bold text-xl mb-2">{property.address}</div>
+                <p className="text-green-500 text-base">
+                  {"$" + property.price}
+                </p>
+                {/* If u save property price can add here */}
+                {/* If u save property address can add here */}
+                <p className="text-gray-700 text-base">
+                  {property.description}
+                </p>
+                <p className="text-blue-700 text-base">
+                  Owned by UserID:{" "}
+                  <span className="font-semibold">{property.ownByUserID}</span>
+                </p>
+              </div>
+              <div className="px-6 py-2">
+                <button
+                  className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
+                  onClick={() => openModalPEdit(property.id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
+                  onClick={() => openModalPRemove(property.id)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-        {showFilteredProperties && filteredProperties.map((property) => (
-          <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
-            <img className="w-full" src={property.image} alt="Placeholder" />
-            <div className="px-6 py-4">
-              {/* If u save property name can add here */}
-              <div className="font-bold text-xl mb-2">{property.address}</div>
-              <p className="text-green-500 text-base">{"$" + property.price}</p>
-              {/* If u save property price can add here */}
-              {/* If u save property address can add here */}
-              <p className="text-gray-700 text-base">{property.description}</p>
-              <p className="text-blue-700 text-base">
-                Owned by UserID:{" "}
-                <span className="font-semibold">{property.ownByUserID}</span>
-              </p>
-            </div>
-            <div className="px-6 py-2">
-              <button
-                className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModalPEdit(property.id)}
-              >
-                Edit
-              </button>
-              <button
-                className="my-1 mx-2 p-2 whitespace-nowrap border border-blue-400 rounded-md text-sm font-medium shadow-md hover:border-blue-600 hover:text-blue-600"
-                onClick={() => openModalPRemove(property.id)}
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
         {/* modal for Remove */}
         <Modal
           isOpen={isOpenPRemove}
@@ -343,7 +353,7 @@ const ViewRealProperty = () => {
                 </h1>
                 <div className="mt-1 my-2 flex w-full px-3 py-2 bg-white border border-gray-300 justify-evenly text-center rounded-md shadow-sm">
                   {/* to store photo */}
-                  <EditImage onImageUpload={handleImageEdit} />
+                  <EditImage onEditImage={handleImageEdit} />
                   {editImage && (
                     <div className="mt-4">
                       <h2 className="text-lg font-semibold">Uploaded Image:</h2>
@@ -415,7 +425,7 @@ const ViewRealProperty = () => {
 
 const ViewRP = () => {
   return (
-    <div id="dbhome" className="flex item-start">
+    <div id="dbhome" className="flex h-screen">
       <DBReal />
       <ViewRealProperty />
     </div>

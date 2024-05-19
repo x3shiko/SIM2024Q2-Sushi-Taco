@@ -38,9 +38,9 @@ const DBRealHome = () => {
     fetchProfileStatus();
   }, []);
   return (
-    <div id="dbhome" className="flex item-start">
+    <div id="dbhome" className="flex item-start h-screen">
       <DBReal />
-      <RealHome data={profileStatus}/>
+      <RealHome data={profileStatus} />
     </div>
   );
 };

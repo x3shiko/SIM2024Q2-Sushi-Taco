@@ -67,40 +67,42 @@ const Realrr = () => {
         </select>
       </div>
       {/* show Rating */}
-      {showRate && ratings.map((rating) => (
-        <div className="container w-full border border-black rounded-md shadow-md bg-indigo-700">
-          <h1 className="pt-4 pl-8 text-md text-gray-100">
-            By User ID: <span id="reviwer">{rating.reviewByUserID}</span>
-          </h1>
-          <div className="flex pl-8">
-            <span className="mb-2 text-gray-100 pt-1">Rating: </span>
-            {/* Replace rating with ur backend data name */}
-            {[...Array(rating.rating)].map((_, index) => (
-              <Star key={index} filled={true} />
-            ))}
+      {showRate &&
+        ratings.map((rating) => (
+          <div className="container w-full border border-black rounded-md shadow-md bg-indigo-700">
+            <h1 className="pt-4 pl-8 text-md text-gray-100">
+              By User ID: <span id="reviwer">{rating.reviewByUserID}</span>
+            </h1>
+            <div className="flex pl-8">
+              <span className="mb-2 text-gray-100 pt-1">Rating: </span>
+              {/* Replace rating with ur backend data name */}
+              {[...Array(rating.rating)].map((_, index) => (
+                <Star key={index} filled={true} />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
       {/* show Review */}
-      {showReview && reviews.map((review) => (
-        <div className="container w-full border border-black rounded-md shadow-md bg-indigo-700">
-          <h1 className="pt-4 pl-8 text-md text-gray-100">
-            By User ID: <span id="reviwer">{review.reviewByUserID}</span>
-          </h1>
-          <div className="flex justify-center p-2">
-            <p className="p-2 w-3/4 bg-indigo-300 border border-indigo-300 rounded-md shadow-md font-medium">
-              {review.review}
-            </p>
+      {showReview &&
+        reviews.map((review) => (
+          <div className="container w-full border border-black rounded-md shadow-md bg-indigo-700">
+            <h1 className="pt-4 pl-8 text-md text-gray-100">
+              By User ID: <span id="reviwer">{review.reviewByUserID}</span>
+            </h1>
+            <div className="flex justify-center p-2">
+              <p className="p-2 w-3/4 bg-indigo-300 border border-indigo-300 rounded-md shadow-md font-medium">
+                {review.review}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 };
 
 const RealViewRR = () => {
   return (
-    <div id="realviewratereview" className="flex item-start">
+    <div id="realviewratereview" className="flex h-screen">
       <DBReal />
       <Realrr />
     </div>

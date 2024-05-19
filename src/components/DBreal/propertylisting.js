@@ -309,7 +309,7 @@ const CreateListing = () => {
 };
 const Listing = () => {
   return (
-    <div id="createA" className="flex">
+    <div id="createA" className="flex h-screen">
       <DBReal />
       <CreateListing />
     </div>
