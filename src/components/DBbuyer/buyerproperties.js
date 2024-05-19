@@ -1,10 +1,10 @@
-import { useEffect, useState, useCallback} from "react";
+import { useEffect, useState, useCallback } from "react";
 import DashboardBuyer from "./dbbuyer";
 import {
   viewPropertiesController,
   savePropertyToUserController,
   searchPropertiesByLocationController,
-  addViewsPropertyController
+  addViewsPropertyController,
 } from "../../controller";
 import { currentUser } from "../../firebase/firebase";
 
@@ -47,14 +47,18 @@ const BProperties = ({ data, onSearch }) => {
   };
 
   //handle search input
-  const handleInputChange = useCallback( async (e) => {
+  const handleInputChange = useCallback(
+    async (e) => {
       const inputValue = e.target.value;
       setQuery(inputValue.toLowerCase());
       if (inputValue === "") {
         setShowFilteredProperties(false);
       } else {
         setShowFilteredProperties(true);
-        const filtered = await searchPropertiesByLocationController.searchPropertyByLocation(inputValue)
+        const filtered =
+          await searchPropertiesByLocationController.searchPropertyByLocation(
+            inputValue
+          );
         setFilteredProperties(filtered);
       }
     },
@@ -72,8 +76,8 @@ const BProperties = ({ data, onSearch }) => {
   };
 
   const handleAddView = async (propertyID) => {
-    await addViewsPropertyController.addViewToProperty(propertyID)
-  }
+    await addViewsPropertyController.addViewToProperty(propertyID);
+  };
 
   return (
     <div className="min-h-screen w-3/4 overflow-x-auto">
@@ -110,7 +114,8 @@ const BProperties = ({ data, onSearch }) => {
       {/* Start of Property Grid */}
       <div className="grid grid-cols-3 grid-rows-3 my-3">
         {/* show sold properties */}
-        {!showFilteredProperties && showSold &&
+        {!showFilteredProperties &&
+          showSold &&
           soldProperties.map((soldProperty) => (
             <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
               <img
@@ -122,7 +127,9 @@ const BProperties = ({ data, onSearch }) => {
                 <div className="font-bold text-xl mb-2">
                   {soldProperty.address}
                 </div>
-                <p className="text-green-500 text-base">{"$" + soldProperty.price}</p>
+                <p className="text-green-500 text-base">
+                  {"$" + soldProperty.price}
+                </p>
                 <p className="text-gray-700 text-base">
                   {soldProperty.description}
                 </p>
@@ -148,7 +155,7 @@ const BProperties = ({ data, onSearch }) => {
               </div>
             </div>
           ))}
-          {showFilteredProperties &&
+        {showFilteredProperties &&
           filteredProperties.map((filteredProperty) => (
             <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
               <img
@@ -160,19 +167,34 @@ const BProperties = ({ data, onSearch }) => {
                 <div className="font-bold text-xl mb-2">
                   {filteredProperty.address}
                 </div>
-                <p className="text-green-500 text-base">{"$" + filteredProperty.price}</p>
+                <p className="text-green-500 text-base">
+                  {"$" + filteredProperty.price}
+                </p>
                 <p className="text-gray-700 text-base">
                   {filteredProperty.description}
                 </p>
               </div>
               <div className="px-6 py-4">
                 {/* doesnt need any function or buy */}
-                <button
-                  className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-                  onClick={() => handleAddView(filteredProperty.id)}
-                >
-                  {filteredProperty.status}
-                </button>
+                {filteredProperty.status === "sold" ? (
+                  <div>
+                    <button
+                      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                      disabled
+                    >
+                      Sold
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                      onClick={() => handleAddView(filteredProperty.id)}
+                    >
+                      Buy
+                    </button>
+                  </div>
+                )}
                 {/* Save property please edit the id to its corresponding object*/}
                 {/*<button id='sold1' onClick={handleSave} className={`inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 ${isSaved ? 'bg-green-500' : ''}`}>
                                                 Save
@@ -187,20 +209,26 @@ const BProperties = ({ data, onSearch }) => {
             </div>
           ))}
         {/* show unsold properties */}
-        {!showFilteredProperties && showUnsold &&
+        {!showFilteredProperties &&
+          showUnsold &&
           properties.map((property) => (
             <div className="m-2 max-w-sm rounded overflow-hidden shadow-lg">
               <img className="w-full" src={property.image} alt="Placeholder" />
               <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">{property.address}</div>
-                <p className="text-green-500 text-base">{"$" + property.price}</p>{" "}
+                <p className="text-green-500 text-base">
+                  {"$" + property.price}
+                </p>{" "}
                 {/* If u save property price can add here */}
                 <p className="text-gray-700 text-base">
                   {property.description}
                 </p>
               </div>
               <div className="px-6 py-4">
-                <button className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2" onClick={() => handleAddView(property.id)}>
+                <button
+                  className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                  onClick={() => handleAddView(property.id)}
+                >
                   Buy
                 </button>
                 {/* Save property please edit the id to its corresponding object*/}
