@@ -9,6 +9,7 @@ import {
   updateAccountController,
   addUserIDsToProfileController,
   searchProfileController,
+  suspendProfileController,
 } from "../../controller";
 
 const StatusColor = ({ type }) => {
@@ -187,6 +188,8 @@ const Profile = () => {
       profileName,
       profileDescription
     );
+    fetchAccounts();
+    fetchProfiles();
     closeModalCreateP();
   };
 
@@ -202,21 +205,29 @@ const Profile = () => {
       fieldToUpdate = {
         profileName: updateValue,
       };
+      await updateProfileController.updateProfile(
+        profileIDToUpdate,
+        fieldToUpdate
+      );
     } else if (edit === "profileD") {
       fieldToUpdate = {
         profileDescription: updateValue,
       };
+      await updateProfileController.updateProfile(
+        profileIDToUpdate,
+        fieldToUpdate
+      );
     } else if (edit === "profileS") {
       fieldToUpdate = {
         status: editSuspend,
       };
+      await suspendProfileController.suspendProfile(
+        profileIDToUpdate,
+        fieldToUpdate
+      );
     } else {
       console.log("No field to update");
     }
-    await updateProfileController.updateProfile(
-      profileIDToUpdate,
-      fieldToUpdate
-    );
     fetchAccounts();
     fetchProfiles();
     closeModalEdit();

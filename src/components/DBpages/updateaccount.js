@@ -4,7 +4,7 @@ import Dashboard from "./dashboard";
 import {
   viewAccountController,
   updateAccountController,
-  updatePasswordController,
+  suspendUserController
 } from "../../controller";
 
 const ToggleButtonSuspend = () => {
@@ -85,7 +85,7 @@ const TableU = () => {
           password: password,
         });
       } else if (update === "suspend") {
-        await updateAccountController.updateAccount(accountUpdating, {
+        await suspendUserController.supendUser(accountUpdating, {
           status: assignSuspend,
         });
       } else {

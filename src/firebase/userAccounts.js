@@ -121,6 +121,11 @@ class User {
     return success;
   }
 
+  async supendUser(userID, fieldToUpdate) {
+    const userDocRef = doc(this.db, "users", userID);
+    await updateDoc(userDocRef, fieldToUpdate);
+  }
+
   async getUserSavedPropertiesID(userID) {
     const userDocRef = doc(this.db, "users", userID);
     const userDocSnapshot = await getDoc(userDocRef);
