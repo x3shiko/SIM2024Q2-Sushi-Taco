@@ -1,6 +1,5 @@
 import { user } from "../firebase/userAccounts";
-import { auth } from "../firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { currentUser } from "../firebase/firebase";
 
 //seller is able to sign in and sign out
 test("user successfully signed in and signed out", async () => {
@@ -8,19 +7,6 @@ test("user successfully signed in and signed out", async () => {
   const userUID = "hz6ytGWSqaedRH6ZB0hdVHqYJvJ3"
   const email = "sellerexample@gmail.com";
   const password = "123123";
-  let currentUser
-
-  //function imported from firebase, when user sign in and sign out, currentuser will change accordingly
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in
-      currentUser = user
-    } else {
-      // No user is signed in
-      currentUser = null
-      console.log("No user signed in");
-    }
-  });
 
   //calling my entity's function sign in
   const userData = await user.doSignInWithEmailAndPassword(email, password);

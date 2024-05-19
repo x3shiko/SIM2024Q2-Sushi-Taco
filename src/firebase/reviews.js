@@ -6,11 +6,11 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { currentUser } from "./firebase";
+import { currentUser, firestore } from "./firebase";
 
 class Reviews {
   constructor() {
-    this.db = getFirestore();
+    this.db = firestore;
   }
 
   async createReview(agentID, review) {

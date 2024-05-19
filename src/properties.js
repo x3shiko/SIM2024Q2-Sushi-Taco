@@ -9,7 +9,7 @@ import {
   deleteDoc,
   addDoc,
   arrayUnion,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { currentUser } from "./firebase/firebase";
 import { storage } from "./firebase/firebase";
@@ -107,7 +107,7 @@ class Properties {
         price: price,
         savedByUserID: [],
         status: "unsold",
-        view: 0
+        view: 0,
         // Add more fields as needed
       });
       return true; // Return true for success
@@ -143,16 +143,45 @@ class Properties {
 
   async updateProperties(propertyID, fieldToUpdate) {
     const propertyDocRef = doc(this.db, "properties", propertyID);
-    await updateDoc(propertyDocRef, fieldToUpdate);
+    if ("image" in fieldToUpdate) {
+      const file = fieldToUpdate.image
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+
+      // Map file extensions to content types
+      const contentTypeMap = {
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        png: "image/png",
+        // Add more mappings as needed
+      };
+
+      // Get content type from map or default to 'application/octet-stream'
+      const contentType =
+        contentTypeMap[fileExtension] || "application/octet-stream";
+      // Upload the image to Firebase Storage here if needed
+      const storageRef = ref(storage, file.name);
+      const metadata = {
+        contentType: contentType, // Adjust according to your image type
+      };
+
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+      const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+      await updateDoc(propertyDocRef, {image: downloadURL})
+    } else{
+      await updateDoc(propertyDocRef, fieldToUpdate);
+    }
   }
 
   async deleteProperty(propertyID) {
     const propertyDocRef = doc(this.db, "properties", propertyID);
     const propertyDocSnapshot = await getDoc(propertyDocRef);
-    const baseUrl = "https://firebasestorage.googleapis.com/v0/b/csit314-sushitaco.appspot.com/o/";
+    const baseUrl =
+      "https://firebasestorage.googleapis.com/v0/b/csit314-sushitaco.appspot.com/o/";
     const startIndex = baseUrl.length;
     const endIndex = propertyDocSnapshot.data().image.indexOf("?alt=media");
-    const filePath = decodeURIComponent(propertyDocSnapshot.data().image.substring(startIndex, endIndex));
+    const filePath = decodeURIComponent(
+      propertyDocSnapshot.data().image.substring(startIndex, endIndex)
+    );
     const fileRef = ref(storage, filePath);
     await deleteObject(fileRef);
     await deleteDoc(propertyDocRef);
@@ -178,13 +207,13 @@ class Properties {
     });
   }
 
-  async addViewToProperty(propertyID){
+  async addViewToProperty(propertyID) {
     const propertyDocRef = doc(this.db, "properties", propertyID);
     const docSnapshot = await getDoc(propertyDocRef);
-    const currentViews = docSnapshot.data().view
-    const newViews = currentViews + 1
+    const currentViews = docSnapshot.data().view;
+    const newViews = currentViews + 1;
     await updateDoc(propertyDocRef, {
-      view: newViews
+      view: newViews,
     });
   }
 }

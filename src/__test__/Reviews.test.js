@@ -1,4 +1,4 @@
-import { ratings } from "../firebase/ratings";
+import { reviews } from "../firebase/reviews";
 import { addDoc, collection } from "firebase/firestore";
 
 jest.mock("../firebase/firebase", () => ({
@@ -24,10 +24,10 @@ describe("Ratings class", () => {
     addDoc.mockResolvedValue();
 
     const agentID = "agentId";
-    const rating = 5;
+    const review = 5;
 
     //calling my entity function create rating
-    const result = await ratings.createRating(agentID, rating);
+    const result = await reviews.createReview(agentID, review);
 
     expect(result).toBe(true);
   });
@@ -38,11 +38,11 @@ describe("Ratings class", () => {
     addDoc.mockRejectedValue(new Error(errorMessage));
 
     const agentID = "agentId";
-    const rating = 5;
+    const review = 5;
 
 
     //calling my entity function create rating
-    const result = await ratings.createRating(agentID, rating);
+    const result = await reviews.createReview(agentID, review);
 
     expect(result).toBe(false);
   });
